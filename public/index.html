@@ -229,6 +229,26 @@ button.cell{cursor:pointer;padding:0;font:inherit;color:inherit}
 .score{font:800 2.6rem/1.1 var(--f-ui);font-variant-numeric:tabular-nums}
 .credit{font-size:.74rem;color:var(--muted);margin-top:14px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}.kvg.anim path,.pad .hm path{animation:none;opacity:1;stroke-dashoffset:0}}
+
+/* set selector: one button above the drill, options in a bottom sheet grouped by kind */
+.setbtn{width:100%;display:flex;align-items:center;gap:12px;padding:10px 14px;border:1.5px solid var(--line);background:var(--card);border-radius:var(--r);cursor:pointer;text-align:left;color:var(--ink);font:inherit;box-shadow:0 3px 0 var(--line)}
+.setbtn:focus-visible,.opt:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.setbtn .ex,.opt .ex{flex:0 0 80px;font:600 1.15rem/1.1 var(--f-kana);text-align:center;color:var(--primary);white-space:nowrap;overflow:hidden}
+.setbtn .tx,.opt .tx{display:flex;flex-direction:column;min-width:0}
+.setbtn .nm,.opt .nm{font:800 .95rem/1.3 var(--f-ui)}
+.setbtn .ds,.opt .ds{font-size:.8rem;color:var(--muted);line-height:1.35}
+.setbtn .go{margin-left:auto;font:800 .78rem var(--f-ui);color:var(--primary);white-space:nowrap}
+.sheet-bg{position:fixed;inset:0;background:rgba(12,10,24,.48);z-index:40}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-width:560px;margin:0 auto;max-height:86vh;overflow:auto;background:var(--bg);border-radius:22px 22px 0 0;
+  padding-top:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+.sheet-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.sheet-h b{font:800 1.05rem var(--f-ui)}
+.sheet h4{font:800 .7rem var(--f-ui);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1.5px solid var(--line);background:var(--card);border-radius:14px;cursor:pointer;text-align:left;color:var(--ink);font:inherit}
+.opt.on{border-color:var(--primary);background:var(--primary-soft)}
+.opt[disabled]{opacity:.45;cursor:default}
+.opt .pill{margin-left:6px;vertical-align:1px}
 html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
 .wrap{padding-top:calc(12px + env(safe-area-inset-top,0px))}
 </style>
@@ -342,11 +362,11 @@ const RULES=[
  {t:'Vokal panjang dan ん',d:'Vokal panjang ditulis sesuai romajinya. Apostrof pada hon\'ya menandakan ん berdiri sendiri, bukan bagian dari にゃ.',ex:[['きょう','kyou'],['おにいさん','oniisan'],['せんせい','sensei'],['ほんや','hon\'ya']],set:'word'}
 ];
 const PLAN=[
- {s:0,e:100,c:'a',t:'Huruf dasar per baris',d:'Sepuluh baris, sekitar sembilan menit per baris. Setiap tiga baris, sisipkan latihan campuran lima menit.',go:'learn'},
+ {set:'base',s:0,e:100,c:'a',t:'Huruf dasar per baris',d:'Sepuluh baris, sekitar sembilan menit per baris. Setiap tiga baris, sisipkan latihan campuran lima menit.',go:'learn'},
  {s:100,e:120,c:'y',t:'Tabel Kosong pertama',d:'Seluruh 46 huruf dari ingatan. Huruf yang salah menjadi bahan latihan berikutnya.',go:'table'},
- {s:120,e:150,c:'t',t:'Perbaiki kesalahan',d:'Kerjakan set Yang salah, kemudian set Pasangan mirip.',go:'drill'},
+ {set:'weak',s:120,e:150,c:'t',t:'Perbaiki kesalahan',d:'Kerjakan set Yang salah, kemudian set Pasangan mirip.',go:'drill'},
  {s:150,e:165,c:'w',t:'Istirahat',d:'Tanpa layar dan tanpa hiragana. Jeda ini membantu ingatan mengendap.',go:null},
- {s:165,e:195,c:'n',t:'Aturan tambahan',d:'Dakuten, kombinasi kecil, っ, dan vokal panjang. Baca kartunya, lalu latih setiap set.',go:'learn'},
+ {set:'daku',s:165,e:195,c:'n',t:'Aturan tambahan',d:'Dakuten, kombinasi kecil, っ, dan vokal panjang. Baca kartunya, lalu latih setiap set.',go:'learn'},
  {s:195,e:210,c:'y',t:'Tabel Kosong kedua',d:'Bandingkan waktu dan jumlah kesalahan dengan percobaan pertama.',go:'table'},
  {s:210,e:230,c:'k',t:'Simulasi tes',d:'Dua puluh soal campuran, dinilai otomatis.',go:'test'},
  {s:230,e:240,c:'r',t:'Tabel Kosong terakhir',d:'Targetnya sempurna dua kali berturut-turut.',go:'table'}
@@ -612,7 +632,44 @@ function renderLearn(){killPads('learn');const P=$('#p-learn');
 }
 
 /* ---------- DRILL ---------- */
-const MODES=[['base','Huruf dasar'],['pairs','Pasangan mirip'],['daku','Dakuten'],['combo','ゃ ゅ ょ'],['word','Kata'],['all','Campuran'],['weak','Yang salah']];
+const MODES=[
+ {m:'base',g:'Huruf',l:'Huruf dasar',ex:'あ か さ'},
+ {m:'daku',g:'Huruf',l:'Titik dan lingkaran',ex:'が ぱ'},
+ {m:'combo',g:'Huruf',l:'Huruf kecil',ex:'きゃ'},
+ {m:'word',g:'Kata',l:'Kata',ex:'きって'},
+ {m:'pairs',g:'Fokus',l:'Pasangan mirip',ex:'ぬ め'},
+ {m:'weak',g:'Fokus',l:'Yang salah',ex:''},
+ {m:'all',g:'Fokus',l:'Campuran',ex:'あ が きゃ'}
+];
+const REC_DEFAULT='all';
+function weakKeys(){return Object.entries(S.cards).filter(([k,c])=>c.w>0&&c.b<2&&BY[k]).map(([k])=>k)}
+function setInfo(o){const pool=o.m==='weak'?poolFor('weak'):poolFor(o.m),n=pool.length;
+  const weak=pool.filter(i=>{const c=S.cards[i.k];return c&&c.w>0&&c.b<2}).length;
+  let d;
+  if(o.m==='weak')d=n?`${n} kartu perlu diulang`:'Belum ada kartu yang salah';
+  else if(o.m==='base'){const r=ROWS.filter(r=>S.learned[r.id]).length;d=r?`${n} huruf, ${r} dari 10 baris dipelajari`:'Belum ada baris dipelajari, memakai baris A'}
+  else if(o.m==='all')d=`Semua set, ${n} kartu`;
+  else d=`${n} kartu`;
+  if(weak&&o.m!=='weak')d+=`, ${weak} lemah`;
+  return{n,d,ex:o.m==='weak'?[...pool.slice(0,2).map(i=>i.k).join(' ')].slice(0,4).join(''):o.ex}}
+function recommend(){
+  if(S.start){const m=(Date.now()-S.start)/60000,b=PLAN.find(b=>m>=b.s&&m<b.e);if(b&&b.set)return b.set}
+  if(ROWS.some(r=>!S.learned[r.id]))return'base';
+  if(weakKeys().length)return'weak';
+  return REC_DEFAULT}
+function setButton(){const o=MODES.find(x=>x.m===DR.mode)||MODES[0],i=setInfo(o);
+  const lbl=DR.mode==='weak'&&DR.only?'Yang salah dari hasil terakhir':o.l;
+  return`<button class="setbtn" id="setbtn" aria-haspopup="dialog"><span class="ex">${esc(i.ex)}</span><span class="tx"><span class="nm">${esc(lbl)}</span><span class="ds">${esc(i.d)}</span></span><span class="go">Ganti set</span></button>`}
+function openSheet(){closeSheet(true);const rec=recommend(),groups=[...new Set(MODES.map(o=>o.g))];
+  const body=groups.map(g=>`<h4>${g}</h4><div class="opts">${MODES.filter(o=>o.g===g).map(o=>{const i=setInfo(o);
+    return`<button class="opt${o.m===DR.mode?' on':''}" data-m="${o.m}"${i.n?'':' disabled'}><span class="ex">${esc(i.ex)}</span><span class="tx"><span class="nm">${esc(o.l)}${o.m===rec&&i.n?'<span class="pill ok">Disarankan</span>':''}</span><span class="ds">${esc(i.d)}</span></span></button>`}).join('')}</div>`).join('');
+  document.body.insertAdjacentHTML('beforeend',`<div id="sheet"><div class="sheet-bg" id="sheetbg"></div><div class="sheet" role="dialog" aria-modal="true" aria-label="Pilih set latihan"><div class="sheet-h"><b>Pilih set latihan</b><button class="btn sm ghost" id="sheetx">Tutup</button></div>${body}</div></div>`);
+  document.documentElement.style.overflow='hidden';
+  $('#sheetbg').onclick=()=>closeSheet();$('#sheetx').onclick=()=>closeSheet();
+  document.querySelectorAll('#sheet .opt').forEach(b=>b.onclick=()=>{DR.mode=b.dataset.m;DR.only=null;DR.q=null;closeSheet(true);renderDrill()});
+  const f=$('#sheet .opt.on:not([disabled])')||$('#sheet .opt:not([disabled])');if(f)f.focus({preventScroll:true})}
+function closeSheet(silent){const s=$('#sheet');if(!s)return;s.remove();document.documentElement.style.overflow='';if(!silent){const b=$('#setbtn');if(b)b.focus({preventScroll:true})}}
+
 const DR={mode:'base',q:null,stat:{c:0,w:0},only:null};
 function poolFor(mode){
   const learnedBase=BASE.filter(i=>S.learned[i.row]);
@@ -627,14 +684,14 @@ function buildQ(items){const by=[0,1,2,3,4,5].map(b=>shuffle(items.filter(i=>car
 function renderDrill(){killPads('drill');const P=$('#p-drill');
   if(!DR.q){DR.q=buildQ(poolFor(DR.mode));DR.stat={c:0,w:0}}
   const learnedN=Object.keys(S.learned).length;
-  const chips=`<div class="chips" role="group" aria-label="Pilih set">${MODES.map(([m,l])=>`<button class="chip" aria-pressed="${DR.mode===m}" data-m="${m}">${l}</button>`).join('')}</div>`;
+  const chips=setButton();
   if(!DR.q.length){P.innerHTML=chips+`<div class="card" style="margin-top:12px"><b>${DR.mode==='weak'?'Belum ada huruf yang ditandai salah.':'Set ini kosong.'}</b><p class="muted small" style="margin:4px 0 0">Setiap huruf yang Anda tandai salah, dari tab mana pun, akan terkumpul di sini.</p></div>`;bindChips(P);return}
   const it=DR.q[0],c=card(it.k),C=col(it.row);
   const group=DR.mode==='pairs'?PAIRS.find(g=>g.includes(it.k)):null;
-  const note=DR.mode==='base'&&!learnedN?'<p class="muted small" style="margin:8px 0 0">Belum ada baris yang selesai dipelajari, jadi latihan memakai baris A.</p>':'';
+  const note='';
   const wide=it.type==='word'||it.type==='combo';
   P.innerHTML=chips+note+`
-  <div class="meta" style="margin-top:12px"><span>Benar <b style="color:var(--ok)">${DR.stat.c}</b>&ensp;Salah <b style="color:var(--bad)">${DR.stat.w}</b></span><span>Tingkat <b>${c.b}</b> dari 5</span></div>
+  <div class="meta" style="margin-top:14px"><span>Benar <b style="color:var(--ok)">${DR.stat.c}</b>&ensp;Salah <b style="color:var(--bad)">${DR.stat.w}</b></span><span>Tingkat <b>${c.b}</b> dari 5</span></div>
   <div class="prompt"><div class="lbl">Tulis hiragana untuk</div><div class="rom cink ${it.r.length>8?'long':''}" style="--c:${C}">${esc(it.r)}</div></div>
   <div id="pad"></div><div class="reveal" id="rv"></div>
   <div class="tools" id="tl"><button class="btn sm" id="un">Urungkan</button><button class="btn sm" id="cl">Hapus</button></div>
@@ -653,7 +710,7 @@ function renderDrill(){killPads('drill');const P=$('#p-drill');
   keys.check=()=>{if(revealed)return;revealed=true;judge(P,pad,it,extra,fin,keys)};
   $('#ck',P).onclick=keys.check;
 }
-function bindChips(P){P.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{DR.mode=b.dataset.m;DR.only=null;DR.q=null;renderDrill()})}
+function bindChips(P){const b=$('#setbtn',P);if(b)b.onclick=()=>openSheet()}
 
 /* ---------- TABLE (Tabel Kosong) ---------- */
 let TB=null;
@@ -768,7 +825,7 @@ function renderTest(){killPads('test');const P=$('#p-test');
 }
 
 /* ---------- KEYBOARD ---------- */
-document.addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('button')&&e.key==='Enter')return;
+document.addEventListener('keydown',e=>{if($('#sheet')){if(e.key==='Escape')closeSheet();return}if(e.target.closest&&e.target.closest('button')&&e.key==='Enter')return;
   const k=TAB==='drill'?DR.keys:TAB==='learn'&&L&&L.step==='recall'?L.keys:TAB==='table'&&TB&&TB.phase==='write'?TB.keys:TAB==='test'&&TS&&TS.phase==='write'?TS.keys:null;
   if(!k)return;
   if(e.key==='Enter'){e.preventDefault();k.check&&k.check()}
