@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "Hiragana Empat Jam",
-  "short_name": "Hiragana 4J",
-  "description": "Latihan menulis hiragana dari romaji dalam 4 jam.",
+  "name": "Katakana Empat Jam",
+  "short_name": "Katakana 4J",
+  "description": "Latihan menulis katakana dari romaji dalam 4 jam.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

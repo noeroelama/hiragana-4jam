@@ -1,5 +1,5 @@
 {
-  "name": "hiragana-4jam",
+  "name": "katakana-4jam",
   "private": true,
   "scripts": {
     "dev": "wrangler dev",

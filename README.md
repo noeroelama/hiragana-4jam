@@ -1,25 +1,24 @@
-# Hiragana Empat Jam
+# Katakana Empat Jam
 
-Aplikasi web untuk belajar menulis hiragana dari romaji dalam empat jam. Dirancang mobile-first dan bisa dipasang sebagai aplikasi (PWA).
+Aplikasi web untuk belajar menulis katakana dari romaji dalam empat jam, dengan fokus pada kata serapan. Dirancang mobile-first dan bisa dipasang sebagai aplikasi (PWA).
 
-Dikembangkan oleh @noeroelama.
+Dikembangkan oleh @noeroelama. Versi hiragana ada di branch `main`.
 
 ## Fitur
 
-- **Belajar per baris.** Setiap baris gojūon punya satu warna. Setiap huruf melewati tiga tahap: kenali bentuk dan urutan goresan, jiplak, lalu tulis dari ingatan.
+- **Belajar per baris.** Setiap baris gojūon punya satu warna, dan setiap katakana ditampilkan bersama pasangan hiragananya.
 - **Kakijun.** Animasi urutan goresan, kotak urutan langkah demi langkah, dan nomor goresan saat menjiplak.
-- **Penilaian otomatis.** Tulisan tangan dibaca oleh pengenal tulisan tangan Google. Jawaban benar ditandai hanamaru, dan penilaian bisa diubah manual.
-- **Latihan berulang.** Huruf yang salah muncul lagi lebih cepat. Tersedia set huruf dasar, pasangan mirip, dakuten, ゃゅょ, dan kata.
-- **Tabel Kosong.** Tulis ke-46 huruf dari ingatan, lalu dinilai sekaligus.
-- **Simulasi tes.** Dua puluh soal romaji campuran.
-- **Peta ingatan** dan jadwal sesi empat jam.
+- **Aturan katakana.** Garis panjang ー, ッ kecil, ャ ュ ョ, bunyi asing (ファ, ティ, ウェ, シェ), dan pola kata serapan dari bahasa Inggris.
+- **Kata serapan.** Sekitar 160 kata dengan romaji dan kata asalnya. Romaji dibuat otomatis dari katakana dengan satu konvensi Hepburn, dan vokal panjang bisa ditampilkan sebagai `koohii` atau `kōhī`.
+- **Penilaian otomatis.** Tulisan tangan dibaca oleh pengenal tulisan tangan Google, dengan normalisasi bentuk yang mirip kanji (力 dan カ, 口 dan ロ, 一 dan ー).
+- **Tabel Kosong**, **simulasi tes** 20 soal, **peta ingatan**, dan jadwal sesi empat jam.
 
 ## Menjalankan
 
 ```
 npm install
 npx wrangler dev       # lokal
-npx wrangler deploy    # ke Cloudflare Workers
+npx wrangler deploy    # ke Cloudflare Workers (worker: katakana-4jam)
 ```
 
 Seluruh aplikasi ada di `public/index.html`, tanpa proses build. Progres belajar disimpan di `localStorage` browser.
