@@ -1,5 +1,5 @@
 // Pages: network first with a 4-second limit, then the cached copy, so the app opens offline or on a stalled connection.
-const C='hira4j-0461bd5e';
+const C='hira4j-3bf88098';
 const PRE=['/','/manifest.webmanifest','/icon.svg'];
 const put=(k,res)=>{const cp=res.clone();caches.open(C).then(c=>c.put(k,cp))};
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(PRE)))});

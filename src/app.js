@@ -61,17 +61,18 @@ const qual=it=>QUAL[it.k]||'';
 /* the rule a word exercises, so the note under a word is about that word */
 function wordNote(it){const k=it.k,r=plainRom(k),n=[],kata=APP.id==='kata',sm=kata?'ッ':'っ',nn=kata?'ン':'ん';
   if(/nn/.test(r))n.push(`Romaji nn ditulis ${nn} lalu huruf baris n, tanpa ${sm}.`);
-  if(k.includes(sm))n.push(`Konsonan ganda ditulis dengan ${sm} kecil.`);
+  if(/n'/.test(r))n.push(`Apostrof menandakan ${nn} berdiri sendiri. Tulis ${nn} lalu huruf berikutnya, bukan huruf baris n.`);
+  if(k.includes(sm))n.push(/tch/.test(r)?`Romaji tch ditulis ${sm} kecil lalu huruf berawalan ch.`:`Konsonan ganda ditulis dengan ${sm} kecil.`);
   if(kata){if(k.includes('ー'))n.push('Vokal panjang ditulis dengan ー.')}
-  else{if(/oo/.test(r))n.push('Pengecualian: o panjang di kata ini ditulis おお.');
-    else if(/ee/.test(r))n.push('Pengecualian: e panjang di kata ini ditulis ええ.');
+  else{if(/oo/.test(r))n.push('Pengecualian: o panjang di kata ini ditulis dengan お, bukan う.');
+    else if(/ee/.test(r))n.push('Pengecualian: e panjang di kata ini ditulis dengan え, bukan い.');
     if(/ou/.test(r))n.push('Bunyi o panjang ditulis dengan う.');
     if(/ei/.test(r))n.push('Bunyi e panjang ditulis dengan い.');
-    if(/aa|ii|uu/.test(r))n.push('Vokal panjang ditulis dengan menambah huruf vokalnya.')}
+    if(/aa|ii|uu/.test(r))n.push('Bunyi a, i, atau u panjang ditulis dengan menambah あ, い, atau う.')}
   const sms=[...new Set([...k].filter(c=>SMALL[c]&&c!==sm))];if(sms.length)n.push(`${sms.join(' ')} ditulis kecil.`);
   if(/ng/.test(r))n.push(`Romaji ng ditulis ${nn} lalu huruf baris g.`);
-  if(/n[bpm]/.test(r))n.push(`Sebagian buku menulis m sebelum b, p, m. Hurufnya tetap ${nn}.`);
-  return n.slice(0,2).join(' ')}
+  if(/n[bpm]/.test(r))n.push(`Sebagian buku menulis m sebelum b, p, dan m. Hurufnya tetap ${nn}.`);
+  return n.slice(0,3).join(' ')}
 const noteOf=it=>it.type==='word'?wordNote(it):it.m;
 
 /* ---------- STATE ---------- */
@@ -273,7 +274,7 @@ addEventListener('appinstalled',()=>{installEvt=null;if(TAB==='plan')renderPlan(
 function installCard(){
   if(framed||standalone())return'';
   const box=(body,btn)=>`<div class="card row" style="justify-content:space-between;margin-bottom:10px"><span class="small" style="flex:1 1 200px"><b>Pasang sebagai aplikasi</b><br><span class="muted">${body}</span></span>${btn||''}</div>`;
-  if(installEvt)return box('Terbuka layar penuh. Tanpa internet tetap bisa dipakai, tetapi tulisan Anda nilai sendiri.','<button class="btn pri sm" id="inst">Pasang</button>');
+  if(installEvt)return box('Terbuka layar penuh. Tanpa internet tetap bisa dipakai, tetapi tulisan harus Anda nilai sendiri.','<button class="btn pri sm" id="inst">Pasang</button>');
   if(/iphone|ipad|ipod/i.test(navigator.userAgent))return box('Di Safari, ketuk tombol Bagikan, lalu pilih Tambahkan ke Layar Utama.');
   if(/android/i.test(navigator.userAgent))return box('Buka menu browser, lalu pilih Instal aplikasi atau Tambahkan ke layar utama.');
   return'';
@@ -318,7 +319,7 @@ function renderPlan(){const P=$('#p-plan');
   P.innerHTML=installCard()+`
   <div class="card hero stack">
     <div>${ready?'<div class="hanko" role="img" aria-label="Lulus"><span lang="ja">合格</span><small>LULUS</small></div>':''}
-      <h3>${APP.title}</h3><p class="muted small" style="margin:0">Anda siap tes jika tiga hal ini tercapai.</p></div>
+      <h3>${APP.title}</h3><p class="muted small" style="margin:0">Anda siap tes jika tiga hal pertama tercapai. Hal keempat dikerjakan besok.</p></div>
     <ul class="conds">
       <li class="${c1?'ok':''}"><i></i><span>Semua baris dipelajari. <b>${rowsDone}</b> dari ${ROWS.length}.</span></li>
       <li class="${c2?'ok':''}"><i></i><span>Tabel Kosong sempurna dua kali berturut-turut. <b>${Math.min(S.streak,2)}</b> dari 2.</span></li>
@@ -341,9 +342,9 @@ function renderPlan(){const P=$('#p-plan');
     <div><b>Penulisan vokal panjang pada romaji</b><br><span class="muted">Ikuti cara yang dipakai di tes Anda.</span></div>
     <div class="chips" role="group" aria-label="Penulisan vokal panjang">${APP.romStyles.map(([id,l])=>`<button class="chip" aria-pressed="${S.rom===id}" data-rom="${id}">${l}</button>`).join('')}</div>
     <p class="muted" style="margin:0">Progres tersimpan di perangkat ini saja. Menghapus data browser ikut menghapusnya.</p>
-    ${ask==='clock'?'<div class="confirm stack"><b>Mulai lagi dari 4:00:00? Progres huruf tidak terhapus.</b><div class="row"><button class="btn bad" id="ckYes">Mulai lagi</button><button class="btn" id="askNo">Batal</button></div></div>'
+    ${ask==='clock'?'<div class="confirm stack"><b>Mulai lagi dari 4:00:00? Progres huruf tidak terhapus.</b><div class="row"><button class="btn bad" id="ckYes">Mulai ulang</button><button class="btn" id="askNo">Batal</button></div></div>'
      :ask==='reset'?'<div class="confirm stack"><b>Hapus semua progres?</b><div class="row"><button class="btn bad" id="rsYes">Hapus</button><button class="btn" id="askNo">Batal</button></div></div>'
-     :`<div class="row">${S.start?'<button class="btn sm" id="restart">Mulai ulang waktu</button>':''}<button class="btn sm" id="rs">Reset progres</button></div>`}
+     :`<div class="row">${S.start?'<button class="btn sm" id="restart">Mulai ulang waktu</button>':''}<button class="btn sm" id="rs">Hapus progres</button></div>`}
   </div>
   <p class="credit">Dikembangkan oleh <b>@noeroelama</b>.<br>Data urutan goresan dari KanjiVG oleh Ulrich Apel, lisensi CC BY-SA 3.0.</p>`;
   const on=(id,f)=>{const e=$('#'+id,P);if(e)e.onclick=f};
@@ -415,7 +416,7 @@ function renderLearn(){killPads('learn');const P=$('#p-learn');
     keys.check=()=>{if(revealed)return;revealed=true;judge(P,pad,it,`<div class="mn">${jp(it.m)}</div>`,fin,keys)};
     $('#ck',P).onclick=keys.check;
   }else{
-    const ix=ROWS.indexOf(Rw),nx=ROWS[ix+1],mix=(ix+1)%3===0&&!!nx;
+    const ix=ROWS.indexOf(Rw),nx=ROWS[ix+1],mix=ix===2||ix===5;
     P.innerHTML=head+`<div class="card tint stack" style="--c:${C};text-align:center"><div class="kana cink" lang="ja" style="font-size:2.8rem">${items.map(i=>i.k).join(' ')}</div><h3>${jp(Rw.name)} selesai. Hurufnya sekarang ikut di tab Latih.</h3>
     <p class="muted small" style="margin:0">${mix?'Tiga baris selesai. Latihan campuran 5 menit dulu, lalu istirahat 5 menit.':nx?`Berikutnya ${jp(nx.name)}.`:'Semua baris selesai. Kerjakan Tabel Kosong.'}</p>
     <div class="row" style="justify-content:center">${nx?`<button class="btn ${mix?'':'pri'}" id="nr">Lanjut ke ${jp(nx.name)}</button>`:'<button class="btn pri" id="tb">Tabel Kosong</button>'}<button class="btn ${mix?'pri':''}" id="dr">Latihan campuran</button></div></div>`;
@@ -445,7 +446,7 @@ function weakKeys(){return Object.keys(S.cards).filter(k=>BY[k]&&weakOf(k))}
 function setInfo(o){const pool=poolFor(o.m),n=pool.length,weak=pool.filter(i=>weakOf(i.k)).length;let d;
   if(o.m==='weak')d=n?`${n} kartu perlu diulang`:'Belum ada kartu yang salah';
   else if(o.m==='base'){const r=ROWS.filter(r=>S.learned[r.id]).length;d=r?`${n} huruf, ${r} dari ${ROWS.length} baris dipelajari`:'Belum ada baris dipelajari, memakai Baris A'}
-  else if(o.m==='all')d=`Semua set, ${n} kartu`;
+  else if(o.m==='all')d=`${n} kartu`;
   else d=`${n} ${o.u}`;
   if(weak&&o.m!=='weak')d+=`, ${weak} perlu diulang`;
   return{n,d,ex:o.m==='weak'?[...pool.slice(0,2).map(i=>i.k).join(' ')].slice(0,4).join(''):o.ex}}
@@ -486,7 +487,7 @@ function renderDrill(){killPads('drill');const P=$('#p-drill');
   let revealed=false;
   const pad=addPad('drill',$('#pad',P),{wide:!single,row:it.row,locked:()=>revealed});
   $('#un',P).onclick=()=>pad.undo();$('#cl',P).onclick=()=>pad.clear();
-  const nt=noteOf(it),xn=group&&EXTRA_NOTE[it.k];
+  const nt=noteOf(it),xn=EXTRA_NOTE[it.k];
   const extra=`${nt?`<div class="mn">${jp(nt)}</div>`:''}${xn?`<div class="mn">${jp(xn)}</div>`:''}${group?`<div class="tiles">${group.map(k=>`<div class="tile tint" style="--c:var(--r-${ROW_OF[k]})"><b class="cink" lang="ja">${k}</b><span>${BY[k].r}</span></div>`).join('')}</div>`:''}`;
   const fin=ok=>{grade(it.k,ok);ok?DR.stat.c++:DR.stat.w++;
     DR.q.shift();
@@ -617,14 +618,14 @@ function renderTest(){killPads('test');const P=$('#p-test');
       runAuto(TS,ids.filter(i=>TS.ink[i]).map(i=>({k:TS.items[i].k,i,ink:TS.ink[i]})),x=>x.i,()=>{if(TS&&TS.phase==='review'&&TAB==='test')renderTest()})}
     const und=countOf(TS.un,ids),running=TS.auto==='running';
     const msg=running?`Menilai otomatis, <span id="autoStat">${TS.prog} dari ${ids.filter(i=>TS.ink[i]).length}</span>.`
-      :'Baris merah dinilai salah. Ketuk baris untuk mengubah nilainya.'+(und?` ${und} baris kuning perlu Anda nilai, misalnya karena ukuran huruf kecil tidak bisa dipastikan. Ketuk sekali jika benar, dua kali jika salah.`:'');
+      :'Soal merah dinilai salah. Ketuk soal untuk mengubah nilainya.'+(und?` ${und} soal kuning perlu Anda nilai, misalnya karena ukuran huruf kecil tidak bisa dipastikan. Ketuk sekali jika benar, dua kali jika salah.`:'');
     const st=i=>TS.x[i]?'x':TS.un[i]?'un':'';
     const pill=i=>TS.x[i]?'<span class="pill bad">Salah</span>':TS.un[i]?'<span class="pill warn">Nilai sendiri</span>':'<span class="pill ok">Benar</span>';
     P.innerHTML=`<div class="card"><h3>Periksa hasil tes</h3><p class="small" style="margin:0">${msg}</p></div>
     <div class="rl" style="margin-top:10px">${TS.items.map((it,i)=>`<button class="ri ${st(i)}" data-i="${i}"><span class="rom">${esc(romOf(it))}${qual(it)?` (${qual(it)})`:''}</span>${pill(i)}<span class="img">${TS.ink[i]?inkSVG(TS.ink[i]):'kosong'}</span><span class="a" lang="ja">${ck(it.k)}</span></button>`).join('')}</div>
     <div class="actions"><button class="btn pri" id="sv"></button></div>
     <div class="row" style="justify-content:center;margin-top:8px"><button class="btn sm ghost" id="ab">Buang tanpa menyimpan</button></div>`;
-    const sv=$('#sv',P),paintSave=()=>{const w=countOf(TS.x,ids),u=countOf(TS.un,ids);sv.disabled=TS.auto==='running'||u>0;sv.textContent=TS.auto==='running'?'Menilai':u?`Nilai dulu ${u} baris kuning`:`Simpan hasil, ${N-w} dari ${N} benar`};paintSave();
+    const sv=$('#sv',P),paintSave=()=>{const w=countOf(TS.x,ids),u=countOf(TS.un,ids);sv.disabled=TS.auto==='running'||u>0;sv.textContent=TS.auto==='running'?'Menilai':u?`Nilai dulu ${u} soal kuning`:`Simpan hasil, ${N-w} dari ${N} benar`};paintSave();
     $$('[data-i]',P).forEach(b=>b.onclick=()=>{const i=+b.dataset.i;TS.touched[i]=true;if(TS.un[i]){TS.un[i]=false;TS.x[i]=false}else TS.x[i]=!TS.x[i];
       b.className='ri '+st(i);$('.pill',b).outerHTML=pill(i);paintSave()});
     $('#ab',P).onclick=()=>{TS=null;RUN.clear('test');renderTest()};

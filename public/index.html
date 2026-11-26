@@ -345,7 +345,7 @@ const ROWS=[
   ['し','shi',1,'Satu goresan turun lalu melengkung ke kanan atas, seperti kail. Romajinya shi.'],
   ['す','su',2,'Garis datar panjang, lalu garis tegak dengan simpul di tengah yang ujungnya turun ke kiri.'],
   ['せ','se',3,'Garis datar panjang dan dua garis tegak. Yang kanan pendek. Yang kiri turun lalu berbelok ke kanan.'],
-  ['そ','so',4,'Zig-zag kecil di atas, lalu satu lengkung lebar yang membuka ke kanan. Ditulis dalam satu goresan.']]},
+  ['そ','so',4,'Zigzag kecil di atas, lalu satu lengkung lebar yang membuka ke kanan. Ditulis dalam satu goresan.']]},
  {id:'t',name:'Baris T',items:[
   ['た','ta',0,'Seperti huruf t, dengan こ kecil di sebelah kanannya.'],
   ['ち','chi',1,'Garis datar, lalu satu goresan miring yang berlanjut menjadi lengkung menggembung ke kanan, seperti angka 5. Romajinya chi.'],
@@ -377,12 +377,12 @@ const ROWS=[
  {id:'r',name:'Baris R',items:[
   ['ら','ra',0,'Goresan pendek di atas, lalu garis yang turun dan berbalik membentuk perut ke kanan.'],
   ['り','ri',1,'Dua garis tegak. Garis kanan lebih panjang dan menyapu ke bawah. Pada い, garis kiri yang lebih panjang.'],
-  ['る','ru',2,'Satu goresan zig-zag yang berakhir dengan simpul. ろ sama, tetapi tanpa simpul.'],
+  ['る','ru',2,'Satu goresan zigzag yang berakhir dengan simpul. ろ sama, tetapi tanpa simpul.'],
   ['れ','re',3,'Garis tegak, lalu goresan berliku yang berakhir dengan kait ke kanan.'],
   ['ろ','ro',4,'Seperti る tanpa simpul di ujung.']]},
  {id:'w',name:'Baris W dan ん',items:[
   ['わ','wa',0,'Garis tegak, lalu goresan berliku yang berakhir dengan lengkung membulat ke dalam.'],
-  ['を','wo',4,'Garis datar pendek, zig-zag yang menembusnya, lalu lengkung di bawah yang membuka ke kanan. Hanya dipakai sebagai partikel. Romajinya wo, tetapi dalam kalimat sering ditulis o.'],
+  ['を','wo',4,'Garis datar pendek, zigzag yang menembusnya, lalu lengkung di bawah yang membuka ke kanan. Hanya dipakai sebagai partikel. Romajinya wo, tetapi dalam kalimat sering ditulis o.'],
   ['ん','n',null,'Satu goresan seperti huruf n yang ditulis miring, dengan ekor ke kanan.']]}
 ];
 const SMALL={'ぁ':'あ','ぃ':'い','ぅ':'う','ぇ':'え','ぉ':'お','っ':'つ','ゃ':'や','ゅ':'ゆ','ょ':'よ','ゎ':'わ'};
@@ -396,7 +396,7 @@ const QUAL={};
 const EXTRA_NOTE={};
 /* [kana, arti] */
 const WORD_LIST=[
- ['きって','perangko'],['がっこう','sekolah'],['きょう','hari ini'],['しゃしん','foto'],['ちょっと','sebentar'],['じしょ','kamus'],['でんしゃ','kereta listrik'],
+ ['きって','prangko'],['がっこう','sekolah'],['きょう','hari ini'],['しゃしん','foto'],['ちょっと','sebentar'],['じしょ','kamus'],['でんしゃ','kereta listrik'],
  ['びょういん','rumah sakit'],['りょこう','perjalanan wisata'],['ぎゅうにゅう','susu sapi'],['おかあさん','ibu'],['おにいさん','kakak laki-laki'],['せんせい','guru'],
  ['ありがとう','terima kasih'],['ざっし','majalah'],['きっぷ','karcis'],['ひゃく','seratus'],['さかな','ikan'],['つくえ','meja tulis'],['ふじさん','Gunung Fuji'],
  ['みず','air'],['ひらがな','hiragana'],['にほんご','bahasa Jepang'],['まっちゃ','teh hijau bubuk'],['おちゃ','teh'],['けいたい','ponsel'],['ゆうびんきょく','kantor pos'],
@@ -409,14 +409,14 @@ const PAIRS=[['ぬ','め'],['ね','れ','わ'],['る','ろ'],['さ','ち'],['は
 const RULES=[
  {t:'Dakuten: dua titik',d:'Ditulis di kanan atas, sebagai goresan terakhir. Mengubah baris k, s, t, h menjadi g, z, d, b. Baris d juga punya ぢ dan づ. Bunyinya sama dengan じ dan ず, tetapi jarang dipakai. Untuk romaji ji dan zu, tulis じ dan ず. Tulis ぢ dan づ hanya jika soal meminta baris d lengkap.',ex:['が','ざ','だ','ば'],set:'daku'},
  {t:'Handakuten: lingkaran kecil',d:'Hanya dipakai pada baris h, dan mengubahnya menjadi p.',ex:['ぱ','ぴ','ぷ','ぺ','ぽ'],set:'daku'},
- {t:'Romaji yang tidak mengikuti pola',d:'Romaji lima huruf ini tidak mengikuti pola barisnya: shi, chi, tsu, fu, dan ji. Sebagian buku menulisnya si, ti, tu, hu, dan zi. Hurufnya tetap sama. Dalam kalimat, partikel wa ditulis は, partikel e ditulis へ, dan partikel o ditulis を.',ex:['し','ち','つ','ふ','じ','を','ん'],set:'base'},
+ {t:'Romaji yang tidak mengikuti pola',d:'Romaji lima huruf ini tidak mengikuti pola barisnya: shi, chi, tsu, fu, dan ji. Sebagian buku menulisnya si, ti, tu, hu, dan zi. Hurufnya tetap sama. Dalam kalimat, partikel wa ditulis は, partikel e ditulis へ, dan partikel o ditulis を.',ex:['し','ち','つ','ふ','じ','を'],set:'base'},
  {t:'Huruf kecil ゃ ゅ ょ',cmp:['や','ゃ'],d:'Huruf berakhiran i, ditambah ya, yu, atau yo yang ditulis setengah ukuran. Keduanya dibaca dalam satu ketukan. Pada sha, shu, sho, cha, chu, cho, ja, ju, dan jo, huruf y tidak tampak di romaji, tetapi ゃ, ゅ, atau ょ kecil tetap ditulis. Ukuran menentukan arti: きょう berbeda dengan きよう.',ex:['きゃ','しゅ','ちょ','じゃ','りょ'],set:'combo'},
  {t:'っ kecil',cmp:['つ','っ'],d:'Muncul pada romaji dengan konsonan ganda seperti kk, pp, ss, tt, atau tch. Tulis っ kecil sebelum huruf berikutnya. Sebagian buku menulis cch untuk tch, jadi matcha dan maccha adalah kata yang sama. Pengecualian: nn tidak memakai っ. Huruf n yang pertama ditulis ん, seperti pada みんな (minna).',ex:['きって','がっこう','まっちゃ','みんな'],set:'word'},
  {t:'Vokal panjang',d:'Bunyi a, i, dan u yang panjang ditulis dengan menambah あ, い, atau う. Bunyi o yang panjang hampir selalu ditulis dengan menambah う, bukan お. Bunyi e yang panjang hampir selalu ditulis dengan menambah い, bukan え. Romaji gakkou, gakkō, dan gakkoo adalah kata yang sama. Ketiganya ditulis がっこう. Romaji sensei dan sensee juga sama, dan ditulis せんせい. Hanya sedikit kata yang memakai おお atau ええ. Hafalkan tiga ini: おおきい, とおい, おねえさん. Kalau tes Anda menulis o panjang sebagai ou, tulis persis seperti romajinya. Di tes seperti itu, oo selalu berarti おお dan ee selalu berarti ええ.',ex:['きょう','がっこう','せんせい','おにいさん','おおきい','おねえさん'],set:'word'},
  {t:'Huruf ん',d:'ん ditulis untuk n yang tidak diikuti vokal atau y. Romaji ng berarti ん lalu huruf baris g, seperti にほんご (nihongo). Sebelum b, p, dan m, sebagian buku menulis m. Jadi tempura dan tenpura adalah kata yang sama, yaitu てんぷら. Apostrof pada hon\'ya menandakan ん berdiri sendiri, bukan bagian dari にゃ. Sebagian tes menulisnya hon-ya.',ex:['にほんご','てんぷら','ほんや','みんな'],set:'word'}
 ];
 const PLAN=[
- {s:0,e:100,t:'Huruf dasar per baris',d:'10 baris, sekitar 8 menit per baris. Tiap 3 baris, latihan campuran 5 menit, lalu istirahat 5 menit tanpa layar.',go:'learn',set:'base'},
+ {s:0,e:100,t:'Huruf dasar per baris',d:'10 baris, sekitar 8 menit per baris. Setelah baris ke-3 dan ke-6, latihan campuran 5 menit, lalu istirahat 5 menit tanpa layar.',go:'learn',set:'base'},
  {s:100,e:120,t:'Tabel Kosong pertama',d:'Tulis 46 huruf dari ingatan. Yang salah jadi bahan latihan berikutnya.',go:'table'},
  {s:120,e:150,t:'Perbaiki kesalahan',d:'Latih set Yang salah, lalu Pasangan mirip.',go:'drill',set:'weak'},
  {s:150,e:165,t:'Istirahat',d:'Tanpa layar dan tanpa hiragana. Jeda membantu ingatan mengendap.',go:null},
@@ -432,7 +432,7 @@ const MODES=[
  {m:'word',g:'Kata',l:'Kata',ex:'きって',u:'kata'},
  {m:'pairs',g:'Fokus',l:'Pasangan mirip',ex:'ぬ め',u:'huruf'},
  {m:'weak',g:'Fokus',l:'Yang salah',ex:'',u:'kartu'},
- {m:'all',g:'Fokus',l:'Campuran',ex:'あ が きゃ',u:'kartu'}
+ {m:'all',g:'Fokus',l:'Semua set',ex:'あ が きゃ',u:'kartu'}
 ];
 const REC_DEFAULT='all';
 /* recognizer: へ and り are drawn the same in both scripts, so their katakana readings count as hiragana */
@@ -502,17 +502,18 @@ const qual=it=>QUAL[it.k]||'';
 /* the rule a word exercises, so the note under a word is about that word */
 function wordNote(it){const k=it.k,r=plainRom(k),n=[],kata=APP.id==='kata',sm=kata?'ッ':'っ',nn=kata?'ン':'ん';
   if(/nn/.test(r))n.push(`Romaji nn ditulis ${nn} lalu huruf baris n, tanpa ${sm}.`);
-  if(k.includes(sm))n.push(`Konsonan ganda ditulis dengan ${sm} kecil.`);
+  if(/n'/.test(r))n.push(`Apostrof menandakan ${nn} berdiri sendiri. Tulis ${nn} lalu huruf berikutnya, bukan huruf baris n.`);
+  if(k.includes(sm))n.push(/tch/.test(r)?`Romaji tch ditulis ${sm} kecil lalu huruf berawalan ch.`:`Konsonan ganda ditulis dengan ${sm} kecil.`);
   if(kata){if(k.includes('ー'))n.push('Vokal panjang ditulis dengan ー.')}
-  else{if(/oo/.test(r))n.push('Pengecualian: o panjang di kata ini ditulis おお.');
-    else if(/ee/.test(r))n.push('Pengecualian: e panjang di kata ini ditulis ええ.');
+  else{if(/oo/.test(r))n.push('Pengecualian: o panjang di kata ini ditulis dengan お, bukan う.');
+    else if(/ee/.test(r))n.push('Pengecualian: e panjang di kata ini ditulis dengan え, bukan い.');
     if(/ou/.test(r))n.push('Bunyi o panjang ditulis dengan う.');
     if(/ei/.test(r))n.push('Bunyi e panjang ditulis dengan い.');
-    if(/aa|ii|uu/.test(r))n.push('Vokal panjang ditulis dengan menambah huruf vokalnya.')}
+    if(/aa|ii|uu/.test(r))n.push('Bunyi a, i, atau u panjang ditulis dengan menambah あ, い, atau う.')}
   const sms=[...new Set([...k].filter(c=>SMALL[c]&&c!==sm))];if(sms.length)n.push(`${sms.join(' ')} ditulis kecil.`);
   if(/ng/.test(r))n.push(`Romaji ng ditulis ${nn} lalu huruf baris g.`);
-  if(/n[bpm]/.test(r))n.push(`Sebagian buku menulis m sebelum b, p, m. Hurufnya tetap ${nn}.`);
-  return n.slice(0,2).join(' ')}
+  if(/n[bpm]/.test(r))n.push(`Sebagian buku menulis m sebelum b, p, dan m. Hurufnya tetap ${nn}.`);
+  return n.slice(0,3).join(' ')}
 const noteOf=it=>it.type==='word'?wordNote(it):it.m;
 
 /* ---------- STATE ---------- */
@@ -714,7 +715,7 @@ addEventListener('appinstalled',()=>{installEvt=null;if(TAB==='plan')renderPlan(
 function installCard(){
   if(framed||standalone())return'';
   const box=(body,btn)=>`<div class="card row" style="justify-content:space-between;margin-bottom:10px"><span class="small" style="flex:1 1 200px"><b>Pasang sebagai aplikasi</b><br><span class="muted">${body}</span></span>${btn||''}</div>`;
-  if(installEvt)return box('Terbuka layar penuh. Tanpa internet tetap bisa dipakai, tetapi tulisan Anda nilai sendiri.','<button class="btn pri sm" id="inst">Pasang</button>');
+  if(installEvt)return box('Terbuka layar penuh. Tanpa internet tetap bisa dipakai, tetapi tulisan harus Anda nilai sendiri.','<button class="btn pri sm" id="inst">Pasang</button>');
   if(/iphone|ipad|ipod/i.test(navigator.userAgent))return box('Di Safari, ketuk tombol Bagikan, lalu pilih Tambahkan ke Layar Utama.');
   if(/android/i.test(navigator.userAgent))return box('Buka menu browser, lalu pilih Instal aplikasi atau Tambahkan ke layar utama.');
   return'';
@@ -759,7 +760,7 @@ function renderPlan(){const P=$('#p-plan');
   P.innerHTML=installCard()+`
   <div class="card hero stack">
     <div>${ready?'<div class="hanko" role="img" aria-label="Lulus"><span lang="ja">合格</span><small>LULUS</small></div>':''}
-      <h3>${APP.title}</h3><p class="muted small" style="margin:0">Anda siap tes jika tiga hal ini tercapai.</p></div>
+      <h3>${APP.title}</h3><p class="muted small" style="margin:0">Anda siap tes jika tiga hal pertama tercapai. Hal keempat dikerjakan besok.</p></div>
     <ul class="conds">
       <li class="${c1?'ok':''}"><i></i><span>Semua baris dipelajari. <b>${rowsDone}</b> dari ${ROWS.length}.</span></li>
       <li class="${c2?'ok':''}"><i></i><span>Tabel Kosong sempurna dua kali berturut-turut. <b>${Math.min(S.streak,2)}</b> dari 2.</span></li>
@@ -782,9 +783,9 @@ function renderPlan(){const P=$('#p-plan');
     <div><b>Penulisan vokal panjang pada romaji</b><br><span class="muted">Ikuti cara yang dipakai di tes Anda.</span></div>
     <div class="chips" role="group" aria-label="Penulisan vokal panjang">${APP.romStyles.map(([id,l])=>`<button class="chip" aria-pressed="${S.rom===id}" data-rom="${id}">${l}</button>`).join('')}</div>
     <p class="muted" style="margin:0">Progres tersimpan di perangkat ini saja. Menghapus data browser ikut menghapusnya.</p>
-    ${ask==='clock'?'<div class="confirm stack"><b>Mulai lagi dari 4:00:00? Progres huruf tidak terhapus.</b><div class="row"><button class="btn bad" id="ckYes">Mulai lagi</button><button class="btn" id="askNo">Batal</button></div></div>'
+    ${ask==='clock'?'<div class="confirm stack"><b>Mulai lagi dari 4:00:00? Progres huruf tidak terhapus.</b><div class="row"><button class="btn bad" id="ckYes">Mulai ulang</button><button class="btn" id="askNo">Batal</button></div></div>'
      :ask==='reset'?'<div class="confirm stack"><b>Hapus semua progres?</b><div class="row"><button class="btn bad" id="rsYes">Hapus</button><button class="btn" id="askNo">Batal</button></div></div>'
-     :`<div class="row">${S.start?'<button class="btn sm" id="restart">Mulai ulang waktu</button>':''}<button class="btn sm" id="rs">Reset progres</button></div>`}
+     :`<div class="row">${S.start?'<button class="btn sm" id="restart">Mulai ulang waktu</button>':''}<button class="btn sm" id="rs">Hapus progres</button></div>`}
   </div>
   <p class="credit">Dikembangkan oleh <b>@noeroelama</b>.<br>Data urutan goresan dari KanjiVG oleh Ulrich Apel, lisensi CC BY-SA 3.0.</p>`;
   const on=(id,f)=>{const e=$('#'+id,P);if(e)e.onclick=f};
@@ -856,7 +857,7 @@ function renderLearn(){killPads('learn');const P=$('#p-learn');
     keys.check=()=>{if(revealed)return;revealed=true;judge(P,pad,it,`<div class="mn">${jp(it.m)}</div>`,fin,keys)};
     $('#ck',P).onclick=keys.check;
   }else{
-    const ix=ROWS.indexOf(Rw),nx=ROWS[ix+1],mix=(ix+1)%3===0&&!!nx;
+    const ix=ROWS.indexOf(Rw),nx=ROWS[ix+1],mix=ix===2||ix===5;
     P.innerHTML=head+`<div class="card tint stack" style="--c:${C};text-align:center"><div class="kana cink" lang="ja" style="font-size:2.8rem">${items.map(i=>i.k).join(' ')}</div><h3>${jp(Rw.name)} selesai. Hurufnya sekarang ikut di tab Latih.</h3>
     <p class="muted small" style="margin:0">${mix?'Tiga baris selesai. Latihan campuran 5 menit dulu, lalu istirahat 5 menit.':nx?`Berikutnya ${jp(nx.name)}.`:'Semua baris selesai. Kerjakan Tabel Kosong.'}</p>
     <div class="row" style="justify-content:center">${nx?`<button class="btn ${mix?'':'pri'}" id="nr">Lanjut ke ${jp(nx.name)}</button>`:'<button class="btn pri" id="tb">Tabel Kosong</button>'}<button class="btn ${mix?'pri':''}" id="dr">Latihan campuran</button></div></div>`;
@@ -886,7 +887,7 @@ function weakKeys(){return Object.keys(S.cards).filter(k=>BY[k]&&weakOf(k))}
 function setInfo(o){const pool=poolFor(o.m),n=pool.length,weak=pool.filter(i=>weakOf(i.k)).length;let d;
   if(o.m==='weak')d=n?`${n} kartu perlu diulang`:'Belum ada kartu yang salah';
   else if(o.m==='base'){const r=ROWS.filter(r=>S.learned[r.id]).length;d=r?`${n} huruf, ${r} dari ${ROWS.length} baris dipelajari`:'Belum ada baris dipelajari, memakai Baris A'}
-  else if(o.m==='all')d=`Semua set, ${n} kartu`;
+  else if(o.m==='all')d=`${n} kartu`;
   else d=`${n} ${o.u}`;
   if(weak&&o.m!=='weak')d+=`, ${weak} perlu diulang`;
   return{n,d,ex:o.m==='weak'?[...pool.slice(0,2).map(i=>i.k).join(' ')].slice(0,4).join(''):o.ex}}
@@ -927,7 +928,7 @@ function renderDrill(){killPads('drill');const P=$('#p-drill');
   let revealed=false;
   const pad=addPad('drill',$('#pad',P),{wide:!single,row:it.row,locked:()=>revealed});
   $('#un',P).onclick=()=>pad.undo();$('#cl',P).onclick=()=>pad.clear();
-  const nt=noteOf(it),xn=group&&EXTRA_NOTE[it.k];
+  const nt=noteOf(it),xn=EXTRA_NOTE[it.k];
   const extra=`${nt?`<div class="mn">${jp(nt)}</div>`:''}${xn?`<div class="mn">${jp(xn)}</div>`:''}${group?`<div class="tiles">${group.map(k=>`<div class="tile tint" style="--c:var(--r-${ROW_OF[k]})"><b class="cink" lang="ja">${k}</b><span>${BY[k].r}</span></div>`).join('')}</div>`:''}`;
   const fin=ok=>{grade(it.k,ok);ok?DR.stat.c++:DR.stat.w++;
     DR.q.shift();
@@ -1058,14 +1059,14 @@ function renderTest(){killPads('test');const P=$('#p-test');
       runAuto(TS,ids.filter(i=>TS.ink[i]).map(i=>({k:TS.items[i].k,i,ink:TS.ink[i]})),x=>x.i,()=>{if(TS&&TS.phase==='review'&&TAB==='test')renderTest()})}
     const und=countOf(TS.un,ids),running=TS.auto==='running';
     const msg=running?`Menilai otomatis, <span id="autoStat">${TS.prog} dari ${ids.filter(i=>TS.ink[i]).length}</span>.`
-      :'Baris merah dinilai salah. Ketuk baris untuk mengubah nilainya.'+(und?` ${und} baris kuning perlu Anda nilai, misalnya karena ukuran huruf kecil tidak bisa dipastikan. Ketuk sekali jika benar, dua kali jika salah.`:'');
+      :'Soal merah dinilai salah. Ketuk soal untuk mengubah nilainya.'+(und?` ${und} soal kuning perlu Anda nilai, misalnya karena ukuran huruf kecil tidak bisa dipastikan. Ketuk sekali jika benar, dua kali jika salah.`:'');
     const st=i=>TS.x[i]?'x':TS.un[i]?'un':'';
     const pill=i=>TS.x[i]?'<span class="pill bad">Salah</span>':TS.un[i]?'<span class="pill warn">Nilai sendiri</span>':'<span class="pill ok">Benar</span>';
     P.innerHTML=`<div class="card"><h3>Periksa hasil tes</h3><p class="small" style="margin:0">${msg}</p></div>
     <div class="rl" style="margin-top:10px">${TS.items.map((it,i)=>`<button class="ri ${st(i)}" data-i="${i}"><span class="rom">${esc(romOf(it))}${qual(it)?` (${qual(it)})`:''}</span>${pill(i)}<span class="img">${TS.ink[i]?inkSVG(TS.ink[i]):'kosong'}</span><span class="a" lang="ja">${ck(it.k)}</span></button>`).join('')}</div>
     <div class="actions"><button class="btn pri" id="sv"></button></div>
     <div class="row" style="justify-content:center;margin-top:8px"><button class="btn sm ghost" id="ab">Buang tanpa menyimpan</button></div>`;
-    const sv=$('#sv',P),paintSave=()=>{const w=countOf(TS.x,ids),u=countOf(TS.un,ids);sv.disabled=TS.auto==='running'||u>0;sv.textContent=TS.auto==='running'?'Menilai':u?`Nilai dulu ${u} baris kuning`:`Simpan hasil, ${N-w} dari ${N} benar`};paintSave();
+    const sv=$('#sv',P),paintSave=()=>{const w=countOf(TS.x,ids),u=countOf(TS.un,ids);sv.disabled=TS.auto==='running'||u>0;sv.textContent=TS.auto==='running'?'Menilai':u?`Nilai dulu ${u} soal kuning`:`Simpan hasil, ${N-w} dari ${N} benar`};paintSave();
     $$('[data-i]',P).forEach(b=>b.onclick=()=>{const i=+b.dataset.i;TS.touched[i]=true;if(TS.un[i]){TS.un[i]=false;TS.x[i]=false}else TS.x[i]=!TS.x[i];
       b.className='ri '+st(i);$('.pill',b).outerHTML=pill(i);paintSave()});
     $('#ab',P).onclick=()=>{TS=null;RUN.clear('test');renderTest()};

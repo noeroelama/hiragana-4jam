@@ -8,7 +8,7 @@ const APP={
   romStyles:[['double','koohii'],['macron','kōhī']],romDefault:'double',
   wordsLabel:'kata serapan',glossLabel:'Asal kata',
   test:{base:5,daku:3,combo:2,foreign:2,word:8,coreWords:5},
-  testIntro:'20 soal: 5 huruf dasar, 3 dakuten, 2 huruf kecil, 2 bunyi asing, dan 8 kata serapan. Romaji tampil tanpa warna dan tanpa kata asalnya, seperti di kertas ujian. Jawaban baru terlihat setelah soal terakhir.',
+  testIntro:'20 soal: 5 huruf dasar, 3 dakuten, 2 huruf kecil, 2 bunyi asing, dan 8 kata serapan. Tiga dari delapan kata diambil dari luar kata inti. Tulis dengan aturan yang sama. Romaji tampil tanpa warna dan tanpa kata asalnya, seperti di kertas ujian. Jawaban baru terlihat setelah soal terakhir.',
   learnIntro:'Tiga tahap per baris: lihat, jiplak, lalu tulis dari ingatan. Warna baris sama dengan aplikasi hiragana, dan hiragana yang sebunyi ditampilkan di samping romaji.',
   rulesIntro:'Pelajari setelah 46 huruf dasar dikuasai. Sebagian besar nilai tes katakana ditentukan di sini.',
   howto:[
@@ -18,7 +18,7 @@ const APP={
 };
 const ROWS=[
  {id:'a',name:'Baris A',items:[
-  ['ア','a',0,'Garis datar yang ujung kanannya berkait ke bawah, lalu garis yang turun melengkung ke kiri dari tengah. マ tidak punya garis turun panjang, hanya titik pendek.'],
+  ['ア','a',0,'Garis datar yang ujung kanannya berkait ke bawah, lalu garis yang turun melengkung ke kiri dari tengah. Pada マ, goresan kedua hanya titik pendek ke kanan bawah.'],
   ['イ','i',1,'Garis miring panjang yang turun ke kiri, lalu garis tegak dari tengahnya. Hanya dua goresan.'],
   ['ウ','u',2,'Titik di atas, garis tegak pendek, lalu atap yang turun melengkung ke kiri. ワ sama tanpa titik.'],
   ['エ','e',3,'Seperti huruf I kapital: garis atas, garis tegak, dan garis bawah yang lebih panjang.'],
@@ -80,10 +80,10 @@ const DAKU_NOTE='Dua titik mengubah k, s, t, h menjadi g, z, d, b. Lingkaran kec
 const COMBO_LIST=[];'キ シ チ ニ ヒ ミ リ ギ ジ ビ ピ'.split(' ').forEach(k=>'ャ ュ ョ'.split(' ').forEach(s=>COMBO_LIST.push(k+s)));
 const comboNote=k=>[...k][0]+', lalu '+[...k][1]+' yang ditulis kecil dan agak rendah.';
 /* [kana, rare]: rare sounds are drilled last and never drawn in the mock test */
-const FOREIGN_LIST=[['ファ'],['フィ'],['フェ'],['フォ'],['ティ'],['ディ'],['ウィ'],['ウェ'],['ウォ'],['シェ'],['ジェ'],['チェ'],['デュ'],['トゥ',1],['ドゥ',1],['ヴァ',1],['ヴィ',1],['ヴ',1]];
+const FOREIGN_LIST=[['ファ'],['フィ'],['フェ'],['フォ'],['ティ'],['ディ'],['ウィ'],['ウェ'],['ウォ'],['シェ'],['ジェ'],['チェ'],['デュ',1],['トゥ',1],['ドゥ',1],['ヴァ',1],['ヴィ',1],['ヴ',1]];
 const foreignNote=k=>{const f=[...k][0];
   if(f==='フ')return'Bunyi f ditulis フ ditambah vokal kecil. Hanya fu yang berdiri sendiri (フ).';
-  if(f==='テ'||f==='デ')return k.endsWith('ュ')?'デ ditambah ュ kecil, untuk bunyi dyu.':'Bunyi ti dan di tidak ada dalam bahasa Jepang asli, jadi ditulis テ atau デ ditambah ィ kecil. Bandingkan dengan チ (chi).';
+  if(f==='テ'||f==='デ')return k.endsWith('ュ')?'デ ditambah ュ kecil, untuk bunyi dyu. Bunyi ini jarang muncul.':'Bunyi ti dan di tidak ada dalam bahasa Jepang asli, jadi ditulis テ atau デ ditambah ィ kecil. Bandingkan dengan チ (chi).';
   if(f==='ト'||f==='ド')return'ト atau ド ditambah ゥ kecil, untuk bunyi tu dan du. Bandingkan dengan ツ (tsu). Bunyi ini jarang muncul.';
   if(f==='ウ')return'ウ ditambah vokal kecil, untuk bunyi wi, we, dan wo pada kata serapan. Jangan tertukar dengan ヲ, yang juga beromaji wo.';
   if(f==='ヴ')return'ヴ adalah ウ dengan dakuten. Banyak kata justru menulis bunyi v dengan baris B, seperti ビデオ (video). Bunyi ini jarang muncul.';
@@ -93,17 +93,17 @@ const QUAL={'ヲ':'huruf dasar','ウォ':'bunyi asing'};
 const EXTRA_NOTE={'カ':'Bentuk hiragananya か. Di tes katakana, bentuk itu dihitung salah.','キ':'Bentuk hiragananya き. Di tes katakana, bentuk itu dihitung salah.','セ':'Bentuk hiragananya せ. Di tes katakana, bentuk itu dihitung salah.','モ':'Bentuk hiragananya も. Di tes katakana, bentuk itu dihitung salah.','ヤ':'Bentuk hiragananya や. Di tes katakana, bentuk itu dihitung salah.','リ':'Bentuk hiragana り hampir sama. Pada リ, garis kiri lurus tanpa kait.'};
 /* [kana, asal kata, inti]: 40 core words cover every spelling pattern and are the target of the 4-hour session */
 const WORD_LIST=[
- ['コーヒー','coffee',1],['ジュース','juice',1],['ミルク','milk'],['ケーキ','cake'],['チーズ','cheese'],['バター','butter'],['サラダ','salad'],['スープ','soup',1],
+ ['コーヒー','coffee',1],['ジュース','juice',1],['ミルク','milk'],['ケーキ','cake'],['チーズ','cheese'],['バター','butter'],['サラダ','salad'],['スープ','soup'],
  ['ハンバーガー','hamburger'],['サンドイッチ','sandwich'],['ピザ','pizza'],['ステーキ','steak'],['チョコレート','chocolate',1],['アイスクリーム','ice cream'],['クッキー','cookie'],
  ['レモン','lemon'],['バナナ','banana'],['トマト','tomato'],['ポテト','potato'],['ソース','sauce',1],['フォーク','fork',1],['ナイフ','knife'],['スプーン','spoon'],['カップ','cup',1],
  ['グラス','glass'],['メニュー','menu',1],['レストラン','restaurant'],['ドーナツ','doughnut'],['ヨーグルト','yogurt'],['ミルクティー','milk tea'],['ディナー','dinner',1],
- ['コンピューター','computer'],['インターネット','internet'],['メール','e-mail'],['スマートフォン','smartphone'],['アプリ','app'],['ソフトウェア','software'],['ファイル','file',1],
+ ['コンピューター','computer'],['インターネット','internet'],['メール','mail'],['スマートフォン','smartphone'],['アプリ','app'],['ソフトウェア','software'],['ファイル','file',1],
  ['データ','data'],['パスワード','password'],['キーボード','keyboard'],['マウス','mouse'],['プリンター','printer'],['カメラ','camera'],['テレビ','television',1],['ラジオ','radio'],
  ['ビデオ','video'],['ゲーム','game'],['ウェブサイト','website'],['ダウンロード','download'],['クリック','click'],['システム','system'],['プログラム','program'],
  ['ネットワーク','network'],['サーバー','server'],['デザイン','design'],['オンライン','online'],['チャット','chat'],
  ['ホテル','hotel'],['デパート','department store'],['スーパー','supermarket'],['コンビニ','convenience store',1],['バス','bus'],['タクシー','taxi'],['エレベーター','elevator'],
  ['エスカレーター','escalator'],['トイレ','toilet'],['ドア','door'],['テーブル','table'],['ベッド','bed',1],['ソファ','sofa'],['カーテン','curtain'],['シャワー','shower'],
- ['キッチン','kitchen'],['アパート','apartment'],['ビル','building'],['オフィス','office'],['デスク','desk'],['パーティー','party',1],['コンサート','concert'],['プール','pool'],
+ ['キッチン','kitchen',1],['アパート','apartment'],['ビル','building'],['オフィス','office'],['デスク','desk'],['パーティー','party',1],['コンサート','concert'],['プール','pool'],
  ['スタジアム','stadium'],['チケット','ticket',1],['パスポート','passport'],['ビザ','visa'],['スーツケース','suitcase'],['ガイド','guide'],['ツアー','tour'],
  ['ペン','pen'],['ノート','notebook'],['テスト','test'],['クラス','class'],['レポート','report'],['ニュース','news',1],['スポーツ','sports',1],['サッカー','soccer',1],['テニス','tennis'],
  ['ゴルフ','golf'],['バスケットボール','basketball'],['ジョギング','jogging',1],['ギター','guitar'],['ピアノ','piano'],['ドラマ','drama'],['アニメ','animation'],['シャツ','shirt',1],
@@ -111,12 +111,12 @@ const WORD_LIST=[
  ['シャンプー','shampoo',1],['タオル','towel'],['カレンダー','calendar'],['スケジュール','schedule'],['ミーティング','meeting'],['プレゼント','present'],['カード','card'],
  ['メッセージ','message'],['ボランティア','volunteer'],['リーダー','leader'],['チーム','team'],['マネージャー','manager'],['エンジニア','engineer'],['スタッフ','staff',1],
  ['ユーザー','user'],['ヒーロー','hero'],['ファッション','fashion'],['フィルム','film',1],['フェリー','ferry',1],['ウェディング','wedding'],['チェック','check',1],['シェフ','chef',1],
- ['フィットネス','fitness'],['ティッシュ','tissue'],['ディスク','disk'],['フェスティバル','festival'],['ウェブ','web',1],['ジェット','jet',1],
+ ['フィットネス','fitness'],['ティッシュ','tissue',1],['ディスク','disk'],['フェスティバル','festival'],['ウェブ','web',1],['ジェット','jet',1],
  ['インドネシア','Indonesia'],['アメリカ','America'],['オーストラリア','Australia'],['カナダ','Canada'],['フランス','France'],['イタリア','Italy'],['スペイン','Spain'],
  ['ブラジル','Brazil'],['インド','India'],['マレーシア','Malaysia'],['シンガポール','Singapore',1],['タイ','Thailand'],['ベトナム','Vietnam'],['エジプト','Egypt'],
  ['ジャカルタ','Jakarta'],['ロンドン','London'],['ニューヨーク','New York'],
  ['ウィークエンド','weekend',1],['キャンプ','camp',1],['キャベツ','cabbage'],['ミュージアム','museum',1],['インタビュー','interview',1],['リュック','rucksack',1],
- ['チューリップ','tulip',1],['ギャラリー','gallery',1],['ウォーキング','walking',1],['プロデューサー','producer',1],['ヌードル','noodle'],['メモ','memo'],['トンネル','tunnel',1],
+ ['チューリップ','tulip',1],['ギャラリー','gallery',1],['ウォーキング','walking',1],['プロデューサー','producer'],['ヌードル','noodle'],['メモ','memo'],['トンネル','tunnel',1],
  ['タイヤ','tire'],['ヘルメット','helmet']
 ];
 const PAIRS=[['シ','ツ'],['ソ','ン'],['シ','ン'],['ツ','ソ'],['ク','ケ','タ'],['ウ','ワ','フ'],['ア','マ'],['コ','ユ','ヨ','ロ'],['ス','ヌ'],['チ','テ'],['ナ','メ'],['ル','レ'],['ヤ','セ'],['ノ','メ'],['ク','ワ'],['ラ','ヲ','フ'],['マ','ム'],['ミ','シ'],['オ','ホ'],['ソ','リ']];
@@ -126,19 +126,19 @@ const RULES=[
  {t:'Huruf kecil ャ ュ ョ',cmp:['ヤ','ャ'],d:'Huruf berakhiran i, ditambah ya, yu, atau yo yang ditulis setengah ukuran. Keduanya dibaca dalam satu ketukan. Pada sha, shu, sho, cha, chu, cho, ja, ju, dan jo, huruf y tidak tampak di romaji, tetapi ャ, ュ, atau ョ kecil tetap ditulis.',ex:['シャツ','ジュース','メニュー','チョコレート'],set:'combo'},
  {t:'Bunyi asing',d:'Bunyi yang tidak ada dalam bahasa Jepang asli ditulis dengan huruf kecil di belakangnya: fa, fi, fe, fo, ti, di, wi, we, wo, she, je, che. Sebagian buku menulis thi dan dhi untuk ティ dan ディ. Yang jarang muncul: tu, du, dyu, dan bunyi v dengan ヴ. Pelajari yang jarang ini paling akhir. Di sebagian buku, si, hu, dan zi berarti シ, フ, dan ジ. Di aplikasi ini, ti dan tu berarti ティ dan トゥ.',ex:['ファッション','パーティー','ウェブ','シェフ','ディナー'],set:'foreign'},
  {t:'ン dalam romaji',d:'Romaji ng berarti ン lalu huruf baris g, seperti ジョギング (jogingu). Sebelum b, p, dan m, sebagian buku menulis m. Jadi hambaagaa dan hanbaagaa adalah kata yang sama, yaitu ハンバーガー. Huruf m yang langsung diikuti b, p, atau m selalu ditulis ン.',ex:['ジョギング','シンガポール','ハンバーガー','コンビニ','シャンプー'],set:'core'},
- {t:'Dakuten dan handakuten',d:'Sama seperti hiragana. Dua titik mengubah k, s, t, h menjadi g, z, d, b. Lingkaran kecil mengubah h menjadi p. Untuk romaji ji dan zu, tulis ジ dan ズ. Baris d juga punya ヂ dan ヅ, tetapi jarang dipakai.',ex:['ガ','ザ','ダ','バ','パ'],set:'daku'},
+ {t:'Dakuten dan handakuten',d:'Sama seperti hiragana. Dua titik mengubah k, s, t, h menjadi g, z, d, b. Lingkaran kecil mengubah h menjadi p. Untuk romaji ji dan zu, tulis ジ dan ズ. Baris d juga punya ヂ dan ヅ. Bunyinya sama dengan ジ dan ズ, tetapi jarang dipakai. Tulis ヂ dan ヅ hanya jika soal meminta baris d lengkap.',ex:['ガ','ザ','ダ','バ','パ'],set:'daku'},
  {t:'シ ツ ソ ン',d:'Empat huruf ini paling sering tertukar. Lihat arah goresan terakhir. Pada シ dan ン ditarik dari bawah ke atas, pada ツ dan ソ dari atas ke bawah. Titik pada シ bertumpuk di kiri, titik pada ツ berjajar di atas. Di kertas, arah goresan sulit terlihat. Yang terlihat adalah letaknya. Pada シ dan ン, titiknya lebih rebah dan garis panjang mulai dari kiri bawah, di bawah titik. Pada ツ dan ソ, titiknya lebih tegak dan semua goresan mulai dari atas, hampir sama tinggi.',ex:['シ','ツ','ソ','ン'],set:'pairs'},
  {t:'Dari bahasa Inggris ke katakana',d:'Bahasa Jepang menambahkan vokal setelah konsonan yang tidak diikuti vokal. Biasanya u, seperti desk menjadi desuku. Setelah t dan d biasanya o, seperti bed menjadi beddo. Setelah ch dan j biasanya i, seperti sandwich menjadi sandoitchi. Huruf n tetap ン tanpa vokal, seperti pen menjadi pen. Ada pengecualian, misalnya cake menjadi keeki dan shirt menjadi shatsu. Karena itu, selalu ikuti romaji pada soal. Akhiran -er dan -or menjadi bunyi panjang, seperti server menjadi saabaa. Bunyi l ditulis dengan baris R, dan v umumnya dengan baris B.',ex:['ベッド','デスク','サーバー','ホテル','ビデオ'],set:'word'}
 ];
 const PLAN=[
- {s:0,e:90,t:'Huruf dasar per baris',d:'10 baris, sekitar 7 menit per baris. Katakana yang mirip hiragananya cepat selesai. Tiap 3 baris, latihan campuran 5 menit, lalu istirahat 5 menit tanpa layar.',go:'learn',set:'base'},
+ {s:0,e:90,t:'Huruf dasar per baris',d:'10 baris, sekitar 7 menit per baris. Katakana yang mirip hiragananya cepat selesai. Setelah baris ke-3 dan ke-6, latihan campuran 5 menit, lalu istirahat 5 menit tanpa layar.',go:'learn',set:'base'},
  {s:90,e:105,t:'Tabel Kosong pertama',d:'Tulis 46 huruf dari ingatan. Yang salah jadi bahan latihan berikutnya.',go:'table'},
  {s:105,e:130,t:'Perbaiki kesalahan',d:'Latih set Yang salah, lalu Pasangan mirip, terutama シ ツ ソ ン.',go:'drill',set:'weak'},
  {s:130,e:140,t:'Istirahat',d:'Tanpa layar. Jeda membantu ingatan mengendap.',go:null},
- {s:140,e:170,t:'Aturan katakana',d:'Garis panjang ー, ッ kecil, ャ ュ ョ, bunyi asing, dan ン. Baca kartunya, lalu latih tiap set.',go:'learn',set:'foreign'},
+ {s:140,e:170,t:'Aturan katakana',d:'Dakuten, garis panjang ー, ッ kecil, ャ ュ ョ, bunyi asing, dan ン. Baca kartunya, lalu latih tiap set.',go:'learn',set:'foreign'},
  {s:170,e:205,t:'Kata inti',d:'Latih 40 kata inti. Satu kata terhitung dikuasai setelah benar dua kali berturut-turut. Kata serapan lainnya untuk hari-hari berikutnya.',go:'drill',set:'core'},
  {s:205,e:225,t:'Simulasi tes',d:'20 soal. 8 di antaranya kata serapan.',go:'test'},
- {s:225,e:240,t:'Tabel Kosong terakhir',d:'Target: 46 benar. Besok pagi, tulis lagi ke-46 huruf di kertas sebelum membuka aplikasi.',go:'table'}
+ {s:225,e:240,t:'Tabel Kosong terakhir',d:'Target: 46 benar, dua kali berturut-turut. Kalau tabel pertama tadi belum sempurna, ulangi tabel ini sekali lagi. Besok pagi, tulis lagi ke-46 huruf di kertas sebelum membuka aplikasi.',go:'table'}
 ];
 const MODES=[
  {m:'base',g:'Huruf',l:'Huruf dasar',ex:'ア カ サ',u:'huruf'},
@@ -149,7 +149,7 @@ const MODES=[
  {m:'word',g:'Kata',l:'Semua kata serapan',ex:'テレビ',u:'kata'},
  {m:'pairs',g:'Fokus',l:'Pasangan mirip',ex:'シ ツ',u:'huruf'},
  {m:'weak',g:'Fokus',l:'Yang salah',ex:'',u:'kartu'},
- {m:'all',g:'Fokus',l:'Campuran',ex:'ア ガ キャ',u:'kartu'}
+ {m:'all',g:'Fokus',l:'Semua set',ex:'ア ガ キャ',u:'kartu'}
 ];
 const REC_DEFAULT='core';
 /* recognizer: katakana share shapes with some kanji and symbols, and へ and り are drawn the same in both scripts.
