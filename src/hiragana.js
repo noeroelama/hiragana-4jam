@@ -31,7 +31,7 @@ const ROWS=[
   ['し','shi',1,'Satu goresan turun lalu melengkung ke kanan atas, seperti kail. Romajinya shi.'],
   ['す','su',2,'Garis datar panjang, lalu garis tegak dengan simpul di tengah yang ujungnya turun ke kiri.'],
   ['せ','se',3,'Garis datar panjang dan dua garis tegak. Yang kanan pendek. Yang kiri turun lalu berbelok ke kanan.'],
-  ['そ','so',4,'Zig-zag kecil di atas, lalu satu lengkung lebar yang membuka ke kanan. Ditulis dalam satu goresan.']]},
+  ['そ','so',4,'Zigzag kecil di atas, lalu satu lengkung lebar yang membuka ke kanan. Ditulis dalam satu goresan.']]},
  {id:'t',name:'Baris T',items:[
   ['た','ta',0,'Seperti huruf t, dengan こ kecil di sebelah kanannya.'],
   ['ち','chi',1,'Garis datar, lalu satu goresan miring yang berlanjut menjadi lengkung menggembung ke kanan, seperti angka 5. Romajinya chi.'],
@@ -63,12 +63,12 @@ const ROWS=[
  {id:'r',name:'Baris R',items:[
   ['ら','ra',0,'Goresan pendek di atas, lalu garis yang turun dan berbalik membentuk perut ke kanan.'],
   ['り','ri',1,'Dua garis tegak. Garis kanan lebih panjang dan menyapu ke bawah. Pada い, garis kiri yang lebih panjang.'],
-  ['る','ru',2,'Satu goresan zig-zag yang berakhir dengan simpul. ろ sama, tetapi tanpa simpul.'],
+  ['る','ru',2,'Satu goresan zigzag yang berakhir dengan simpul. ろ sama, tetapi tanpa simpul.'],
   ['れ','re',3,'Garis tegak, lalu goresan berliku yang berakhir dengan kait ke kanan.'],
   ['ろ','ro',4,'Seperti る tanpa simpul di ujung.']]},
  {id:'w',name:'Baris W dan ん',items:[
   ['わ','wa',0,'Garis tegak, lalu goresan berliku yang berakhir dengan lengkung membulat ke dalam.'],
-  ['を','wo',4,'Garis datar pendek, zig-zag yang menembusnya, lalu lengkung di bawah yang membuka ke kanan. Hanya dipakai sebagai partikel. Romajinya wo, tetapi dalam kalimat sering ditulis o.'],
+  ['を','wo',4,'Garis datar pendek, zigzag yang menembusnya, lalu lengkung di bawah yang membuka ke kanan. Hanya dipakai sebagai partikel. Romajinya wo, tetapi dalam kalimat sering ditulis o.'],
   ['ん','n',null,'Satu goresan seperti huruf n yang ditulis miring, dengan ekor ke kanan.']]}
 ];
 const SMALL={'ぁ':'あ','ぃ':'い','ぅ':'う','ぇ':'え','ぉ':'お','っ':'つ','ゃ':'や','ゅ':'ゆ','ょ':'よ','ゎ':'わ'};
@@ -82,7 +82,7 @@ const QUAL={};
 const EXTRA_NOTE={};
 /* [kana, arti] */
 const WORD_LIST=[
- ['きって','perangko'],['がっこう','sekolah'],['きょう','hari ini'],['しゃしん','foto'],['ちょっと','sebentar'],['じしょ','kamus'],['でんしゃ','kereta listrik'],
+ ['きって','prangko'],['がっこう','sekolah'],['きょう','hari ini'],['しゃしん','foto'],['ちょっと','sebentar'],['じしょ','kamus'],['でんしゃ','kereta listrik'],
  ['びょういん','rumah sakit'],['りょこう','perjalanan wisata'],['ぎゅうにゅう','susu sapi'],['おかあさん','ibu'],['おにいさん','kakak laki-laki'],['せんせい','guru'],
  ['ありがとう','terima kasih'],['ざっし','majalah'],['きっぷ','karcis'],['ひゃく','seratus'],['さかな','ikan'],['つくえ','meja tulis'],['ふじさん','Gunung Fuji'],
  ['みず','air'],['ひらがな','hiragana'],['にほんご','bahasa Jepang'],['まっちゃ','teh hijau bubuk'],['おちゃ','teh'],['けいたい','ponsel'],['ゆうびんきょく','kantor pos'],
@@ -95,14 +95,14 @@ const PAIRS=[['ぬ','め'],['ね','れ','わ'],['る','ろ'],['さ','ち'],['は
 const RULES=[
  {t:'Dakuten: dua titik',d:'Ditulis di kanan atas, sebagai goresan terakhir. Mengubah baris k, s, t, h menjadi g, z, d, b. Baris d juga punya ぢ dan づ. Bunyinya sama dengan じ dan ず, tetapi jarang dipakai. Untuk romaji ji dan zu, tulis じ dan ず. Tulis ぢ dan づ hanya jika soal meminta baris d lengkap.',ex:['が','ざ','だ','ば'],set:'daku'},
  {t:'Handakuten: lingkaran kecil',d:'Hanya dipakai pada baris h, dan mengubahnya menjadi p.',ex:['ぱ','ぴ','ぷ','ぺ','ぽ'],set:'daku'},
- {t:'Romaji yang tidak mengikuti pola',d:'Romaji lima huruf ini tidak mengikuti pola barisnya: shi, chi, tsu, fu, dan ji. Sebagian buku menulisnya si, ti, tu, hu, dan zi. Hurufnya tetap sama. Dalam kalimat, partikel wa ditulis は, partikel e ditulis へ, dan partikel o ditulis を.',ex:['し','ち','つ','ふ','じ','を','ん'],set:'base'},
+ {t:'Romaji yang tidak mengikuti pola',d:'Romaji lima huruf ini tidak mengikuti pola barisnya: shi, chi, tsu, fu, dan ji. Sebagian buku menulisnya si, ti, tu, hu, dan zi. Hurufnya tetap sama. Dalam kalimat, partikel wa ditulis は, partikel e ditulis へ, dan partikel o ditulis を.',ex:['し','ち','つ','ふ','じ','を'],set:'base'},
  {t:'Huruf kecil ゃ ゅ ょ',cmp:['や','ゃ'],d:'Huruf berakhiran i, ditambah ya, yu, atau yo yang ditulis setengah ukuran. Keduanya dibaca dalam satu ketukan. Pada sha, shu, sho, cha, chu, cho, ja, ju, dan jo, huruf y tidak tampak di romaji, tetapi ゃ, ゅ, atau ょ kecil tetap ditulis. Ukuran menentukan arti: きょう berbeda dengan きよう.',ex:['きゃ','しゅ','ちょ','じゃ','りょ'],set:'combo'},
  {t:'っ kecil',cmp:['つ','っ'],d:'Muncul pada romaji dengan konsonan ganda seperti kk, pp, ss, tt, atau tch. Tulis っ kecil sebelum huruf berikutnya. Sebagian buku menulis cch untuk tch, jadi matcha dan maccha adalah kata yang sama. Pengecualian: nn tidak memakai っ. Huruf n yang pertama ditulis ん, seperti pada みんな (minna).',ex:['きって','がっこう','まっちゃ','みんな'],set:'word'},
  {t:'Vokal panjang',d:'Bunyi a, i, dan u yang panjang ditulis dengan menambah あ, い, atau う. Bunyi o yang panjang hampir selalu ditulis dengan menambah う, bukan お. Bunyi e yang panjang hampir selalu ditulis dengan menambah い, bukan え. Romaji gakkou, gakkō, dan gakkoo adalah kata yang sama. Ketiganya ditulis がっこう. Romaji sensei dan sensee juga sama, dan ditulis せんせい. Hanya sedikit kata yang memakai おお atau ええ. Hafalkan tiga ini: おおきい, とおい, おねえさん. Kalau tes Anda menulis o panjang sebagai ou, tulis persis seperti romajinya. Di tes seperti itu, oo selalu berarti おお dan ee selalu berarti ええ.',ex:['きょう','がっこう','せんせい','おにいさん','おおきい','おねえさん'],set:'word'},
  {t:'Huruf ん',d:'ん ditulis untuk n yang tidak diikuti vokal atau y. Romaji ng berarti ん lalu huruf baris g, seperti にほんご (nihongo). Sebelum b, p, dan m, sebagian buku menulis m. Jadi tempura dan tenpura adalah kata yang sama, yaitu てんぷら. Apostrof pada hon\'ya menandakan ん berdiri sendiri, bukan bagian dari にゃ. Sebagian tes menulisnya hon-ya.',ex:['にほんご','てんぷら','ほんや','みんな'],set:'word'}
 ];
 const PLAN=[
- {s:0,e:100,t:'Huruf dasar per baris',d:'10 baris, sekitar 8 menit per baris. Tiap 3 baris, latihan campuran 5 menit, lalu istirahat 5 menit tanpa layar.',go:'learn',set:'base'},
+ {s:0,e:100,t:'Huruf dasar per baris',d:'10 baris, sekitar 8 menit per baris. Setelah baris ke-3 dan ke-6, latihan campuran 5 menit, lalu istirahat 5 menit tanpa layar.',go:'learn',set:'base'},
  {s:100,e:120,t:'Tabel Kosong pertama',d:'Tulis 46 huruf dari ingatan. Yang salah jadi bahan latihan berikutnya.',go:'table'},
  {s:120,e:150,t:'Perbaiki kesalahan',d:'Latih set Yang salah, lalu Pasangan mirip.',go:'drill',set:'weak'},
  {s:150,e:165,t:'Istirahat',d:'Tanpa layar dan tanpa hiragana. Jeda membantu ingatan mengendap.',go:null},
@@ -118,7 +118,7 @@ const MODES=[
  {m:'word',g:'Kata',l:'Kata',ex:'きって',u:'kata'},
  {m:'pairs',g:'Fokus',l:'Pasangan mirip',ex:'ぬ め',u:'huruf'},
  {m:'weak',g:'Fokus',l:'Yang salah',ex:'',u:'kartu'},
- {m:'all',g:'Fokus',l:'Campuran',ex:'あ が きゃ',u:'kartu'}
+ {m:'all',g:'Fokus',l:'Semua set',ex:'あ が きゃ',u:'kartu'}
 ];
 const REC_DEFAULT='all';
 /* recognizer: へ and り are drawn the same in both scripts, so their katakana readings count as hiragana */
