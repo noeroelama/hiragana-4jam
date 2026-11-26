@@ -2,17 +2,29 @@
   "id": "/",
   "name": "Hiragana Empat Jam",
   "short_name": "Hiragana 4J",
-  "description": "Latihan menulis hiragana dari romaji dalam 4 jam.",
+  "description": "Latihan menulis hiragana dari romaji dalam 4 jam, dengan urutan goresan dan penilaian tulisan tangan otomatis.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "orientation": "portrait",
   "background_color": "#FBFBFE",
   "theme_color": "#FBFBFE",
   "lang": "id",
   "icons": [
-    {"src": "/icon-192.png", "sizes": "192x192", "type": "image/png"},
-    {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png"},
-    {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Hiragana Empat Jam</title>
-<meta name="description" content="Latihan menulis hiragana dari romaji dalam 4 jam, dengan penilaian tulisan tangan otomatis.">
+<meta name="description" content="Latihan menulis hiragana dari romaji dalam 4 jam, dengan urutan goresan dan penilaian tulisan tangan otomatis.">
 <meta name="theme-color" content="#FBFBFE" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#13121C" media="(prefers-color-scheme: dark)">
 <meta name="mobile-web-app-capable" content="yes">
@@ -14,18 +14,19 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-180.png">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&family=Klee+One:wght@600&display=swap">
+<link rel="stylesheet" crossorigin href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&family=Klee+One:wght@600&display=swap">
 <style>
+html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
 /* Layout: one-column app on dotted practice paper. Colour carries meaning: each gojūon row (consonant family) owns one hue,
-   used on its kana, tiles, pad guides and the mastery map. Red is reserved for the teacher's pen (hanamaru, corrections). */
+   used on its kana, tiles, pad guides and the memory map, and on nothing else. Red ink is the teacher's pen (hanamaru, stamp). */
 :root{
-  --bg:#FBFBFE; --card:#FFFFFF; --ink:#1D1B2E; --muted:#67657C; --line:#E4E2EE; --dots:#E2E0EC;
+  --bg:#FBFBFE; --card:#FFFFFF; --ink:#1D1B2E; --muted:#5F5D73; --line:#E4E2EE; --dots:#E2E0EC;
   --primary:#2D3A8C; --on-primary:#FFFFFF; --primary-soft:#E8EAF8;
-  --shu:#E0362C; --ok:#1E9653; --ok-soft:#E2F5E9; --bad:#D2372D; --bad-soft:#FCE6E4; --warn:#A86A12; --warn-soft:#FCF1DA;
+  --shu:#E0362C; --ok:#197D45; --ok-soft:#E2F5E9; --bad:#B3261E; --bad-soft:#FCE6E4; --warn:#855209; --warn-soft:#FCF1DA;
   --r-a:#E5484D; --r-k:#F0661A; --r-s:#DB9A00; --r-t:#2FA84F; --r-n:#0E9F9F; --r-h:#1E88E5; --r-m:#5B5BD6; --r-y:#9B51D0; --r-r:#D6409F; --r-w:#8D6E63;
+  --tint:12%; --nav-h:64px;
   --f-ui:"M PLUS Rounded 1c",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-kana:"Klee One","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
   --r:16px;
@@ -35,254 +36,297 @@
   --primary:#9DAAFF; --on-primary:#15163A; --primary-soft:#272B52;
   --shu:#FF6A5E; --ok:#5CCB87; --ok-soft:#173023; --bad:#FF7A70; --bad-soft:#3A1E1C; --warn:#F0C25A; --warn-soft:#3A2F17;
   --r-a:#FF6B70; --r-k:#FF8A45; --r-s:#F2C445; --r-t:#5AC977; --r-n:#30C9C3; --r-h:#55A9FF; --r-m:#8F91F7; --r-y:#C185FA; --r-r:#F36CBA; --r-w:#BC9D90;
-  color-scheme:dark}}
+  --tint:20%; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#13121C; --card:#1D1C29; --ink:#EEEDF7; --muted:#A3A1B8; --line:#302E42; --dots:#26253A;
   --primary:#9DAAFF; --on-primary:#15163A; --primary-soft:#272B52;
   --shu:#FF6A5E; --ok:#5CCB87; --ok-soft:#173023; --bad:#FF7A70; --bad-soft:#3A1E1C; --warn:#F0C25A; --warn-soft:#3A2F17;
   --r-a:#FF6B70; --r-k:#FF8A45; --r-s:#F2C445; --r-t:#5AC977; --r-n:#30C9C3; --r-h:#55A9FF; --r-m:#8F91F7; --r-y:#C185FA; --r-r:#F36CBA; --r-w:#BC9D90;
-  color-scheme:dark}
+  --tint:20%; color-scheme:dark}
 
 *{box-sizing:border-box}
+html{overscroll-behavior-y:contain}
 html,body{height:100%}
-body{background-color:var(--bg);background-image:radial-gradient(var(--dots) 1.1px,transparent 1.3px);background-size:22px 22px;color:var(--ink);font:500 16px/1.55 var(--f-ui);-webkit-tap-highlight-color:transparent}
-.wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px calc(96px + env(safe-area-inset-bottom,0px))}
+body{background-color:var(--bg);background-image:radial-gradient(var(--dots) 1.1px,transparent 1.3px);background-size:22px 22px;color:var(--ink);font:500 1rem/1.55 var(--f-ui);-webkit-tap-highlight-color:transparent}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px calc(var(--nav-h) + 32px + env(safe-area-inset-bottom,0px))}
 .panel[hidden]{display:none!important}
-
-/* colour helpers: set --c on an element */
-.tint{background:color-mix(in oklab,var(--c) 12%,var(--card));border-color:color-mix(in oklab,var(--c) 42%,var(--card))!important}
-.cink{color:color-mix(in oklab,var(--c) 82%,var(--ink))}
+.panel>p{background:var(--bg);border-radius:8px}
 
 /* header */
 header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:6px 4px}
 .logo{display:flex;align-items:baseline;gap:8px}
 .logo h1{margin:0;font:600 1.7rem/1 var(--f-kana);letter-spacing:.02em}
 .logo h1 span{color:color-mix(in oklab,var(--c) 85%,var(--ink))}
-.logo small{font:800 .72rem var(--f-ui);letter-spacing:.06em;background:var(--ink);color:var(--bg);padding:3px 8px;border-radius:999px}
+.logo small{font:800 .75rem var(--f-ui);letter-spacing:.06em;background:var(--ink);color:var(--bg);padding:3px 8px;border-radius:999px}
 .clock{font:700 .85rem var(--f-ui);font-variant-numeric:tabular-nums;color:var(--muted);text-align:right}
 .clock b{color:var(--ink)}
-.spectrum{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;margin:8px 0 14px}
-.spectrum i{height:6px;border-radius:3px;background:color-mix(in oklab,var(--c) 22%,var(--card))}
-.spectrum i.on{background:var(--c)}
+/* the a-ka-sa-ta-na order, one kana per row; filled once the row is learned */
+.spectrum{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin:8px 0 14px}
+.spectrum b{font:600 .95rem/1.7 var(--f-kana);text-align:center;border-radius:8px;border-bottom:3px solid color-mix(in oklab,var(--c) 30%,var(--card));color:var(--muted)}
+.spectrum b.on{border-bottom-color:var(--c);background:color-mix(in oklab,var(--c) var(--tint),var(--card));color:color-mix(in oklab,var(--c) 62%,var(--ink))}
 
 h2{font:800 1.12rem/1.3 var(--f-ui);margin:22px 0 8px;text-wrap:balance}
 h3{font:800 1rem/1.35 var(--f-ui);margin:0 0 4px}
 p{margin:0 0 10px}
 .muted{color:var(--muted)}
-.small{font-size:.86rem}
+.small{font-size:.88rem}
 .kana{font-family:var(--f-kana)}
+/* Japanese quoted inside Indonesian sentences: textbook face, larger, always in ink */
+.ki{font:600 1.45em/1 var(--f-kana);color:var(--ink);padding:0 .08em;vertical-align:-.05em;white-space:nowrap}
+.cink{color:color-mix(in oklab,var(--c) 82%,var(--ink))}
+.cdeep{color:color-mix(in oklab,var(--c) 62%,var(--ink))}
 
 /* nav */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:1px solid var(--line);
   padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
 nav.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);padding:6px 6px 4px}
-nav.tabs button{appearance:none;border:0;background:none;color:var(--muted);padding:5px 2px 6px;font:700 .7rem var(--f-ui);display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;border-radius:14px}
+nav.tabs button{appearance:none;border:0;background:none;color:var(--muted);padding:5px 2px 6px;font:700 .78rem var(--f-ui);display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;border-radius:14px}
 nav.tabs button .g{font:600 1.3rem/1.1 var(--f-kana)}
-nav.tabs button[aria-selected="true"]{color:color-mix(in oklab,var(--c) 85%,var(--ink));background:color-mix(in oklab,var(--c) 14%,var(--card))}
+nav.tabs button[aria-current="page"]{color:var(--primary);background:var(--primary-soft)}
 nav.tabs button:focus-visible{outline:2px solid var(--primary);outline-offset:-2px}
 
 /* generic */
 .card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px}
+.tint{background:color-mix(in oklab,var(--c) var(--tint),var(--card));border-color:color-mix(in oklab,var(--c) 42%,var(--card))!important}
 .stack{display:flex;flex-direction:column;gap:10px}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.btn{appearance:none;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;padding:11px 16px;font:800 .95rem var(--f-ui);cursor:pointer;min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 3px 0 var(--line);transition:transform .06s,box-shadow .06s}
+.btn{appearance:none;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;padding:11px 16px;font:800 .95rem var(--f-ui);cursor:pointer;min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 3px 0 var(--line);transition:transform .06s,box-shadow .06s;text-align:center}
 .btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
 .btn:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
 .btn.pri{background:var(--primary);border-color:var(--primary);color:var(--on-primary);box-shadow:0 3px 0 color-mix(in oklab,var(--primary) 60%,#000)}
 .btn.ok{background:var(--ok);border-color:var(--ok);color:var(--card);box-shadow:0 3px 0 color-mix(in oklab,var(--ok) 60%,#000)}
 .btn.bad{background:var(--bad);border-color:var(--bad);color:var(--card);box-shadow:0 3px 0 color-mix(in oklab,var(--bad) 60%,#000)}
 .btn.ghost{background:transparent;box-shadow:none}
-.btn.sm{min-height:36px;padding:6px 12px;font-size:.84rem;border-radius:12px}
+.btn.sm{min-height:40px;padding:6px 12px;font-size:.86rem;border-radius:12px}
 .btn[disabled]{opacity:.5;cursor:default;transform:none}
 .grow{flex:1 1 0}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
-.chip{appearance:none;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 13px;font:700 .84rem var(--f-ui);cursor:pointer}
+.chip{appearance:none;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:9px 16px;min-height:44px;font:700 .88rem var(--f-ui);cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
-.pill{display:inline-block;font:800 .7rem var(--f-ui);letter-spacing:.05em;padding:3px 9px;border-radius:999px;background:var(--primary-soft);color:var(--primary)}
+.pill{display:inline-block;font:800 .8rem var(--f-ui);letter-spacing:.03em;padding:3px 10px;border-radius:999px;background:var(--primary-soft);color:var(--primary);white-space:nowrap}
 .pill.ok{background:var(--ok-soft);color:var(--ok)}
 .pill.bad{background:var(--bad-soft);color:var(--bad)}
 .pill.warn{background:var(--warn-soft);color:var(--warn)}
-.pill.tint{background:color-mix(in oklab,var(--c) 15%,var(--card))}
-.meta{display:flex;justify-content:space-between;gap:12px;font-size:.86rem;color:var(--muted)}
+.pill.row-pill{background:color-mix(in oklab,var(--c) 15%,var(--card));color:color-mix(in oklab,var(--c) 62%,var(--ink))}
+.meta{display:flex;justify-content:space-between;gap:12px;font-size:.88rem;color:var(--muted);background:var(--bg);border-radius:8px}
 .meta b{color:var(--ink);font-variant-numeric:tabular-nums}
+.confirm{border:1.5px solid var(--bad);background:var(--bad-soft);border-radius:12px;padding:10px}
 
-/* stroke-order (kakijun) svg */
+/* stroke order (kakijun) */
 .kvg{display:block;overflow:visible}
 .kvg path{fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
-.kvg.anim path{stroke-dasharray:1;stroke-dashoffset:1;opacity:0;animation:draw .48s ease-out forwards}
+.kvg.anim path{stroke-dasharray:1;stroke-dashoffset:1;opacity:0;animation:draw .45s ease-out forwards}
 @keyframes draw{0%{opacity:1;stroke-dashoffset:1}100%{opacity:1;stroke-dashoffset:0}}
-.kvg path.done{stroke:color-mix(in oklab,var(--ink) 22%,var(--card))}
-.kvg .num circle{fill:currentColor}
+.kvg path.done{stroke:color-mix(in oklab,var(--ink) 45%,var(--card))}
+.kvg .num circle{fill:color-mix(in oklab,var(--c,var(--primary)) 62%,var(--ink))}
 .kvg .num text{fill:var(--card);font:800 6.6px var(--f-ui);text-anchor:middle;dominant-baseline:central}
 .strip{display:flex;gap:6px;flex-wrap:wrap}
-.strip .bx{width:44px;height:44px;border:1.5px solid var(--line);border-radius:8px;background:var(--card);position:relative;padding:3px}
+.strip .bx{width:52px;height:52px;border:1.5px solid var(--line);border-radius:8px;background:var(--card);position:relative;padding:4px}
 .strip .bx .kvg{width:100%;height:100%}
 .strip .bx .kvg path{stroke-width:5}
-.strip .bx b{position:absolute;left:3px;top:1px;font:800 .6rem var(--f-ui);color:var(--muted)}
+.strip .bx b{position:absolute;left:4px;top:1px;font:800 .75rem var(--f-ui);color:var(--muted)}
 
-/* practice pad */
-.pad{--c:var(--primary);position:relative;width:100%;max-width:330px;aspect-ratio:1/1;margin:0 auto;background:var(--card);border:2.5px solid color-mix(in oklab,var(--c) 55%,var(--card));border-radius:18px;touch-action:none;user-select:none;-webkit-user-select:none;overflow:hidden}
+/* writing pad */
+.pad{--c:var(--primary);position:relative;width:100%;max-width:clamp(180px,calc(100dvh - 446px),330px);aspect-ratio:1/1;margin:0 auto;background:var(--card);border:2.5px solid color-mix(in oklab,var(--c) 55%,var(--card));border-radius:18px;touch-action:none;user-select:none;-webkit-user-select:none;overflow:hidden}
 .pad.wide{max-width:100%;aspect-ratio:2.4/1}
 .pad::before,.pad::after{content:"";position:absolute;pointer-events:none}
-.pad::before{left:50%;top:0;bottom:0;border-left:1.5px dashed color-mix(in oklab,var(--c) 35%,var(--card))}
-.pad::after{top:50%;left:0;right:0;border-top:1.5px dashed color-mix(in oklab,var(--c) 35%,var(--card))}
+.pad::before{left:50%;top:0;bottom:0;border-left:1.5px dashed color-mix(in oklab,var(--c) 55%,var(--card))}
+.pad::after{top:50%;left:0;right:0;border-top:1.5px dashed color-mix(in oklab,var(--c) 55%,var(--card))}
 .pad.wide::before{display:none}
 .pad canvas{position:absolute;inset:0;width:100%;height:100%;z-index:2;cursor:crosshair}
-.pad .ghost{position:absolute;inset:6%;display:flex;align-items:center;justify-content:center;color:color-mix(in oklab,var(--c) 45%,var(--card));z-index:1;opacity:0;transition:opacity .15s}
+.pad .ghost{position:absolute;inset:6%;display:flex;align-items:center;justify-content:center;color:color-mix(in oklab,color-mix(in oklab,var(--c) 70%,var(--ink)) 55%,var(--card));z-index:1;opacity:0;transition:opacity .15s}
 .pad .ghost.show{opacity:1}
 .pad .ghost .kvg{height:100%;max-width:100%}
 .pad .ghost .kvg path{stroke-width:6}
-.pad .ghost .kvg .num circle{fill:color-mix(in oklab,var(--c) 80%,var(--ink))}
-.pad .hm{position:absolute;right:-2%;top:-2%;width:38%;z-index:3;pointer-events:none;color:var(--shu)}
-.pad.wide .hm{width:22%;right:0;top:0}
+/* hanamaru sits bottom-left, clear of where dakuten and the last kana are written */
+.pad .hm{position:absolute;left:-2%;bottom:-2%;width:28%;z-index:3;pointer-events:none;color:var(--shu)}
+.pad.wide .hm{left:0;bottom:0;width:16%}
 .pad .hm path{fill:none;stroke:currentColor;stroke-width:4.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:hm .9s ease-out forwards}
 @keyframes hm{to{stroke-dashoffset:0}}
-.pad.correct{border-color:var(--ok)}
-.pad.wrong{border-color:var(--bad)}
+.pad.correct{border:4px solid var(--ok)}
+.pad.wrong{border:4px solid var(--bad)}
 
-.prompt{text-align:center;padding-block:2px 10px}
-.prompt .lbl{font:800 .7rem var(--f-ui);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.prompt{text-align:center;padding-block:2px 8px}
+.prompt .lbl{font:800 .8rem var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .prompt .rom{font:800 2.8rem/1.05 var(--f-ui);letter-spacing:.01em}
 .prompt .rom.long{font-size:2.1rem}
-.reveal{text-align:center;min-height:56px;margin-top:6px}
-.reveal .ans{font:600 2rem/1.2 var(--f-kana)}
-.reveal .ans small{font:700 .9rem var(--f-ui);color:var(--muted);margin-left:6px}
-.reveal .mn{font-size:.9rem;color:var(--muted);max-width:44ch;margin:2px auto 0}
-.verdict{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:6px;font-size:.88rem;color:var(--muted)}
-.verdict .kana{font-size:1.2rem;color:var(--ink)}
+.prompt .q{font:700 .88rem var(--f-ui);color:var(--muted)}
+.reveal{display:flex;flex-direction:column;align-items:center;text-align:center;background:var(--bg);border-radius:8px}
+.reveal:not(:empty){margin-top:8px}
+.reveal .ans{font:600 2rem/1.25 var(--f-kana)}
+.reveal .romsub{font:800 .95rem var(--f-ui);color:var(--muted)}
+.reveal .romsub span{font-weight:500;margin-left:8px}
+.reveal .mn{font-size:.94rem;line-height:1.6;max-width:44ch;margin:4px auto 0}
+.verdict{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin:0 0 4px;font-size:.94rem}
+.verdict .pill{font-size:.95rem;padding:4px 12px}
+.verdict .ki{font-size:1.3em}
+.knote{font-size:.9rem;color:var(--warn);background:var(--warn-soft);border-radius:10px;padding:4px 10px;margin:2px 0 4px}
 .tools{display:flex;gap:8px;justify-content:center;margin-top:10px}
-.actions{display:flex;gap:8px;margin-top:12px}
+/* the action row stays above the tab bar whatever the card's height */
+.actions{display:flex;gap:8px;position:sticky;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom,0px));z-index:5;margin:8px -16px 0;padding:8px 16px;background:var(--bg)}
 .actions .btn{flex:1 1 0}
-.kbd{font:500 .74rem var(--f-ui);color:var(--muted);text-align:center;margin-top:10px}
+.kbd{display:none;font:500 .8rem var(--f-ui);color:var(--muted);text-align:center;margin-top:10px}
+@media (hover:hover) and (pointer:fine){.kbd{display:block}}
+
+/* set selector */
+.setbtn{width:100%;display:flex;align-items:center;gap:12px;padding:10px 14px;border:1.5px solid var(--line);background:var(--card);border-radius:var(--r);cursor:pointer;text-align:left;color:var(--ink);font:inherit;box-shadow:0 3px 0 var(--line)}
+.setbtn:focus-visible,.opt:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.setbtn .ex,.opt .ex{flex:0 0 auto;min-width:5rem;font:600 1.15rem/1.1 var(--f-kana);text-align:center;color:var(--ink);white-space:nowrap}
+.setbtn .tx,.opt .tx{display:flex;flex-direction:column;min-width:0}
+.setbtn .nm,.opt .nm{font:800 .95rem/1.3 var(--f-ui)}
+.setbtn .ds,.opt .ds{font-size:.86rem;color:var(--muted);line-height:1.35}
+.setbtn .go{margin-left:auto;font:800 .82rem var(--f-ui);color:var(--primary);white-space:nowrap}
+.sheet-bg{position:fixed;inset:0;background:rgba(12,10,24,.48);z-index:40}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-width:560px;margin:0 auto;max-height:86vh;overflow:auto;background:var(--bg);border-radius:22px 22px 0 0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+.sheet-h{display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--bg);padding-block:12px 6px;z-index:1}
+.sheet-h b{font:800 1.05rem var(--f-ui)}
+.sheet h4{font:800 .8rem var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:12px 0 6px}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1.5px solid var(--line);background:var(--card);border-radius:14px;cursor:pointer;text-align:left;color:var(--ink);font:inherit;min-height:56px}
+.opt.on{border-color:var(--primary);background:var(--primary-soft)}
+.opt[disabled]{border-style:dashed;background:transparent;cursor:default}
+.opt[disabled] .nm,.opt[disabled] .ex{color:var(--muted)}
+.opt .pill{margin-left:6px;vertical-align:1px}
 
 /* learn */
 .rowlist{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.rowbtn{appearance:none;text-align:left;border:1.5px solid;border-radius:var(--r);padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:2px;color:var(--ink);position:relative}
-.rowbtn .k{font:600 1.45rem/1.2 var(--f-kana);letter-spacing:.04em}
-.rowbtn .s{font:700 .76rem var(--f-ui);color:var(--muted)}
-.rowbtn .done{position:absolute;right:10px;top:9px;width:22px;height:22px;border-radius:50%;background:var(--c);color:var(--card);font:800 .8rem/22px var(--f-ui);text-align:center}
+.rowbtn{appearance:none;text-align:left;border:1.5px solid;border-radius:var(--r);padding:10px 12px 10px 16px;cursor:pointer;display:flex;flex-direction:column;gap:2px;color:var(--ink);position:relative;font:inherit;box-shadow:inset 6px 0 0 var(--c);min-width:0}
+.rowbtn .k{font:600 clamp(1.25rem,6.2vw,1.5rem)/1.2 var(--f-kana);letter-spacing:.02em;white-space:nowrap}
+.rowbtn .s{font:700 .82rem var(--f-ui);color:var(--muted)}
+.rowbtn .done{position:absolute;right:10px;bottom:9px;font:800 .75rem var(--f-ui);color:color-mix(in oklab,var(--c) 62%,var(--ink))}
 .rowbtn:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
-.kc{display:grid;grid-template-columns:96px 1fr;gap:14px;align-items:start;border:1.5px solid;border-radius:var(--r);padding:12px}
+.kc{display:grid;grid-template-columns:96px 1fr;gap:14px;align-items:start;border:1.5px solid;border-radius:var(--r);padding:12px 12px 12px 18px;box-shadow:inset 6px 0 0 var(--c)}
 .kc .big{width:96px;height:96px;background:var(--card);border-radius:12px;padding:6px;cursor:pointer;border:0}
 .kc .big .kvg{width:100%;height:100%}
 .kc .big .kvg path{stroke-width:4.2}
 .kc .r{font:800 1.4rem/1.1 var(--f-ui)}
-.kc .m{font-size:.88rem;color:var(--muted);margin:2px 0 8px}
+.kc .m{font-size:.94rem;line-height:1.6;margin:2px 0 8px}
+.twin{font:700 .82rem var(--f-ui);color:var(--muted);margin-left:6px;white-space:nowrap}
 .steps{display:flex;gap:6px;margin:6px 0 12px}
 .steps span{flex:1;height:6px;border-radius:3px;background:var(--line)}
-.steps span.on{background:var(--c)}
-.rule{display:flex;flex-direction:column;gap:6px}
+.steps span.on{background:var(--c,var(--primary))}
+.rule{display:flex;flex-direction:column;gap:8px}
+.rule p{margin:0;font-size:.94rem;line-height:1.65}
 .rule .ex{display:flex;gap:6px;flex-wrap:wrap}
-.rule .ex span{border:1.5px solid;border-radius:10px;padding:3px 9px;font:700 .86rem var(--f-ui)}
-.rule .ex span b{font:600 1.15rem var(--f-kana);margin-right:6px}
+.rule .ex>span{border:1.5px solid var(--line);border-radius:10px;padding:2px 9px;font:700 .86rem var(--f-ui);background:var(--bg);display:inline-flex;align-items:baseline;gap:6px;white-space:nowrap}
+.rule .ex>span>b{font:600 1.5rem var(--f-kana)}
+.cmp{display:inline-flex;align-items:baseline;gap:14px;font:600 2.4rem/1.2 var(--f-kana);background:var(--bg);border:1.5px dashed var(--line);border-radius:12px;padding:0 14px;align-self:flex-start}
+.cmp small{font:700 .8rem var(--f-ui);color:var(--muted)}
 
-/* table */
+/* table and review */
 .tstrip{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;max-width:330px;margin:0 auto 10px}
-.cell{aspect-ratio:1/1;border:1.5px solid var(--line);border-radius:10px;background:var(--card);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;font:700 .7rem var(--f-ui);color:var(--muted)}
-.cell img{width:100%;height:100%;object-fit:contain}
+.cell{aspect-ratio:1/1;border:1.5px solid var(--line);border-radius:10px;background:var(--card);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;font:700 .78rem var(--f-ui);color:var(--muted)}
 .cell.cur{border:2.5px solid var(--c)!important}
 .cell.void{background:transparent;border-style:dashed;opacity:.45}
+.thumb{width:100%;height:100%;display:block}
+.thumb path{fill:none;stroke:var(--ink);stroke-linecap:round;stroke-linejoin:round}
 .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
 button.cell{cursor:pointer;padding:0;font:inherit;color:inherit}
-.grid .cell .ck{position:absolute;right:4px;top:1px;font:600 1rem var(--f-kana)}
-.grid .cell .rr{position:absolute;left:5px;bottom:2px;font:700 .64rem var(--f-ui);color:var(--muted)}
+.grid .cell .ck{position:absolute;right:4px;top:0;font:600 1.25rem var(--f-kana);color:var(--ink)}
+.grid .cell .rr{position:absolute;left:5px;bottom:2px;font:700 .78rem var(--f-ui);color:var(--muted)}
+.grid .cell .st{position:absolute;right:4px;bottom:2px;font:800 .7rem var(--f-ui);display:none}
 .grid .cell.x{background:var(--bad-soft)!important;border:2.5px solid var(--bad)!important}
-.grid .cell.x .ck{color:var(--bad)}
+.grid .cell.x .st{display:block;color:var(--bad)}
+.grid .cell.un{background:var(--warn-soft)!important;border:2.5px dashed var(--warn)!important}
+.grid .cell.un .st{display:block;color:var(--warn)}
+.preview{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;max-width:260px}
+.preview i{aspect-ratio:1.6/1;border-radius:6px;background:color-mix(in oklab,var(--c) 26%,var(--card))}
+.preview i.void{background:transparent}
 
 /* plan */
-.hero{position:relative;overflow:hidden}
-.conds{display:flex;flex-direction:column;gap:6px;margin:4px 0 0;padding:0;list-style:none}
-.conds li{display:flex;gap:10px;align-items:center;font-size:.9rem}
-.conds li i{flex:none;width:20px;height:20px;border-radius:50%;border:2px solid var(--line)}
+.hero{position:relative}
+.conds{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.conds li{display:flex;gap:10px;align-items:center;font-size:.92rem}
+.conds li i{flex:none;width:20px;height:20px;border-radius:50%;border:2px solid var(--muted)}
 .conds li.ok i{background:var(--ok);border-color:var(--ok)}
-.conds li span b{font-variant-numeric:tabular-nums}
-.hanko{position:absolute;right:14px;top:12px;width:74px;height:74px;border:3px solid var(--shu);border-radius:50%;color:var(--shu);display:flex;align-items:center;justify-content:center;font:600 1.5rem/1 var(--f-kana);transform:rotate(-12deg);letter-spacing:.05em;opacity:.9}
+.conds button{appearance:none;background:none;border:0;padding:6px 0;margin:0;font:inherit;color:inherit;display:flex;gap:10px;align-items:center;text-align:left;cursor:pointer;min-height:40px}
+.conds b{font-variant-numeric:tabular-nums}
+.hanko{float:right;margin:0 0 6px 10px;width:76px;height:76px;border:3px solid var(--shu);border-radius:50%;color:var(--shu);display:flex;flex-direction:column;align-items:center;justify-content:center;font:600 1.4rem/1 var(--f-kana);transform:rotate(-10deg);letter-spacing:.05em}
+.hanko small{font:800 .68rem var(--f-ui);letter-spacing:.04em;margin-top:3px}
 .map{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
-.map div{aspect-ratio:1.5/1;border-radius:8px;display:flex;align-items:center;justify-content:center;font:600 1.05rem var(--f-kana);color:color-mix(in oklab,var(--c) 85%,var(--ink))}
+.map div{aspect-ratio:1.5/1;border-radius:8px;display:flex;align-items:center;justify-content:center;font:600 1.25rem var(--f-kana);color:var(--ink)}
+.map div[data-b="5"]{box-shadow:inset 0 0 0 2px var(--c)}
 .map div.void{background:transparent}
-.legend{display:flex;align-items:center;gap:6px;font-size:.76rem;color:var(--muted);margin-top:8px}
-.legend i{width:16px;height:12px;border-radius:4px;background:color-mix(in oklab,var(--r-h) var(--p),var(--card))}
+.legend{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted);margin-top:8px;flex-wrap:wrap}
+.legend i{width:16px;height:12px;border-radius:4px;background:color-mix(in oklab,var(--r-h) var(--p),var(--card));box-shadow:inset 0 0 0 1px var(--line)}
 .blocks{display:flex;flex-direction:column;gap:6px}
-.blk{display:grid;grid-template-columns:54px 1fr auto;gap:12px;align-items:center;background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:10px 12px}
-.blk .t{font:800 .78rem/1.35 var(--f-ui);font-variant-numeric:tabular-nums;color:color-mix(in oklab,var(--c) 85%,var(--ink));background:color-mix(in oklab,var(--c) 13%,var(--card));border-radius:10px;padding:6px 4px;text-align:center}
-.blk .d{font-size:.9rem;min-width:0}
-.blk .d b{display:block;font-size:.95rem}
-.blk.now{border-color:var(--c);box-shadow:0 0 0 2px color-mix(in oklab,var(--c) 30%,transparent)}
-.blk.past{opacity:.5}
+.blk{display:grid;grid-template-columns:62px 1fr auto;gap:12px;align-items:center;background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:10px 12px}
+.blk .t{font:800 .82rem/1.35 var(--f-ui);font-variant-numeric:tabular-nums;color:var(--primary);background:var(--primary-soft);border-radius:10px;padding:6px 4px;text-align:center}
+.blk .t small{display:block;font:700 .72rem var(--f-ui);color:var(--muted)}
+.blk .d{font-size:.92rem;min-width:0}
+.blk .d>b{display:block;font-size:.95rem}
+.blk.now{border-color:var(--primary);box-shadow:0 0 0 2px color-mix(in oklab,var(--primary) 30%,transparent)}
+.blk.past{background:transparent;border-style:dashed}
+.blk.past .t{background:transparent;color:var(--muted)}
+@media (max-width:359px){.blk{grid-template-columns:62px 1fr}.blk .btn{grid-column:2;justify-self:start}}
 .howto{display:flex;flex-direction:column;gap:12px}
-.howto b{display:block}
+.howto div>b:not(.ki){display:block}
 
-/* review list */
+/* test review rows: romaji and verdict on top, the learner's writing beside the answer below */
 .rl{display:flex;flex-direction:column;gap:6px}
-.ri{display:grid;grid-template-columns:minmax(72px,auto) 1fr auto auto;gap:10px;align-items:center;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:6px 10px;cursor:pointer;color:var(--ink);font:inherit;text-align:left}
-.ri .rom{font:800 .95rem var(--f-ui)}
-.ri .img{height:52px;background:var(--bg);border-radius:8px;display:flex;align-items:center;justify-content:center;min-width:0}
-.ri .img img{height:100%;max-width:100%;object-fit:contain}
-.ri .a{font:600 1.3rem var(--f-kana)}
+.ri{display:grid;grid-template-columns:minmax(110px,1fr) auto;grid-template-areas:"rom pill" "img a";gap:4px 10px;align-items:center;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:8px 10px;cursor:pointer;color:var(--ink);font:inherit;text-align:left}
+.ri .rom{grid-area:rom;font:800 .95rem var(--f-ui);min-width:0;overflow-wrap:anywhere}
+.ri .pill{grid-area:pill;justify-self:end}
+.ri .img{grid-area:img;height:56px;background:var(--bg);border-radius:8px;min-width:0;display:flex;align-items:center;justify-content:center;font-size:.82rem;color:var(--muted)}
+.ri .a{grid-area:a;font:600 clamp(1rem,5vw,1.5rem) var(--f-kana);white-space:nowrap;background:var(--card);border-radius:8px;padding:0 6px}
 .ri.x{background:var(--bad-soft);border-color:var(--bad)}
-.ri.w{background:var(--warn-soft);border-color:var(--warn)}
-.confirm{border:1.5px solid var(--bad);background:var(--bad-soft);border-radius:12px;padding:10px}
-.trio{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px}
-.trio div{border:1.5px solid;border-radius:12px;padding:4px 10px;text-align:center}
-.trio div b{display:block;font:600 1.8rem/1.2 var(--f-kana)}
-.trio div span{font:800 .74rem var(--f-ui);color:var(--muted)}
+.ri.un{background:var(--warn-soft);border-color:var(--warn);border-style:dashed}
+.tiles{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.tile{border:1.5px solid var(--line);border-radius:12px;padding:4px 10px;text-align:center;background:var(--card)}
+.tile>b{display:block;font:600 1.7rem/1.25 var(--f-kana);white-space:nowrap}
+.tile>span{font:800 .82rem var(--f-ui);color:var(--muted)}
 .score{font:800 2.6rem/1.1 var(--f-ui);font-variant-numeric:tabular-nums}
-.credit{font-size:.74rem;color:var(--muted);margin-top:14px}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}.kvg.anim path,.pad .hm path{animation:none;opacity:1;stroke-dashoffset:0}}
+.credit{font-size:.8rem;color:var(--muted);margin-top:14px}
 
-/* set selector: one button above the drill, options in a bottom sheet grouped by kind */
-.setbtn{width:100%;display:flex;align-items:center;gap:12px;padding:10px 14px;border:1.5px solid var(--line);background:var(--card);border-radius:var(--r);cursor:pointer;text-align:left;color:var(--ink);font:inherit;box-shadow:0 3px 0 var(--line)}
-.setbtn:focus-visible,.opt:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
-.setbtn .ex,.opt .ex{flex:0 0 80px;font:600 1.15rem/1.1 var(--f-kana);text-align:center;color:var(--primary);white-space:nowrap;overflow:hidden}
-.setbtn .tx,.opt .tx{display:flex;flex-direction:column;min-width:0}
-.setbtn .nm,.opt .nm{font:800 .95rem/1.3 var(--f-ui)}
-.setbtn .ds,.opt .ds{font-size:.8rem;color:var(--muted);line-height:1.35}
-.setbtn .go{margin-left:auto;font:800 .78rem var(--f-ui);color:var(--primary);white-space:nowrap}
-.sheet-bg{position:fixed;inset:0;background:rgba(12,10,24,.48);z-index:40}
-.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-width:560px;margin:0 auto;max-height:86vh;overflow:auto;background:var(--bg);border-radius:22px 22px 0 0;
-  padding-top:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
-.sheet-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
-.sheet-h b{font:800 1.05rem var(--f-ui)}
-.sheet h4{font:800 .7rem var(--f-ui);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
-.opts{display:flex;flex-direction:column;gap:6px}
-.opt{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1.5px solid var(--line);background:var(--card);border-radius:14px;cursor:pointer;text-align:left;color:var(--ink);font:inherit}
-.opt.on{border-color:var(--primary);background:var(--primary-soft)}
-.opt[disabled]{opacity:.45;cursor:default}
-.opt .pill{margin-left:6px;vertical-align:1px}
-html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
-.wrap{padding-top:calc(12px + env(safe-area-inset-top,0px))}
+@media (max-height:700px){
+  .wrap:has(.panel:not([hidden]) .pad) header.top{display:none}
+  .setbtn .ds{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .prompt .rom{font-size:2.2rem}
+  .prompt .lbl{display:none}
+  .pad:not(.wide){max-width:clamp(160px,calc(100dvh - 404px),330px)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}.kvg.anim path,.pad .hm path{animation:none;opacity:1;stroke-dashoffset:0}}
+.blk.past .t::after{content:"lewat";display:block;font:700 .72rem var(--f-ui)}
+.wrap{padding-top:calc(10px + env(safe-area-inset-top,0px))}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="top">
-    <div class="logo"><h1><span style="--c:var(--r-h)">ひ</span><span style="--c:var(--r-r)">ら</span><span style="--c:var(--r-k)">が</span><span style="--c:var(--r-n)">な</span></h1><small>4 JAM</small></div>
+    <div class="logo"><h1 lang="ja" id="logo"></h1><small>4 JAM</small></div>
     <div class="clock" id="clock"></div>
   </header>
   <div class="spectrum" id="spectrum" aria-hidden="true"></div>
+  <main>
   <section class="panel" id="p-plan"></section>
   <section class="panel" id="p-learn" hidden></section>
   <section class="panel" id="p-drill" hidden></section>
   <section class="panel" id="p-table" hidden></section>
   <section class="panel" id="p-test" hidden></section>
+  </main>
 </div>
-
-<nav class="tabs" aria-label="Menu utama"><div class="in" role="tablist">
-  <button role="tab" data-tab="plan" aria-selected="true" style="--c:var(--r-h)"><span class="g">時</span>Rencana</button>
-  <button role="tab" data-tab="learn" aria-selected="false" style="--c:var(--r-a)"><span class="g">あ</span>Belajar</button>
-  <button role="tab" data-tab="drill" aria-selected="false" style="--c:var(--r-t)"><span class="g">練</span>Latih</button>
-  <button role="tab" data-tab="table" aria-selected="false" style="--c:var(--r-y)"><span class="g">表</span>Tabel</button>
-  <button role="tab" data-tab="test" aria-selected="false" style="--c:var(--r-k)"><span class="g">試</span>Tes</button>
-</div></nav>
-
+<nav class="tabs" aria-label="Menu utama"><div class="in" id="tabs"></div></nav>
 <script>
 (function(){
 "use strict";
 /* Stroke data: KanjiVG (Ulrich Apel), CC BY-SA 3.0. p: stroke paths in a 109x109 box, n: stroke-number label positions. */
-const KVG={"あ":{"p":["M31.01,33c0.88,0.88,2.75,1.82,5.25,1.75c8.62-0.25,20-2.12,29.5-4.25c1.51-0.34,4.62-0.88,6.62-0.5","M49.76,17.62c0.88,1,1.82,3.26,1.38,5.25c-3.75,16.75-6.25,38.13-5.13,53.63c0.41,5.7,1.88,10.88,3.38,13.62","M65.63,44.12c0.75,1.12,1.16,4.39,0.5,6.12c-4.62,12.26-11.24,23.76-25.37,35.76c-6.86,5.83-15.88,3.75-16.25-8.38c-0.34-10.87,13.38-23.12,32.38-26.74c12.42-2.37,27,1.38,30.5,12.75c4.05,13.18-3.76,26.37-20.88,30.49"],"n":[[22.5,35.0],[41.5,19.0],[57.5,42.0]]},"い":{"p":["M21.5,29.66c2.01,2.17,2.61,4.68,2.17,7.43c-3.09,19.16-1.03,32.01,7.93,41.45c6.12,6.45,6.26,3.14,7.04-5.21","M72.96,36.51c9.44,8.05,17.79,18.82,18.41,33.83"],"n":[[15.0,27.1],[62.2,32.9]]},"う":{"p":["M42,15.5c5.62,2.12,9.62,3,12.88,3c8.27,0,8,1.12-0.38,5.5","M33,42.38c2.12,1.12,4.12,2.88,8.5,1.38c4.38-1.5,12.75-7.12,18.5-7c5.75,0.12,10.25,5,10.25,18c0,15.49-8.25,30.24-24.37,41.24"],"n":[[33.5,14.1],[28.8,39.6]]},"え":{"p":["M40.52,13.25c5.62,2.12,10,3,14.12,3c8.27,0,8,1.12-0.38,5.5","M32.52,45.12c1.88,1.25,4.5,1.75,7.38,0.62c3.29-1.29,17-7.88,21.25-9.88c4.25-2,8.32,0.04,4.38,4.62c-12.26,14.27-27.26,31.52-39.51,44.4c-3.26,3.42-0.58,3.54,1.5,1.37c13.5-14.12,18.12-20.12,23.62-20.12c7.13,0,3.5,16.75,6.75,22.38c3.25,5.63,19.12,3.75,26.12,2.12"],"n":[[33.9,13.5],[25.1,44.4]]},"お":{"p":["M22.88,35.12c1.38,1,3.62,2.38,6,2.12c2.38-0.26,19.62-5.12,21.12-5.74c1.5-0.62,4-1.25,5.88-2","M41.5,16.12c2.25,1,3.59,4.39,3.12,7.38c-2.5,16.12-3.37,45.53-2.25,58.38c0.75,8.62-0.64,10.45-7.12,7.12c-5.13-2.62-13.75-8-13.75-12.38c0-7.5,24.38-23.62,44.75-23.62c17.25,0,25,8.25,25,17.25c0,8.25-9.38,18.88-26.75,21","M73,22.12c5.38,2.62,8.88,5.88,10.62,8.25c2.27,3.08,0.38,4.5-1.12,5"],"n":[[17.2,34.9],[32.8,16.6],[64.4,21.6]]},"か":{"p":["M24.62,38.62c1.88,1.62,4.65,2.33,8.62,1c25.5-8.5,29.5-4.13,29.5,7.62c0,9.38-1.24,17.46-4.25,25.25c-7.62,19.76-10.87,17.39-16.12,10.89","M48.5,17.5c1,1.38,1.29,4.7,0.5,7.12c-5,15.25-18.02,40.93-19.62,43.88c-3.12,5.75-6.38,11.88-9.38,16.25","M77.37,31.62c7.5,6.88,13.25,15.75,15,24.88"],"n":[[16.8,37.4],[39.8,16.0],[70.0,29.8]]},"が":{"p":["M24.62,38.62c1.88,1.62,4.65,2.33,8.62,1c25.5-8.5,29.5-4.13,29.5,7.62c0,9.38-1.24,17.46-4.25,25.25c-7.62,19.76-10.87,17.39-16.12,10.89","M48.5,17.5c1,1.38,1.29,4.7,0.5,7.12c-5,15.25-18.02,40.93-19.62,43.88c-3.12,5.75-6.38,11.88-9.38,16.25","M77.37,31.62c7.5,6.88,13.25,15.75,15,24.88","M80.5,18.25c2.75,1.75,6,5.38,7.75,8.5","M86.87,13.38c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[16.8,37.4],[39.8,16.0],[70.0,29.8],[72.9,17.2],[79.0,12.1]]},"き":{"p":["M30.5,30.25c1.88,0.75,4.64,1.06,5.88,0.88c6.75-1,22.25-4.5,26.5-6c2.17-0.76,3.5-1.25,4.88-2.12","M36.25,48.7c2.01,0.85,4.97,1.2,6.29,0.99c7.23-1.13,23.82-5.09,28.37-6.79c2.32-0.86,3.75-1.41,5.22-2.4","M42,14.12c1.5,0.88,3.13,2.94,4,5.12c5.5,13.76,16,29.26,26.37,40.76c7.64,8.47,9.12,9.38-6,3.88","M33.75,83.25c10.62,9.75,27.25,8.62,38.12,5"],"n":[[24.5,29.5],[28.1,48.1],[32.5,13.0],[24.5,77.0]]},"ぎ":{"p":["M30.5,30.5c1.88,0.75,4.64,1.06,5.88,0.88c6.75-1,22.25-4.5,26.5-6c2.17-0.76,3.5-1.25,4.88-2.12","M36.25,48.95c2.01,0.85,4.97,1.2,6.29,0.99c7.23-1.13,23.82-5.09,28.37-6.79c2.32-0.86,3.75-1.41,5.22-2.4","M42,14.38c1.5,0.88,3.13,2.94,4,5.12c5.5,13.75,16,29.25,26.38,40.75c7.64,8.47,9.12,9.38-6,3.88","M33.75,83.5c10.62,9.75,27.25,8.62,38.12,5","M77.37,19c2.75,1.75,6,5.38,7.75,8.5","M83.75,14.12c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[24.5,29.5],[28.1,48.1],[32.5,13.0],[24.5,77.0],[69.8,18.0],[75.9,12.9]]},"く":{"p":["M60.66,15c0.5,1.62,0.35,5.44-1,7.38c-6.75,9.62-14.3,19.08-18.62,24.5c-4,5-3.79,7.03-0.88,11c5.5,7.5,12.75,18.75,17.62,27.25c1.48,2.59,2.75,4.75,4.5,8.62"],"n":[[53.7,12.4]]},"ぐ":{"p":["M60.66,15c0.5,2.12,0.75,5-1,7.38c-6.97,9.46-14.29,19.09-18.62,24.5c-4,5-3.79,7.03-0.88,11c5.5,7.5,12.75,18.75,17.62,27.25c1.48,2.59,2.75,4.75,4.5,8.62","M73.54,30c2.75,1.75,6,5.38,7.75,8.5","M79.91,25.12c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[53.7,12.4],[65.9,29.0],[72.0,23.9]]},"け":{"p":["M24.67,19.75c1.25,1.5,2.62,3.75,2.12,6.38c-3,15.88-6.5,29.5-4.88,44.62c2.02,18.84,2.25,4.75,6.75-3.5","M53.67,38.62c2.12,1.38,4.28,1.89,6.88,1.5c8.25-1.25,15.39-2.57,20.62-4c2.76-0.74,5.26-1.12,6.88-1.12","M71.67,14.38c2.13,1.37,2.88,3.35,2.88,5.12c0,11.62,0.12,20.38,0.12,30.12c0,20.75-0.62,30.88-12.5,42.25"],"n":[[16.3,18.8],[46.7,36.9],[64.0,13.2]]},"げ":{"p":["M24.91,20.25c1.25,1.5,2.37,3.75,1.88,6.38c-3,15.88-6.5,29.5-4.88,44.62c2.02,18.84,2.25,4.75,6.75-3.5","M53.67,39.12c2.12,1.38,4.28,1.89,6.88,1.5c8.25-1.25,15.39-2.57,20.62-4c2.75-0.75,5.25-1.12,6.88-1.12","M71.67,14.62c2.12,1.38,2.87,3.61,2.87,5.38c0,11.62,0.12,20.38,0.12,30.12c0,20.75-0.62,30.88-12.5,42.25","M86.17,13c2.75,1.75,6,5.38,7.75,8.5","M92.54,8.12c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[16.3,19.2],[46.7,37.4],[64.0,13.8],[78.5,12.0],[84.7,6.9]]},"こ":{"p":["M34.75,26.75c1.12,0.88,2.91,2.01,6,1.5c7.62-1.25,14.11-2.56,22.38-2.62c15.5-0.12,5.88,5-5.75,9","M30,68.12c2.25,14.5,15.26,17.96,31,16.75c6.5-0.5,11.88-1.25,17.62-2.88"],"n":[[28.0,25.9],[23.8,68.1]]},"ご":{"p":["M34.75,27c1.12,0.88,2.91,2.01,6,1.5c7.62-1.25,14.11-2.56,22.38-2.62c15.5-0.12,5.88,5-5.75,9","M30,68.38c2.25,14.5,15.26,17.96,31,16.75c6.5-0.5,11.88-1.25,17.62-2.88","M80.37,16.25c2.75,1.75,6,5.38,7.75,8.5","M86.75,11.38c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[28.0,26.1],[23.8,68.4],[72.8,15.2],[78.9,10.1]]},"さ":{"p":["M27,38.9c2.42,1.33,5.38,1.47,8.32,1.06c8.79-1.24,28.67-7.76,34.15-10.43c2.79-1.36,3.78-1.91,6.28-3.53","M41.5,13.88c1.5,0.88,3.63,2.94,4.5,5.12c5.5,13.75,15.25,27.62,26.87,39.5c7.98,8.15,6.38,10-6,3.12","M35.25,80.5c4.5,11.75,20.88,12.5,38.38,7.5"],"n":[[21.2,38.5],[32.0,13.0],[28.2,77.0]]},"ざ":{"p":["M27,39.15c2.42,1.33,5.38,1.47,8.32,1.06c8.79-1.24,28.67-8.01,34.15-10.68c2.79-1.36,3.78-1.91,6.28-3.53","M41.5,14.12c1.5,0.88,3.63,2.95,4.5,5.13c5.5,13.75,15.25,27.63,26.88,39.5c7.98,8.15,6.38,10-6,3.12","M35.25,80.75c4.5,11.75,20.88,12.5,38.38,7.5","M79.88,14.25c2.75,1.75,6,5.38,7.75,8.5","M86.25,9.38c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[21.2,38.8],[32.0,13.2],[28.2,77.2],[72.2,13.2],[78.4,8.1]]},"し":{"p":["M39.12,17.5c1.25,3.12,0.93,6.74,0.38,10.25c-2.12,13.5-3,26.5-3,39.12c0,27.38,19.88,30.12,45.5,17.25"],"n":[[30.9,14.1]]},"じ":{"p":["M39.12,17.25c1.25,3.12,0.93,6.74,0.38,10.25c-2.12,13.5-3,26.5-3,39.12c0,27.38,19.88,30.12,45.5,17.25","M64.24,27c2.75,1.75,6,5.38,7.75,8.5","M70.62,22.12c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[30.9,13.9],[56.6,26.0],[62.8,20.9]]},"す":{"p":["M15.5,37.12c2.88,2.12,6.94,1.51,12.75,0.25c16.12-3.5,36.14-5.38,46.62-6.5c7-0.75,11.88-0.62,17.75,0.12","M57.62,13.38c2,1.5,2.75,3.25,2.75,5.88c0,10.38,0,35.12,0,40.75c0,14.62-15.62,16.38-15.62,1.75c0-14.25,18-14.12,18,6.38c0,13.25-7.75,21.5-16,28.38"],"n":[[9.1,35.5],[49.0,14.1]]},"ず":{"p":["M15.5,37.12c2.88,2.12,6.94,1.51,12.75,0.25c16.12-3.5,36.14-5.38,46.62-6.5c7-0.75,11.88-0.62,17.75,0.12","M57.62,13.38c2,1.5,2.75,3.25,2.75,5.88c0,10.38,0,35.12,0,40.75c0,14.62-15.62,16.38-15.62,1.75c0-14.25,18-14.12,18,6.38c0,13.25-7.75,21.5-16,28.38","M77,13c2.75,1.75,6,5.38,7.75,8.5","M83.37,8.12c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[9.1,35.5],[49.0,14.1],[69.4,12.0],[75.5,6.9]]},"せ":{"p":["M16.5,49.93c2.88,2.42,6.86,1.57,12.75,0.53c19-3.34,33-5.72,47.12-7.64c6.99-0.95,11.88-1.21,17.75-0.36","M69.74,17.75c2,1.5,2.75,3.25,2.75,5.88c0,10.38,0,17.88,0,23.5c0,25.62-5.75,23.25-11.88,19","M35.62,26.25c2,1.5,2.75,3.25,2.75,5.88c0,10.38,0,28.38,0,34c0,14.5,6.38,19.55,20.14,19.55c10.24,0,13.74,0.07,22.61-1.68"],"n":[[10.1,48.5],[61.2,16.5],[27.8,25.2]]},"ぜ":{"p":["M16.5,49.93c2.88,2.42,6.86,1.57,12.75,0.53c19-3.34,32.5-5.34,47.12-7.64c6.97-1.1,11.88-1.21,17.75-0.36","M69.74,17.75c2,1.5,2.75,3.25,2.75,5.88c0,10.38,0,17.88,0,23.5c0,25.62-5.75,23.25-11.88,19","M35.62,26.25c2,1.5,2.75,3.25,2.75,5.88c0,10.38,0,28.38,0,34c0,14.5,6.38,19.55,20.14,19.55c10.24,0,13.74,0.07,22.61-1.68","M84.5,17.25c2.75,1.75,6,5.38,7.75,8.5","M90.87,12.38c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[10.1,48.5],[61.2,16.5],[27.8,25.2],[76.9,16.2],[83.0,11.1]]},"そ":{"p":["M38.4,22c1.88,1.25,4.98,1.05,7.5,0.38c6.5-1.75,13.25-3.75,19.38-5.38c4.63-1.23,7.18,2.06,3.62,5.25c-12.12,10.87-31.14,24.4-40,30.25c-6.25,4.12-5.88,5.75,1.38,3.88c17.08-4.42,35.96-8.68,50.12-10.38c9.38-1.12,9.62,0.12,0.5,1.38c-15.82,2.17-34.38,14.25-34.38,26.5c0,12.88,11.62,20.38,31.5,16.62"],"n":[[31.9,20.5]]},"ぞ":{"p":["M38.4,22c1.88,1.25,4.98,1.05,7.5,0.38c6.5-1.75,13.25-3.75,19.38-5.38c4.63-1.23,7.18,2.06,3.62,5.25c-12.12,10.87-31.14,24.4-40,30.25c-6.25,4.12-5.88,5.75,1.38,3.88c17.08-4.42,35.96-8.68,50.12-10.38c9.38-1.12,9.62,0.12,0.5,1.38c-15.82,2.17-34.38,14.25-34.38,26.5c0,12.88,11.62,20.38,31.5,16.62","M81.78,26.75c2.75,1.75,6,5.38,7.75,8.5","M88.15,21.88c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[31.9,20.5],[74.4,28.0],[80.3,21.1]]},"た":{"p":["M24.38,35.38c1.38,0.62,3.88,1.51,6.38,1.12c6.5-1,16.25-2.88,24.88-4.75c2.64-0.57,5.38-1.5,7.62-2.38","M45,16.88c0.75,1.25,0.87,3.62,0.38,5.25c-6.35,20.94-12.75,36.37-18.88,52.37c-1.36,3.56-4.75,11.75-6,14.62","M56.38,53.25c12.38-2.75,18.25-3.7,23.62-3.12c15.12,1.62-1.12,2.25-4.25,4.88","M54.13,82.25c4.38,7,14.25,8.12,34.5,5.62"],"n":[[16.9,34.9],[35.1,16.2],[52.3,50.6],[46.8,80.0]]},"だ":{"p":["M24.38,35.38c1.38,0.62,3.88,1.51,6.38,1.12c6.5-1,16.25-2.88,24.88-4.75c2.64-0.57,5.38-1.5,7.62-2.38","M45,16.88c0.75,1.25,0.87,3.62,0.38,5.25c-6.35,20.94-12.75,36.37-18.88,52.37c-1.36,3.56-4.75,11.75-6,14.62","M56.38,53.25c12.38-2.75,18.25-3.7,23.62-3.12c15.12,1.62-1.12,2.25-4.25,4.88","M54.13,82.25c4.38,7,14.25,8.12,34.5,5.62","M76,22.5c2.75,1.75,6,5.38,7.75,8.5","M82.38,17.62c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[16.9,34.9],[35.1,16.2],[52.3,50.6],[46.8,80.0],[68.4,21.5],[74.5,16.4]]},"ち":{"p":["M24.5,32.62c1.38,0.62,3.88,1.51,6.38,1.12c6.5-1,18.25-4.12,26.88-6c2.64-0.57,5.38-1.5,7.62-2.38","M45.62,15.62c0.75,1.25,0.71,3.58,0.38,5.25c-3,15-4.25,22.59-8.38,38.62c-3.25,12.62-5.38,11.12,3.62,4.38c8.29-6.21,19.75-9.5,28.5-9.5c8.62,0,14.58,5.88,14.5,14.5c-0.12,13.5-16.5,20.62-29.88,23.25"],"n":[[20.0,28.9],[36.8,15.5]]},"っ":{"p":["M23,61.15c1.49,1.29,3.72,1.67,6.46,0.5c14.21-6.07,23.85-8.85,35.68-8.65c9.99,0.17,18.28,5.7,18.18,15.24c-0.15,14.93-18.46,23.39-35.79,25.51"],"n":[[18.8,57.0]]},"つ":{"p":["M14,44.75c1.88,1.62,4.68,2.09,8.12,0.62c17.88-7.62,30-11.12,44.88-10.88c12.56,0.21,22.98,7.17,22.87,19.17c-0.18,18.77-24.75,28.71-45.01,32.08"],"n":[[9.8,40.4]]},"て":{"p":["M20.5,26.38c1.87,1.62,4.42,1.97,8.12,1.37c21.75-3.5,33-5.12,50.12-8.38c12.34-2.34,13-0.88,0.38,1.38c-17.89,3.19-33.78,19.12-33.78,37.62c0,20.5,17.91,30.25,35.16,30.25"],"n":[[16.4,20.0]]},"で":{"p":["M20.5,26.38c1.87,1.62,4.42,1.97,8.12,1.37c21.75-3.5,33-5.12,50.12-8.38c12.34-2.34,13-0.88,0.38,1.38c-17.89,3.19-33.78,19.12-33.78,37.62c0,20.5,17.91,30.25,35.16,30.25","M75,41.75c2.75,1.75,6,5.38,7.75,8.5","M81.37,36.88c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[16.5,20.4],[67.4,40.8],[73.5,35.6]]},"と":{"p":["M35.5,18.38c1.74,0.74,3.62,2.62,4.12,5.37c0.5,2.75,4.75,25,5.38,28.12","M78.12,25.5c0.25,1.88,0.04,4.09-2.25,5.75c-6.37,4.63-13.22,8.49-22.75,15.25c-12.88,9.12-21.62,18.38-21.62,27.5c0,10.12,8.5,13.88,26.88,13.88c6.25,0,14.75-0.12,21.62-1.25"],"n":[[27.9,18.8],[69.2,22.2]]},"ど":{"p":["M35.5,18.38c1.74,0.74,3.62,2.62,4.12,5.37c0.5,2.75,4.75,25,5.38,28.12","M78.12,25.5c0.25,1.88,0.04,4.09-2.25,5.75c-6.37,4.63-13.21,8.49-22.75,15.25c-12.88,9.12-21.62,18.38-21.62,27.5c0,10.12,8.5,13.88,26.88,13.88c6.25,0,14.75-0.12,21.62-1.25","M84.24,14.5c2.75,1.75,6,5.38,7.75,8.5","M90.62,9.62c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[27.9,18.8],[69.2,22.2],[76.6,13.5],[82.8,8.4]]},"な":{"p":["M22.88,28.96c1.18,0.58,3.3,1.1,5.47,1.05c5.53-0.13,10.9-0.98,16.52-2.42c4.82-1.23,9.13-3.12,11.38-4.22","M42.99,14c0.63,0.89,0.56,2.52,0.31,3.72c-2.96,14.16-7.95,26.56-14.25,37.87c-2.05,3.69-4.25,7.24-6.55,10.65","M72.26,23.25c6.88,2.5,12.62,5.62,14.75,9.5c4.06,7.41-0.25,3.38-3.5,3.88","M68.88,44.62c-1,1.88-2.14,5.24-1.88,8.25c0.62,7,1.5,13.12,1.5,20.62c0,20-27.88,19.75-27.88,9.38c0-5.62,8.25-8.25,13.88-8.25c8.75,0,21.5,3.25,29.75,11.5"],"n":[[17.6,23.8],[32.5,12.0],[64.6,22.1],[64.3,41.6]]},"に":{"p":["M24.53,22.75c1.25,1.5,1.62,3.75,1.12,6.38c-3,15.88-9,32.5-7.38,47.62c2.02,18.84,4.5,5.75,8.5-3.5","M53.2,30.64c0.96,0.79,2.44,1.58,5.1,1.35c6.98-0.61,15.01-3.3,22.04-3.36c13.19-0.11,1.5,3.75-8.39,7.35","M52.53,68c1.76,12.92,11.92,16.01,24.23,14.93c5.08-0.45,8.9-0.8,14.27-2.06"],"n":[[16.8,22.1],[46.9,29.0],[46.4,66.0]]},"ぬ":{"p":["M25.38,28.5c2,1.38,2.97,3.23,3.38,5.88c1.87,12.18,4.12,23.92,8.54,34.67c1.79,4.36,3.96,8.33,6.84,12.46","M57.12,19.25c0.88,2.12,1.06,3.79,0.62,5.88c-3.12,15-13.14,39.81-18.12,48.62c-11.87,21-20.62,1.25-20.62-4.5c0-22.63,43.75-44.25,62.36-29.59c7.66,6.03,9.8,14.58,9.14,23.34c-2,26.75-32.88,28.38-32.88,16.88c0-9.38,17.38-7.12,27.12-1.12c3.1,1.91,7.25,5.25,9.5,7.5"],"n":[[17.6,27.9],[47.2,17.2]]},"ね":{"p":["M33.29,14.5c1.62,1.62,2.1,3.21,1.88,5.88c-1.03,11.93-2.06,31.66-2.53,53.12c-0.1,4.62-0.18,9.31-0.22,14","M17.16,37.88c1.62,0.88,3.25,1.38,5.62,0.75c2.14-0.56,7.8-2.31,12.37-4.03c6.26-2.35,6.88-1.47,3.12,3.63c-5.56,7.53-13.02,17.38-18.48,26.77c-5.6,9.62-3.45,8.3,2,3c19.12-18.62,38.5-39.12,54.12-39.12c11.38,0,12.88,11.25,12.88,32.5c0,28.62-30.18,24.88-30.18,16.26c0-9.63,18.73-7.82,28.06-1.88c2.75,1.75,5.88,4.88,7.5,6.75"],"n":[[25.9,13.8],[12.9,34.1]]},"の":{"p":["M53.82,28.62c1,1.5,1.34,4.12,0.88,6.62c-1.75,9.5-6.89,25-10.75,33.12c-9.63,20.26-16.55,14.74-24.38-1.98c-9.13-19.5,23.5-48.88,50.63-40.38c32.38,10.15,28,54.62-4.75,60.88"],"n":[[46.5,34.9]]},"は":{"p":["M24.51,18c1.25,1.5,2.15,4,1.62,6.62c-3.5,17.62-6.98,36.4-4,54.88c2.5,15.5,1.12,2,5.62-6.25","M49.64,37.89c2.41,1.57,4.85,2.16,7.8,1.71c9.36-1.43,17.46-2.94,23.4-4.57c3.12-0.86,5.96-1.29,7.8-1.29","M69.77,16.5c2.25,2.12,2.88,4.12,2.88,6.5c0,2.38,1.5,38.62,1.5,48c0,22.5-30.62,19.62-30.62,10.5c0-9.75,23.88-5.62,29.5-2.88c5.62,2.74,11.98,8.26,13.36,9.38"],"n":[[16.9,17.6],[43.0,36.4],[59.9,16.0]]},"ば":{"p":["M24.75,17.75c1.25,1.5,1.9,4.25,1.38,6.88c-3.5,17.62-6.98,36.4-4,54.88c2.5,15.5,1.12,2,5.62-6.25","M49.88,37.89c2.41,1.57,4.85,2.41,7.8,1.96c9.36-1.43,17.21-3.19,23.15-4.82c3.12-0.86,5.96-1.29,7.8-1.29","M69.75,16.5c2.26,2.12,2.88,4.12,2.88,6.5c0,2.38,1.5,38.62,1.5,48c0,22.5-30.62,19.62-30.62,10.5c0-9.75,23.88-5.62,29.5-2.88c5.62,2.74,12,8.25,13.38,9.38","M84.75,15.25c2.75,1.75,6,5.38,7.75,8.5","M91.13,10.38c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[16.9,17.6],[43.0,36.4],[59.9,16.0],[77.1,14.2],[83.3,9.1]]},"ぱ":{"p":["M24.51,18c1.25,1.5,2.15,4,1.62,6.62c-3.5,17.62-6.98,36.4-4,54.88c2.5,15.5,1.12,2,5.62-6.25","M49.64,37.89c2.41,1.57,4.85,2.16,7.8,1.71c9.36-1.43,17.46-2.94,23.4-4.57c3.12-0.86,5.96-1.29,7.8-1.29","M69.77,16.5c2.25,2.12,2.88,4.12,2.88,6.5c0,2.38,1.5,38.62,1.5,48c0,22.5-30.62,19.62-30.62,10.5c0-9.75,23.88-5.62,29.5-2.88c5.62,2.74,11.98,8.26,13.36,9.38","M91.01,24.38c-9.62,0-9.25-14.25,0-14.25c9.76-0.01,9.5,14.25,0,14.25"],"n":[[16.9,17.6],[43.0,36.4],[59.9,16.0],[88.0,31.8]]},"ひ":{"p":["M20,25.12c1.25,0.88,3.75,2.25,6.5,1.38c2.75-0.87,7.31-2.38,11.38-4.5c6-3.12,8.42-1.01,4.25,4c-27.13,32.62-23.76,58.5-1.52,62.88c18.07,3.56,37.63-16.38,35.63-56.51c-0.72-14.5-0.17-14.78,4.12-1.75c3.76,11.38,10.26,20.76,16.14,26.5"],"n":[[15.2,21.4]]},"び":{"p":["M20,25.12c1.25,0.88,3.75,2.25,6.5,1.38c2.75-0.87,7.31-2.38,11.38-4.5c6-3.12,8.42-1.01,4.25,4c-27.13,32.62-23.76,58.5-1.52,62.88c18.07,3.56,37.63-16.38,35.63-56.51c-0.72-14.5-0.17-14.78,4.12-1.75c3.76,11.38,10.26,20.76,16.14,26.5","M86.5,13.5c2.75,1.75,6,5.38,7.75,8.5","M92.87,8.62c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[18.4,17.6],[78.9,12.5],[85.0,7.4]]},"ぴ":{"p":["M20,25.12c1.25,0.88,3.75,2.25,6.5,1.38c2.75-0.87,7.31-2.38,11.38-4.5c6-3.12,8.42-1.01,4.25,4c-27.13,32.62-23.76,58.5-1.52,62.88c18.07,3.56,37.63-16.38,35.63-56.51c-0.72-14.5-0.17-14.78,4.12-1.75c3.76,11.38,10.26,20.76,16.14,26.5","M93.87,22.12c-9.62,0-9.25-14.25,0-14.25c9.75,0.01,9.5,14.25,0,14.25"],"n":[[16.6,20.9],[89.1,29.1]]},"ふ":{"p":["M42.63,15.62c3.62,3.38,7.5,5.38,12.74,6.13c9.59,1.37,3.5,3.38-1.88,6.12","M43.63,46.88c1.88,4.62,7.5,9.41,14.25,17.5c10.62,12.74,0.49,30-19.13,21.62","M16.5,73.38c0.75,4,1.88,8.12,5,10.12c1.16,0.74,0.12-3.38,13.25-9.12","M80.13,61.88c5.12,3.38,10.28,7.49,11.38,8.88c6.75,8.5-0.25,4.62-4.62,7.12"],"n":[[36.8,13.9],[37.8,43.9],[13.5,67.6],[69.4,59.1]]},"ぶ":{"p":["M42.12,15.62c3.62,3.38,7.5,5.38,12.75,6.12c9.59,1.37,3.5,3.38-1.88,6.12","M43.12,46.88c1.88,4.62,7.5,9.41,14.25,17.5c10.62,12.75,0.5,30-19.12,21.62","M16.5,73.88c0.75,4,1.88,8.12,5,10.12c1.16,0.74,0.12-3.38,13.25-9.12","M79.62,61.88c5.5,3.38,10.28,7.49,11.38,8.88c6.75,8.5-0.25,4.62-4.62,7.12","M73.62,16.25c2.75,1.75,6,5.38,7.75,8.5","M80,11.38c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[36.2,13.9],[37.2,43.9],[13.0,67.6],[68.9,59.1],[66.0,15.2],[72.1,10.1]]},"ぷ":{"p":["M42.13,15.62c3.62,3.38,7.5,5.38,12.74,6.13c9.59,1.37,3.5,3.38-1.88,6.12","M43.13,46.88c1.88,4.62,7.5,9.41,14.25,17.5c10.62,12.74,0.49,30-19.13,21.62","M16.5,73.88c0.75,4,1.88,8.12,5,10.12c1.16,0.74,0.12-3.38,13.25-9.12","M79.63,61.88c5.5,3.38,10.28,7.49,11.38,8.88c6.75,8.5-0.25,4.62-4.62,7.12","M80.87,26.62c-9.62,0-9.25-14.25,0-14.25c9.76,0.01,9.5,14.25,0,14.25"],"n":[[36.2,13.9],[37.2,43.9],[13.0,67.6],[68.9,59.1],[75.0,33.1]]},"へ":{"p":["M15,48.75c2.25,1.62,4.67,1.96,7-0.38c3.62-3.62,7.46-6.54,11.25-10.5c5.5-5.75,8.48-4.75,13.12-0.88c12.12,10.12,30.38,25.12,33.38,27.38c3,2.26,12.37,10.38,13.87,11.63"],"n":[[9.9,42.8]]},"べ":{"p":["M15,48.75c2.25,1.62,5,1.38,7.62-1c3.89-3.52,6.12-5.75,10.62-9.88c5.88-5.37,8.49-4.75,13.14-0.87c12.12,10.12,30.38,25.12,33.38,27.38c3,2.26,12.37,10.37,13.87,11.62","M66.76,26.75c2.75,1.75,6,5.38,7.75,8.5","M73.13,21.88c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[9.9,42.8],[59.1,25.8],[65.3,20.6]]},"ぺ":{"p":["M15,48.75c2.25,1.62,4.67,1.96,7-0.38c3.62-3.62,7.46-6.54,11.25-10.5c5.5-5.75,8.48-4.75,13.12-0.88c12.12,10.12,30.38,25.12,33.38,27.38c3,2.26,12.38,10.38,13.88,11.63","M73.63,36.75c-9.62,0-9.25-14.25,0-14.25c9.75,0,9.5,14.25,0,14.25"],"n":[[9.9,42.8],[65.6,43.0]]},"ほ":{"p":["M24.51,18.75c1.25,1.5,2.15,4,1.62,6.62c-3.5,17.63-6.98,37.4-4,55.88c2.5,15.5,1.12,2,5.62-6.25","M53.08,21.13c1.9,1.28,3.82,1.76,6.14,1.4c7.36-1.17,13.73-2.4,18.41-3.73c2.46-0.7,4.69-1.05,6.13-1.05","M53.83,44.3c2.21,1.44,4.46,1.98,7.16,1.57c8.59-1.31,15.78-2.44,21.23-3.94c2.87-0.79,5.72-1.18,7.41-1.18","M72.51,23c1.38,1.62,1.62,4.12,1.62,6.5c0,2.38,2,35.12,2,44.5c0,17.5-29.88,17.12-29.88,8c0-9.75,21.38-7.88,29.5-2.88c5.33,3.28,12,8.25,13.38,9.38"],"n":[[17.1,18.1],[46.4,20.5],[45.5,46.0],[66.1,29.4]]},"ぼ":{"p":["M24.51,18.75c1.25,1.5,2.15,4,1.62,6.62c-3.5,17.63-6.98,37.4-4,55.88c2.5,15.5,1.12,2,5.62-6.25","M53.08,21.13c1.9,1.28,3.82,1.76,6.14,1.4c7.36-1.17,13.73-2.4,18.41-3.73c2.46-0.7,4.69-1.05,6.13-1.05","M53.83,44.3c2.21,1.44,4.46,1.98,7.16,1.57c8.59-1.31,15.78-2.44,21.23-3.94c2.87-0.79,5.72-1.18,7.41-1.18","M72.51,23c1.38,1.62,1.62,4.12,1.62,6.5c0,2.38,2,35.12,2,44.5c0,17.5-29.88,17.12-29.88,8c0-9.75,21.38-7.88,29.5-2.88c5.33,3.28,12,8.25,13.38,9.38","M87.51,26c2.75,1.75,6,5.38,7.75,8.5","M93.88,21.12c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[17.1,18.1],[46.4,20.5],[45.5,46.0],[66.1,29.4],[79.9,27.0],[86.0,21.4]]},"ぽ":{"p":["M24.51,19c1.25,1.5,2.15,4,1.62,6.62c-3.5,17.62-6.98,37.4-4,55.88c2.5,15.5,1.12,2,5.62-6.25","M53.08,21.38c1.9,1.28,3.82,1.76,6.14,1.4c7.36-1.17,13.73-2.4,18.41-3.73c2.46-0.7,4.69-1.05,6.13-1.05","M53.83,44.55c2.21,1.44,4.46,1.98,7.16,1.57c8.59-1.31,15.78-2.44,21.23-3.94c2.87-0.79,5.72-1.18,7.41-1.18","M72.51,23.25c1.38,1.62,1.62,4.12,1.62,6.5c0,2.38,2,35.12,2,44.5c0,17.5-29.88,17.12-29.88,8c0-9.75,21.38-7.88,29.5-2.88c5.33,3.28,12,8.25,13.38,9.38","M95.13,34.5c-9.62,0-9.25-14.25,0-14.25c9.75,0,9.5,14.25,0,14.25"],"n":[[17.1,18.4],[46.4,20.8],[46.8,43.1],[66.1,29.6],[92.0,41.9]]},"ま":{"p":["M29.83,32.28c2.2,1.15,4.43,1.5,7.14,1.26c11.54-1.04,25.94-3.12,34.66-4.85c2.87-0.57,5.45-0.44,7.13-0.44","M33.83,51.84c2.45,1.61,4.94,1.72,7.94,1.26c9.52-1.46,17.87-3.1,27.03-5.16c3.22-0.72,6.34-1.32,8.21-1.32","M55.81,14c1.52,1.8,1.8,4.57,1.8,7.19c0,2.63,0.46,43.88,0.46,54.25c0,21.3-30.07,19.96-30.07,9.86c0-10.79,25.88-9.93,38.57-3.18c6.12,3.25,11.55,6.38,14.8,9.13"],"n":[[24.3,28.1],[26.6,50.9],[47.3,13.1]]},"み":{"p":["M32.5,26c1.88,1.75,4.06,1.7,6.88,1.25c3.88-0.62,7.62-1.75,11.88-3.12c4.26-1.37,6.25-0.12,4.5,5.12c-1.75,5.24-6.66,17.39-12,30.12c-13.63,32.51-29.26,29.26-29.26,18.63c0-14.25,20.48-15.36,33-13.5c18.5,2.75,30,6.62,44.38,14.25","M79.38,54.75c0.75,2.38,0.49,4.37,0,6.25c-2.12,8.12-7.5,25-22.12,33.75"],"n":[[26.5,24.9],[71.1,52.0]]},"む":{"p":["M19.59,31.65c2.1,1.55,4.24,1.66,6.81,1.21c8.17-1.41,15.33-2.98,23.19-4.96c2.76-0.69,5.44-1.27,7.05-1.27","M37.02,15.5c1.62,1.25,2.31,2.88,2.12,5.25c-0.88,11.12-1.5,20.75-4,34.88c-3.61,20.44-19.25,16.99-18.62,7.37c0.5-7.74,6.25-12.86,12.62-13.5c5-0.5,14.28,1.93,5.88,15c-12.62,19.62-11.42,24.51,5.11,25.54c10.98,0.68,19.26,0.72,28.49-0.92c14.15-2.5,7.4-2.63,7.4-11.13","M78.52,36.25c6.88,3.12,11.71,5.95,14.88,10.12c6.25,8.25-1.38,3.62-4.5,4.5"],"n":[[12.9,29.0],[26.6,13.0],[70.4,34.8]]},"め":{"p":["M27.48,31.75c1.75,1,2.41,3.09,2.5,5.25c0.5,11.62,2.75,23.5,7.25,31.38c1.39,2.44,5.38,8.5,7.25,10.38","M59.6,19.38c1,1.5,1.35,4.12,0.88,6.62c-2.75,14.62-13.62,37.75-20.1,47.24c-12.28,17.14-16.78,13.14-22.28,0.64c-5.38-15.38,26.4-42.18,53.42-35.28c29.08,8.27,23.96,46.02-7.98,50.15"],"n":[[20.1,30.0],[50.1,18.0]]},"も":{"p":["M49.17,14.75c1.88,1.88,1.86,4.52,1.12,8c-3,14.25-5,26.62-7,42.12c-2.55,19.73-0.75,29.88,17,29.86c20.25-0.02,28.63-13.11,20.01-35.73","M26.54,34.62c1.12,0.88,2.87,2.21,6,2c11.12-0.75,20-2.12,27.74-3.46c3.88-0.67,5.88-1.17,8.88-1.04","M26.42,53.38c-1.5,4,1,6.75,7.75,6.75c8.75,0,17.62-1,22.88-1.88c2.01-0.33,5.38-1,7.5-1.75"],"n":[[40.5,14.4],[21.3,29.6],[21.8,50.9]]},"ゃ":{"p":["M26,61.07c1.49,1.29,4.16,1.98,6.84,0.69c14.68-7.03,28.36-15.36,40.32-15.26c7.16,0.11,12.7,3.28,12.63,9.75c0,6.61-8.63,13.15-19.43,14.14","M49.1,34.5c4.07,0.69,8.25,3.21,9.12,5.25c1.69,3.97-0.79,1.88-2.28,2.08","M35.77,40.99c1.88,1.49,2.35,2.77,2.82,4.67c2.08,8.33,8.82,32.37,11.7,41.39c0.51,1.62,1.49,4.96,2.28,7.44"],"n":[[21.9,57.1],[42.2,32.6],[27.1,40.6]]},"や":{"p":["M18,49.38c1.88,1.62,5.25,2.5,8.62,0.88c18.51-8.88,35.76-19.38,50.83-19.26c9.02,0.14,16.01,4.13,15.93,12.29c0,8.33-10.88,16.58-24.5,17.83","M47.13,15.88c5.12,0.88,10.41,4.05,11.5,6.62c2.12,5-1,2.38-2.88,2.62","M30,24.38c2.38,1.88,3.28,2.87,3.88,5.25c2.62,10.5,11.12,41.12,14.75,52.5c0.65,2.04,1.88,6.25,2.88,9.38"],"n":[[12.9,44.1],[39.9,13.9],[19.3,25.0]]},"ゅ":{"p":["M27.74,40.79c1.1,1.2,1.61,3.3,1.2,5c-2.3,9.4-3.2,17.79-1.7,27.99c2.22,15.08,0.9,3.1,2.6-1.2c7.19-18.19,21.79-27.59,35.49-27.59c13.5,0,17.49,9.1,17.49,16.2c0,21.89-24.69,23.69-34.39,13.4","M57.63,33.89c2.1,1.4,2.53,2.5,2.8,5.7c0.7,8.4,1.12,14.97,1.3,23.49c0.4,19.19-5,25.59-9.9,31.39"],"n":[[19.4,39.6],[48.8,32.5]]},"ゆ":{"p":["M21.05,25.38c1.38,1.5,2.02,4.13,1.5,6.25c-2.88,11.75-4,22.25-2.12,35c2.77,18.85,1.12,3.88,3.25-1.5c9-22.75,27.24-34.5,44.38-34.5c16.88,0,21.88,11.38,21.88,20.25c0,27.38-30.88,29.62-43,16.75","M58.42,16.75c2.62,1.75,3.17,3.13,3.5,7.12c0.88,10.5,1.4,18.72,1.62,29.38c0.5,24-6.25,32-12.38,39.25"],"n":[[12.7,22.0],[49.8,15.9]]},"ょ":{"p":["M57.8,50.06c5.98-1.02,10.95-2.09,14.74-3.25c1.99-0.61,3.8-0.91,4.98-0.91","M54.91,33c1.79,1.69,2.38,3.28,2.29,5.16c-0.6,13.49-0.1,27.68,1.11,42.47c1.5,18.31-27.81,16.56-27.81,9.12c0-9.53,20.92-6.35,28.68-3.27c6.46,2.56,9.18,3.87,14.76,8.23"],"n":[[60.6,45.2],[46.2,32.8]]},"よ":{"p":["M58.24,35.38c7.5-1.28,13.74-2.63,18.5-4.1c2.5-0.77,4.77-1.15,6.25-1.15","M54.62,13.88c2.25,2.12,2.98,4.13,2.88,6.5c-0.75,17-0.12,34.88,1.39,53.5c1.88,23.07-34.89,20.88-34.89,11.5c0-12,26.25-8,35.98-4.12c8.1,3.23,11.52,4.88,18.52,10.38"],"n":[[61.6,28.9],[45.6,14.6]]},"ら":{"p":["M35.33,15c3.75,3,9.22,4.41,16.5,4.25c11.12-0.25-0.25,2.38-1.25,3.5","M35.83,35.75c-2.14,4.34-2.79,8.67-3.11,13.24c-0.42,5.84-0.31,12.05-2.14,19.13c-3.16,12.27,1.49,4.77,3,3.5c11.88-10,21.7-12.67,32.61-12.49c9.21,0.15,16.85,5.19,16.76,13.88c-0.12,13.6-14.24,21.49-32.49,22.49"],"n":[[29.0,13.8],[27.2,35.2]]},"り":{"p":["M38.75,25.25c1.25,1.5,2.24,4.03,1.62,6.62c-2.88,12.13-6.29,29.65-4.25,42.38c2,12.5,1.75-0.75,5.62-6.25","M69.37,18.75c2.25,2.12,2.88,4.12,2.88,6.5c0,2.38,0,26.38,0,35.75c0,16.5-5,25.75-12.62,33.12"],"n":[[30.4,25.0],[61.6,17.0]]},"る":{"p":["M34.31,20.38c1.75,1.25,4.62,2.62,8.5,1.5c3.88-1.12,9.62-2.5,15.62-4.62c6-2.12,7.5-0.12,4.38,4.25c-3.12,4.37-18.89,24.62-27.75,34c-8.5,9-13.09,11.89,0.75,3.25c15.62-9.75,43-10.88,43,13.38c0,22.5-40.88,24.5-40.88,12.62c0-11.25,18.12-8.75,24.38-0.38"],"n":[[28.9,18.6]]},"れ":{"p":["M34.48,13c1.5,1.38,2.83,3.74,2.5,6.38c-0.5,4-2.75,44.5-2.75,52.88c0,8.38,0.12,16.62,0.12,19.5","M16.98,40.75c2.12,1.38,3.74,1.46,7.5,0c4.5-1.75,6.55-2.66,13-5.5c4.25-1.88,4.4,0.24,2.5,3.5c-5.25,9-10.5,16.75-18.88,27.62c-7.55,9.81-6.93,12.85,3.25,3.12c14-13.38,20.34-19.76,33.88-32.5c6.38-6,19.39-12.09,18.14,0.88c-1.02,10.63-1.89,22.13-2.29,30.75c-1.02,21.71,11.53,18,20.15,8.63"],"n":[[27.4,12.9],[11.9,36.2]]},"ろ":{"p":["M36.95,21.88c1.5,2,4.62,3.62,8.5,2.5c3.88-1.12,8.12-2.25,14.12-4.38c6-2.13,6.53-0.1,3.38,4.25c-7.88,10.88-18,22.75-27.5,35.25c-7.49,9.86-10.68,11.32,2.88,2.25c17.38-11.62,46.62-14,46.62,8.12c0,15.62-16,22.5-32.12,25.12"],"n":[[31.1,19.4]]},"わ":{"p":["M38.53,14.75c1.5,1.38,2.22,3.73,2,6.38c-1,11.87-2.75,44.49-2.75,52.87c0,8.38-0.62,16.62-0.62,19.5","M17.53,40.75c2.12,1.38,3.68,1.3,7.5,0c5.88-2,9.8-3.16,16.25-6c4.25-1.88,6.12,0,2.75,4c-6.72,7.96-13,16.5-22.12,27.88c-7.75,9.66-7.54,12.21,3,2.88c21.88-19.38,49.75-35.62,63.5-21c14.36,15.27,1.62,36.62-23.38,42.62"],"n":[[31.2,13.2],[12.4,36.2]]},"を":{"p":["M28.56,27.87c1.62,1.13,3.17,1.64,6.01,1.12c10.86-1.99,16.74-3.37,24.71-4.72c3.64-0.62,5.65-0.93,8.4-0.75","M49.93,14.38c0.75,1,1.48,3.22,0.38,5.62c-4.62,10.12-10,20.75-17.12,30.25c-9.25,12.33-9.25,11.19,2.12,2.5c9-6.88,23.75-12.12,22.88,19.88","M83.06,39.88c0.62,1.75,0,4-3,5.75c-3,1.75-49.62,24.16-44.75,38.25c3.28,9.48,17.93,9.12,29.98,7.75c4.48-0.51,9.15-1.12,12.4-1.75"],"n":[[21.9,25.9],[39.7,12.8],[76.7,37.4]]},"ん":{"p":["M56.35,16.5c0.75,1.75,1.13,5.83-0.38,8.25c-7,11.25-27.22,43.47-33.88,54.37c-9,14.75-7.62,16.25,1.5,1.25c17.86-29.36,32-23.76,32-6.75c0,25,19,26.5,34.25-5"],"n":[[45.9,15.9]]}};
-
-/* ---------- DATA ----------
-   Each note describes the shape briefly, then the feature that separates it from its look-alike. */
+const KVG={"あ":{"p":["M31.01,33c0.88,0.88,2.75,1.82,5.25,1.75c8.62-0.25,20-2.12,29.5-4.25c1.51-0.34,4.62-0.88,6.62-0.5","M49.76,17.62c0.88,1,1.82,3.26,1.38,5.25c-3.75,16.75-6.25,38.13-5.13,53.63c0.41,5.7,1.88,10.88,3.38,13.62","M65.63,44.12c0.75,1.12,1.16,4.39,0.5,6.12c-4.62,12.26-11.24,23.76-25.37,35.76c-6.86,5.83-15.88,3.75-16.25-8.38c-0.34-10.87,13.38-23.12,32.38-26.74c12.42-2.37,27,1.38,30.5,12.75c4.05,13.18-3.76,26.37-20.88,30.49"],"n":[[22.5,35],[41.5,19],[57.5,42]]},"い":{"p":["M21.5,29.66c2.01,2.17,2.61,4.68,2.17,7.43c-3.09,19.16-1.03,32.01,7.93,41.45c6.12,6.45,6.26,3.14,7.04-5.21","M72.96,36.51c9.44,8.05,17.79,18.82,18.41,33.83"],"n":[[15,27.1],[62.2,32.9]]},"う":{"p":["M42,15.5c5.62,2.12,9.62,3,12.88,3c8.27,0,8,1.12-0.38,5.5","M33,42.38c2.12,1.12,4.12,2.88,8.5,1.38c4.38-1.5,12.75-7.12,18.5-7c5.75,0.12,10.25,5,10.25,18c0,15.49-8.25,30.24-24.37,41.24"],"n":[[33.5,14.1],[28.8,39.6]]},"え":{"p":["M40.52,13.25c5.62,2.12,10,3,14.12,3c8.27,0,8,1.12-0.38,5.5","M32.52,45.12c1.88,1.25,4.5,1.75,7.38,0.62c3.29-1.29,17-7.88,21.25-9.88c4.25-2,8.32,0.04,4.38,4.62c-12.26,14.27-27.26,31.52-39.51,44.4c-3.26,3.42-0.58,3.54,1.5,1.37c13.5-14.12,18.12-20.12,23.62-20.12c7.13,0,3.5,16.75,6.75,22.38c3.25,5.63,19.12,3.75,26.12,2.12"],"n":[[33.9,13.5],[25.1,44.4]]},"お":{"p":["M22.88,35.12c1.38,1,3.62,2.38,6,2.12c2.38-0.26,19.62-5.12,21.12-5.74c1.5-0.62,4-1.25,5.88-2","M41.5,16.12c2.25,1,3.59,4.39,3.12,7.38c-2.5,16.12-3.37,45.53-2.25,58.38c0.75,8.62-0.64,10.45-7.12,7.12c-5.13-2.62-13.75-8-13.75-12.38c0-7.5,24.38-23.62,44.75-23.62c17.25,0,25,8.25,25,17.25c0,8.25-9.38,18.88-26.75,21","M73,22.12c5.38,2.62,8.88,5.88,10.62,8.25c2.27,3.08,0.38,4.5-1.12,5"],"n":[[17.2,34.9],[32.8,16.6],[64.4,21.6]]},"か":{"p":["M24.62,38.62c1.88,1.62,4.65,2.33,8.62,1c25.5-8.5,29.5-4.13,29.5,7.62c0,9.38-1.24,17.46-4.25,25.25c-7.62,19.76-10.87,17.39-16.12,10.89","M48.5,17.5c1,1.38,1.29,4.7,0.5,7.12c-5,15.25-18.02,40.93-19.62,43.88c-3.12,5.75-6.38,11.88-9.38,16.25","M77.37,31.62c7.5,6.88,13.25,15.75,15,24.88"],"n":[[16.8,37.4],[39.8,16],[70,29.8]]},"が":{"p":["M24.62,38.62c1.88,1.62,4.65,2.33,8.62,1c25.5-8.5,29.5-4.13,29.5,7.62c0,9.38-1.24,17.46-4.25,25.25c-7.62,19.76-10.87,17.39-16.12,10.89","M48.5,17.5c1,1.38,1.29,4.7,0.5,7.12c-5,15.25-18.02,40.93-19.62,43.88c-3.12,5.75-6.38,11.88-9.38,16.25","M77.37,31.62c7.5,6.88,13.25,15.75,15,24.88","M80.5,18.25c2.75,1.75,6,5.38,7.75,8.5","M86.87,13.38c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[16.8,37.4],[39.8,16],[70,29.8],[72.9,17.2],[79,12.1]]},"き":{"p":["M30.5,30.25c1.88,0.75,4.64,1.06,5.88,0.88c6.75-1,22.25-4.5,26.5-6c2.17-0.76,3.5-1.25,4.88-2.12","M36.25,48.7c2.01,0.85,4.97,1.2,6.29,0.99c7.23-1.13,23.82-5.09,28.37-6.79c2.32-0.86,3.75-1.41,5.22-2.4","M42,14.12c1.5,0.88,3.13,2.94,4,5.12c5.5,13.76,16,29.26,26.37,40.76c7.64,8.47,9.12,9.38-6,3.88","M33.75,83.25c10.62,9.75,27.25,8.62,38.12,5"],"n":[[24.5,29.5],[28.1,48.1],[32.5,13],[24.5,77]]},"ぎ":{"p":["M30.5,30.5c1.88,0.75,4.64,1.06,5.88,0.88c6.75-1,22.25-4.5,26.5-6c2.17-0.76,3.5-1.25,4.88-2.12","M36.25,48.95c2.01,0.85,4.97,1.2,6.29,0.99c7.23-1.13,23.82-5.09,28.37-6.79c2.32-0.86,3.75-1.41,5.22-2.4","M42,14.38c1.5,0.88,3.13,2.94,4,5.12c5.5,13.75,16,29.25,26.38,40.75c7.64,8.47,9.12,9.38-6,3.88","M33.75,83.5c10.62,9.75,27.25,8.62,38.12,5","M77.37,19c2.75,1.75,6,5.38,7.75,8.5","M83.75,14.12c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[24.5,29.5],[28.1,48.1],[32.5,13],[24.5,77],[69.8,18],[75.9,12.9]]},"く":{"p":["M60.66,15c0.5,1.62,0.35,5.44-1,7.38c-6.75,9.62-14.3,19.08-18.62,24.5c-4,5-3.79,7.03-0.88,11c5.5,7.5,12.75,18.75,17.62,27.25c1.48,2.59,2.75,4.75,4.5,8.62"],"n":[[53.7,12.4]]},"ぐ":{"p":["M60.66,15c0.5,2.12,0.75,5-1,7.38c-6.97,9.46-14.29,19.09-18.62,24.5c-4,5-3.79,7.03-0.88,11c5.5,7.5,12.75,18.75,17.62,27.25c1.48,2.59,2.75,4.75,4.5,8.62","M73.54,30c2.75,1.75,6,5.38,7.75,8.5","M79.91,25.12c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[53.7,12.4],[65.9,29],[72,23.9]]},"け":{"p":["M24.67,19.75c1.25,1.5,2.62,3.75,2.12,6.38c-3,15.88-6.5,29.5-4.88,44.62c2.02,18.84,2.25,4.75,6.75-3.5","M53.67,38.62c2.12,1.38,4.28,1.89,6.88,1.5c8.25-1.25,15.39-2.57,20.62-4c2.76-0.74,5.26-1.12,6.88-1.12","M71.67,14.38c2.13,1.37,2.88,3.35,2.88,5.12c0,11.62,0.12,20.38,0.12,30.12c0,20.75-0.62,30.88-12.5,42.25"],"n":[[16.3,18.8],[46.7,36.9],[64,13.2]]},"げ":{"p":["M24.91,20.25c1.25,1.5,2.37,3.75,1.88,6.38c-3,15.88-6.5,29.5-4.88,44.62c2.02,18.84,2.25,4.75,6.75-3.5","M53.67,39.12c2.12,1.38,4.28,1.89,6.88,1.5c8.25-1.25,15.39-2.57,20.62-4c2.75-0.75,5.25-1.12,6.88-1.12","M71.67,14.62c2.12,1.38,2.87,3.61,2.87,5.38c0,11.62,0.12,20.38,0.12,30.12c0,20.75-0.62,30.88-12.5,42.25","M86.17,13c2.75,1.75,6,5.38,7.75,8.5","M92.54,8.12c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[16.3,19.2],[46.7,37.4],[64,13.8],[78.5,12],[84.7,6.9]]},"こ":{"p":["M34.75,26.75c1.12,0.88,2.91,2.01,6,1.5c7.62-1.25,14.11-2.56,22.38-2.62c15.5-0.12,5.88,5-5.75,9","M30,68.12c2.25,14.5,15.26,17.96,31,16.75c6.5-0.5,11.88-1.25,17.62-2.88"],"n":[[28,25.9],[23.8,68.1]]},"ご":{"p":["M34.75,27c1.12,0.88,2.91,2.01,6,1.5c7.62-1.25,14.11-2.56,22.38-2.62c15.5-0.12,5.88,5-5.75,9","M30,68.38c2.25,14.5,15.26,17.96,31,16.75c6.5-0.5,11.88-1.25,17.62-2.88","M80.37,16.25c2.75,1.75,6,5.38,7.75,8.5","M86.75,11.38c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[28,26.1],[23.8,68.4],[72.8,15.2],[78.9,10.1]]},"さ":{"p":["M27,38.9c2.42,1.33,5.38,1.47,8.32,1.06c8.79-1.24,28.67-7.76,34.15-10.43c2.79-1.36,3.78-1.91,6.28-3.53","M41.5,13.88c1.5,0.88,3.63,2.94,4.5,5.12c5.5,13.75,15.25,27.62,26.87,39.5c7.98,8.15,6.38,10-6,3.12","M35.25,80.5c4.5,11.75,20.88,12.5,38.38,7.5"],"n":[[21.2,38.5],[32,13],[28.2,77]]},"ざ":{"p":["M27,39.15c2.42,1.33,5.38,1.47,8.32,1.06c8.79-1.24,28.67-8.01,34.15-10.68c2.79-1.36,3.78-1.91,6.28-3.53","M41.5,14.12c1.5,0.88,3.63,2.95,4.5,5.13c5.5,13.75,15.25,27.63,26.88,39.5c7.98,8.15,6.38,10-6,3.12","M35.25,80.75c4.5,11.75,20.88,12.5,38.38,7.5","M79.88,14.25c2.75,1.75,6,5.38,7.75,8.5","M86.25,9.38c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[21.2,38.8],[32,13.2],[28.2,77.2],[72.2,13.2],[78.4,8.1]]},"し":{"p":["M39.12,17.5c1.25,3.12,0.93,6.74,0.38,10.25c-2.12,13.5-3,26.5-3,39.12c0,27.38,19.88,30.12,45.5,17.25"],"n":[[30.9,14.1]]},"じ":{"p":["M39.12,17.25c1.25,3.12,0.93,6.74,0.38,10.25c-2.12,13.5-3,26.5-3,39.12c0,27.38,19.88,30.12,45.5,17.25","M64.24,27c2.75,1.75,6,5.38,7.75,8.5","M70.62,22.12c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[30.9,13.9],[56.6,26],[62.8,20.9]]},"す":{"p":["M15.5,37.12c2.88,2.12,6.94,1.51,12.75,0.25c16.12-3.5,36.14-5.38,46.62-6.5c7-0.75,11.88-0.62,17.75,0.12","M57.62,13.38c2,1.5,2.75,3.25,2.75,5.88c0,10.38,0,35.12,0,40.75c0,14.62-15.62,16.38-15.62,1.75c0-14.25,18-14.12,18,6.38c0,13.25-7.75,21.5-16,28.38"],"n":[[9.1,35.5],[49,14.1]]},"ず":{"p":["M15.5,37.12c2.88,2.12,6.94,1.51,12.75,0.25c16.12-3.5,36.14-5.38,46.62-6.5c7-0.75,11.88-0.62,17.75,0.12","M57.62,13.38c2,1.5,2.75,3.25,2.75,5.88c0,10.38,0,35.12,0,40.75c0,14.62-15.62,16.38-15.62,1.75c0-14.25,18-14.12,18,6.38c0,13.25-7.75,21.5-16,28.38","M77,13c2.75,1.75,6,5.38,7.75,8.5","M83.37,8.12c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[9.1,35.5],[49,14.1],[69.4,12],[75.5,6.9]]},"せ":{"p":["M16.5,49.93c2.88,2.42,6.86,1.57,12.75,0.53c19-3.34,33-5.72,47.12-7.64c6.99-0.95,11.88-1.21,17.75-0.36","M69.74,17.75c2,1.5,2.75,3.25,2.75,5.88c0,10.38,0,17.88,0,23.5c0,25.62-5.75,23.25-11.88,19","M35.62,26.25c2,1.5,2.75,3.25,2.75,5.88c0,10.38,0,28.38,0,34c0,14.5,6.38,19.55,20.14,19.55c10.24,0,13.74,0.07,22.61-1.68"],"n":[[10.1,48.5],[61.2,16.5],[27.8,25.2]]},"ぜ":{"p":["M16.5,49.93c2.88,2.42,6.86,1.57,12.75,0.53c19-3.34,32.5-5.34,47.12-7.64c6.97-1.1,11.88-1.21,17.75-0.36","M69.74,17.75c2,1.5,2.75,3.25,2.75,5.88c0,10.38,0,17.88,0,23.5c0,25.62-5.75,23.25-11.88,19","M35.62,26.25c2,1.5,2.75,3.25,2.75,5.88c0,10.38,0,28.38,0,34c0,14.5,6.38,19.55,20.14,19.55c10.24,0,13.74,0.07,22.61-1.68","M84.5,17.25c2.75,1.75,6,5.38,7.75,8.5","M90.87,12.38c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[10.1,48.5],[61.2,16.5],[27.8,25.2],[76.9,16.2],[83,11.1]]},"そ":{"p":["M38.4,22c1.88,1.25,4.98,1.05,7.5,0.38c6.5-1.75,13.25-3.75,19.38-5.38c4.63-1.23,7.18,2.06,3.62,5.25c-12.12,10.87-31.14,24.4-40,30.25c-6.25,4.12-5.88,5.75,1.38,3.88c17.08-4.42,35.96-8.68,50.12-10.38c9.38-1.12,9.62,0.12,0.5,1.38c-15.82,2.17-34.38,14.25-34.38,26.5c0,12.88,11.62,20.38,31.5,16.62"],"n":[[31.9,20.5]]},"ぞ":{"p":["M38.4,22c1.88,1.25,4.98,1.05,7.5,0.38c6.5-1.75,13.25-3.75,19.38-5.38c4.63-1.23,7.18,2.06,3.62,5.25c-12.12,10.87-31.14,24.4-40,30.25c-6.25,4.12-5.88,5.75,1.38,3.88c17.08-4.42,35.96-8.68,50.12-10.38c9.38-1.12,9.62,0.12,0.5,1.38c-15.82,2.17-34.38,14.25-34.38,26.5c0,12.88,11.62,20.38,31.5,16.62","M81.78,26.75c2.75,1.75,6,5.38,7.75,8.5","M88.15,21.88c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[31.9,20.5],[74.4,28],[80.3,21.1]]},"た":{"p":["M24.38,35.38c1.38,0.62,3.88,1.51,6.38,1.12c6.5-1,16.25-2.88,24.88-4.75c2.64-0.57,5.38-1.5,7.62-2.38","M45,16.88c0.75,1.25,0.87,3.62,0.38,5.25c-6.35,20.94-12.75,36.37-18.88,52.37c-1.36,3.56-4.75,11.75-6,14.62","M56.38,53.25c12.38-2.75,18.25-3.7,23.62-3.12c15.12,1.62-1.12,2.25-4.25,4.88","M54.13,82.25c4.38,7,14.25,8.12,34.5,5.62"],"n":[[16.9,34.9],[35.1,16.2],[52.3,50.6],[46.8,80]]},"だ":{"p":["M24.38,35.38c1.38,0.62,3.88,1.51,6.38,1.12c6.5-1,16.25-2.88,24.88-4.75c2.64-0.57,5.38-1.5,7.62-2.38","M45,16.88c0.75,1.25,0.87,3.62,0.38,5.25c-6.35,20.94-12.75,36.37-18.88,52.37c-1.36,3.56-4.75,11.75-6,14.62","M56.38,53.25c12.38-2.75,18.25-3.7,23.62-3.12c15.12,1.62-1.12,2.25-4.25,4.88","M54.13,82.25c4.38,7,14.25,8.12,34.5,5.62","M76,22.5c2.75,1.75,6,5.38,7.75,8.5","M82.38,17.62c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[16.9,34.9],[35.1,16.2],[52.3,50.6],[46.8,80],[68.4,21.5],[74.5,16.4]]},"ち":{"p":["M24.5,32.62c1.38,0.62,3.88,1.51,6.38,1.12c6.5-1,18.25-4.12,26.88-6c2.64-0.57,5.38-1.5,7.62-2.38","M45.62,15.62c0.75,1.25,0.71,3.58,0.38,5.25c-3,15-4.25,22.59-8.38,38.62c-3.25,12.62-5.38,11.12,3.62,4.38c8.29-6.21,19.75-9.5,28.5-9.5c8.62,0,14.58,5.88,14.5,14.5c-0.12,13.5-16.5,20.62-29.88,23.25"],"n":[[20,28.9],[36.8,15.5]]},"っ":{"p":["M23,61.15c1.49,1.29,3.72,1.67,6.46,0.5c14.21-6.07,23.85-8.85,35.68-8.65c9.99,0.17,18.28,5.7,18.18,15.24c-0.15,14.93-18.46,23.39-35.79,25.51"],"n":[[18.8,57]]},"つ":{"p":["M14,44.75c1.88,1.62,4.68,2.09,8.12,0.62c17.88-7.62,30-11.12,44.88-10.88c12.56,0.21,22.98,7.17,22.87,19.17c-0.18,18.77-24.75,28.71-45.01,32.08"],"n":[[9.8,40.4]]},"て":{"p":["M20.5,26.38c1.87,1.62,4.42,1.97,8.12,1.37c21.75-3.5,33-5.12,50.12-8.38c12.34-2.34,13-0.88,0.38,1.38c-17.89,3.19-33.78,19.12-33.78,37.62c0,20.5,17.91,30.25,35.16,30.25"],"n":[[16.4,20]]},"で":{"p":["M20.5,26.38c1.87,1.62,4.42,1.97,8.12,1.37c21.75-3.5,33-5.12,50.12-8.38c12.34-2.34,13-0.88,0.38,1.38c-17.89,3.19-33.78,19.12-33.78,37.62c0,20.5,17.91,30.25,35.16,30.25","M75,41.75c2.75,1.75,6,5.38,7.75,8.5","M81.37,36.88c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[16.5,20.4],[67.4,40.8],[73.5,35.6]]},"と":{"p":["M35.5,18.38c1.74,0.74,3.62,2.62,4.12,5.37c0.5,2.75,4.75,25,5.38,28.12","M78.12,25.5c0.25,1.88,0.04,4.09-2.25,5.75c-6.37,4.63-13.22,8.49-22.75,15.25c-12.88,9.12-21.62,18.38-21.62,27.5c0,10.12,8.5,13.88,26.88,13.88c6.25,0,14.75-0.12,21.62-1.25"],"n":[[27.9,18.8],[69.2,22.2]]},"ど":{"p":["M35.5,18.38c1.74,0.74,3.62,2.62,4.12,5.37c0.5,2.75,4.75,25,5.38,28.12","M78.12,25.5c0.25,1.88,0.04,4.09-2.25,5.75c-6.37,4.63-13.21,8.49-22.75,15.25c-12.88,9.12-21.62,18.38-21.62,27.5c0,10.12,8.5,13.88,26.88,13.88c6.25,0,14.75-0.12,21.62-1.25","M84.24,14.5c2.75,1.75,6,5.38,7.75,8.5","M90.62,9.62c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[27.9,18.8],[69.2,22.2],[76.6,13.5],[82.8,8.4]]},"な":{"p":["M22.88,28.96c1.18,0.58,3.3,1.1,5.47,1.05c5.53-0.13,10.9-0.98,16.52-2.42c4.82-1.23,9.13-3.12,11.38-4.22","M42.99,14c0.63,0.89,0.56,2.52,0.31,3.72c-2.96,14.16-7.95,26.56-14.25,37.87c-2.05,3.69-4.25,7.24-6.55,10.65","M72.26,23.25c6.88,2.5,12.62,5.62,14.75,9.5c4.06,7.41-0.25,3.38-3.5,3.88","M68.88,44.62c-1,1.88-2.14,5.24-1.88,8.25c0.62,7,1.5,13.12,1.5,20.62c0,20-27.88,19.75-27.88,9.38c0-5.62,8.25-8.25,13.88-8.25c8.75,0,21.5,3.25,29.75,11.5"],"n":[[17.6,23.8],[32.5,12],[64.6,22.1],[64.3,41.6]]},"に":{"p":["M24.53,22.75c1.25,1.5,1.62,3.75,1.12,6.38c-3,15.88-9,32.5-7.38,47.62c2.02,18.84,4.5,5.75,8.5-3.5","M53.2,30.64c0.96,0.79,2.44,1.58,5.1,1.35c6.98-0.61,15.01-3.3,22.04-3.36c13.19-0.11,1.5,3.75-8.39,7.35","M52.53,68c1.76,12.92,11.92,16.01,24.23,14.93c5.08-0.45,8.9-0.8,14.27-2.06"],"n":[[16.8,22.1],[46.9,29],[46.4,66]]},"ぬ":{"p":["M25.38,28.5c2,1.38,2.97,3.23,3.38,5.88c1.87,12.18,4.12,23.92,8.54,34.67c1.79,4.36,3.96,8.33,6.84,12.46","M57.12,19.25c0.88,2.12,1.06,3.79,0.62,5.88c-3.12,15-13.14,39.81-18.12,48.62c-11.87,21-20.62,1.25-20.62-4.5c0-22.63,43.75-44.25,62.36-29.59c7.66,6.03,9.8,14.58,9.14,23.34c-2,26.75-32.88,28.38-32.88,16.88c0-9.38,17.38-7.12,27.12-1.12c3.1,1.91,7.25,5.25,9.5,7.5"],"n":[[17.6,27.9],[47.2,17.2]]},"ね":{"p":["M33.29,14.5c1.62,1.62,2.1,3.21,1.88,5.88c-1.03,11.93-2.06,31.66-2.53,53.12c-0.1,4.62-0.18,9.31-0.22,14","M17.16,37.88c1.62,0.88,3.25,1.38,5.62,0.75c2.14-0.56,7.8-2.31,12.37-4.03c6.26-2.35,6.88-1.47,3.12,3.63c-5.56,7.53-13.02,17.38-18.48,26.77c-5.6,9.62-3.45,8.3,2,3c19.12-18.62,38.5-39.12,54.12-39.12c11.38,0,12.88,11.25,12.88,32.5c0,28.62-30.18,24.88-30.18,16.26c0-9.63,18.73-7.82,28.06-1.88c2.75,1.75,5.88,4.88,7.5,6.75"],"n":[[25.9,13.8],[12.9,34.1]]},"の":{"p":["M53.82,28.62c1,1.5,1.34,4.12,0.88,6.62c-1.75,9.5-6.89,25-10.75,33.12c-9.63,20.26-16.55,14.74-24.38-1.98c-9.13-19.5,23.5-48.88,50.63-40.38c32.38,10.15,28,54.62-4.75,60.88"],"n":[[46.5,34.9]]},"は":{"p":["M24.51,18c1.25,1.5,2.15,4,1.62,6.62c-3.5,17.62-6.98,36.4-4,54.88c2.5,15.5,1.12,2,5.62-6.25","M49.64,37.89c2.41,1.57,4.85,2.16,7.8,1.71c9.36-1.43,17.46-2.94,23.4-4.57c3.12-0.86,5.96-1.29,7.8-1.29","M69.77,16.5c2.25,2.12,2.88,4.12,2.88,6.5c0,2.38,1.5,38.62,1.5,48c0,22.5-30.62,19.62-30.62,10.5c0-9.75,23.88-5.62,29.5-2.88c5.62,2.74,11.98,8.26,13.36,9.38"],"n":[[16.9,17.6],[43,36.4],[59.9,16]]},"ば":{"p":["M24.75,17.75c1.25,1.5,1.9,4.25,1.38,6.88c-3.5,17.62-6.98,36.4-4,54.88c2.5,15.5,1.12,2,5.62-6.25","M49.88,37.89c2.41,1.57,4.85,2.41,7.8,1.96c9.36-1.43,17.21-3.19,23.15-4.82c3.12-0.86,5.96-1.29,7.8-1.29","M69.75,16.5c2.26,2.12,2.88,4.12,2.88,6.5c0,2.38,1.5,38.62,1.5,48c0,22.5-30.62,19.62-30.62,10.5c0-9.75,23.88-5.62,29.5-2.88c5.62,2.74,12,8.25,13.38,9.38","M84.75,15.25c2.75,1.75,6,5.38,7.75,8.5","M91.13,10.38c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[16.9,17.6],[43,36.4],[59.9,16],[77.1,14.2],[83.3,9.1]]},"ぱ":{"p":["M24.51,18c1.25,1.5,2.15,4,1.62,6.62c-3.5,17.62-6.98,36.4-4,54.88c2.5,15.5,1.12,2,5.62-6.25","M49.64,37.89c2.41,1.57,4.85,2.16,7.8,1.71c9.36-1.43,17.46-2.94,23.4-4.57c3.12-0.86,5.96-1.29,7.8-1.29","M69.77,16.5c2.25,2.12,2.88,4.12,2.88,6.5c0,2.38,1.5,38.62,1.5,48c0,22.5-30.62,19.62-30.62,10.5c0-9.75,23.88-5.62,29.5-2.88c5.62,2.74,11.98,8.26,13.36,9.38","M91.01,24.38c-9.62,0-9.25-14.25,0-14.25c9.76-0.01,9.5,14.25,0,14.25"],"n":[[16.9,17.6],[43,36.4],[59.9,16],[88,31.8]]},"ひ":{"p":["M20,25.12c1.25,0.88,3.75,2.25,6.5,1.38c2.75-0.87,7.31-2.38,11.38-4.5c6-3.12,8.42-1.01,4.25,4c-27.13,32.62-23.76,58.5-1.52,62.88c18.07,3.56,37.63-16.38,35.63-56.51c-0.72-14.5-0.17-14.78,4.12-1.75c3.76,11.38,10.26,20.76,16.14,26.5"],"n":[[15.2,21.4]]},"び":{"p":["M20,25.12c1.25,0.88,3.75,2.25,6.5,1.38c2.75-0.87,7.31-2.38,11.38-4.5c6-3.12,8.42-1.01,4.25,4c-27.13,32.62-23.76,58.5-1.52,62.88c18.07,3.56,37.63-16.38,35.63-56.51c-0.72-14.5-0.17-14.78,4.12-1.75c3.76,11.38,10.26,20.76,16.14,26.5","M86.5,13.5c2.75,1.75,6,5.38,7.75,8.5","M92.87,8.62c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[18.4,17.6],[78.9,12.5],[85,7.4]]},"ぴ":{"p":["M20,25.12c1.25,0.88,3.75,2.25,6.5,1.38c2.75-0.87,7.31-2.38,11.38-4.5c6-3.12,8.42-1.01,4.25,4c-27.13,32.62-23.76,58.5-1.52,62.88c18.07,3.56,37.63-16.38,35.63-56.51c-0.72-14.5-0.17-14.78,4.12-1.75c3.76,11.38,10.26,20.76,16.14,26.5","M93.87,22.12c-9.62,0-9.25-14.25,0-14.25c9.75,0.01,9.5,14.25,0,14.25"],"n":[[16.6,20.9],[89.1,29.1]]},"ふ":{"p":["M42.63,15.62c3.62,3.38,7.5,5.38,12.74,6.13c9.59,1.37,3.5,3.38-1.88,6.12","M43.63,46.88c1.88,4.62,7.5,9.41,14.25,17.5c10.62,12.74,0.49,30-19.13,21.62","M16.5,73.38c0.75,4,1.88,8.12,5,10.12c1.16,0.74,0.12-3.38,13.25-9.12","M80.13,61.88c5.12,3.38,10.28,7.49,11.38,8.88c6.75,8.5-0.25,4.62-4.62,7.12"],"n":[[36.8,13.9],[37.8,43.9],[13.5,67.6],[69.4,59.1]]},"ぶ":{"p":["M42.12,15.62c3.62,3.38,7.5,5.38,12.75,6.12c9.59,1.37,3.5,3.38-1.88,6.12","M43.12,46.88c1.88,4.62,7.5,9.41,14.25,17.5c10.62,12.75,0.5,30-19.12,21.62","M16.5,73.88c0.75,4,1.88,8.12,5,10.12c1.16,0.74,0.12-3.38,13.25-9.12","M79.62,61.88c5.5,3.38,10.28,7.49,11.38,8.88c6.75,8.5-0.25,4.62-4.62,7.12","M73.62,16.25c2.75,1.75,6,5.38,7.75,8.5","M80,11.38c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[36.2,13.9],[37.2,43.9],[13,67.6],[68.9,59.1],[66,15.2],[72.1,10.1]]},"ぷ":{"p":["M42.13,15.62c3.62,3.38,7.5,5.38,12.74,6.13c9.59,1.37,3.5,3.38-1.88,6.12","M43.13,46.88c1.88,4.62,7.5,9.41,14.25,17.5c10.62,12.74,0.49,30-19.13,21.62","M16.5,73.88c0.75,4,1.88,8.12,5,10.12c1.16,0.74,0.12-3.38,13.25-9.12","M79.63,61.88c5.5,3.38,10.28,7.49,11.38,8.88c6.75,8.5-0.25,4.62-4.62,7.12","M80.87,26.62c-9.62,0-9.25-14.25,0-14.25c9.76,0.01,9.5,14.25,0,14.25"],"n":[[36.2,13.9],[37.2,43.9],[13,67.6],[68.9,59.1],[75,33.1]]},"へ":{"p":["M15,48.75c2.25,1.62,4.67,1.96,7-0.38c3.62-3.62,7.46-6.54,11.25-10.5c5.5-5.75,8.48-4.75,13.12-0.88c12.12,10.12,30.38,25.12,33.38,27.38c3,2.26,12.37,10.38,13.87,11.63"],"n":[[9.9,42.8]]},"べ":{"p":["M15,48.75c2.25,1.62,5,1.38,7.62-1c3.89-3.52,6.12-5.75,10.62-9.88c5.88-5.37,8.49-4.75,13.14-0.87c12.12,10.12,30.38,25.12,33.38,27.38c3,2.26,12.37,10.37,13.87,11.62","M66.76,26.75c2.75,1.75,6,5.38,7.75,8.5","M73.13,21.88c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[9.9,42.8],[59.1,25.8],[65.3,20.6]]},"ぺ":{"p":["M15,48.75c2.25,1.62,4.67,1.96,7-0.38c3.62-3.62,7.46-6.54,11.25-10.5c5.5-5.75,8.48-4.75,13.12-0.88c12.12,10.12,30.38,25.12,33.38,27.38c3,2.26,12.38,10.38,13.88,11.63","M73.63,36.75c-9.62,0-9.25-14.25,0-14.25c9.75,0,9.5,14.25,0,14.25"],"n":[[9.9,42.8],[65.6,43]]},"ほ":{"p":["M24.51,18.75c1.25,1.5,2.15,4,1.62,6.62c-3.5,17.63-6.98,37.4-4,55.88c2.5,15.5,1.12,2,5.62-6.25","M53.08,21.13c1.9,1.28,3.82,1.76,6.14,1.4c7.36-1.17,13.73-2.4,18.41-3.73c2.46-0.7,4.69-1.05,6.13-1.05","M53.83,44.3c2.21,1.44,4.46,1.98,7.16,1.57c8.59-1.31,15.78-2.44,21.23-3.94c2.87-0.79,5.72-1.18,7.41-1.18","M72.51,23c1.38,1.62,1.62,4.12,1.62,6.5c0,2.38,2,35.12,2,44.5c0,17.5-29.88,17.12-29.88,8c0-9.75,21.38-7.88,29.5-2.88c5.33,3.28,12,8.25,13.38,9.38"],"n":[[17.1,18.1],[46.4,20.5],[45.5,46],[66.1,29.4]]},"ぼ":{"p":["M24.51,18.75c1.25,1.5,2.15,4,1.62,6.62c-3.5,17.63-6.98,37.4-4,55.88c2.5,15.5,1.12,2,5.62-6.25","M53.08,21.13c1.9,1.28,3.82,1.76,6.14,1.4c7.36-1.17,13.73-2.4,18.41-3.73c2.46-0.7,4.69-1.05,6.13-1.05","M53.83,44.3c2.21,1.44,4.46,1.98,7.16,1.57c8.59-1.31,15.78-2.44,21.23-3.94c2.87-0.79,5.72-1.18,7.41-1.18","M72.51,23c1.38,1.62,1.62,4.12,1.62,6.5c0,2.38,2,35.12,2,44.5c0,17.5-29.88,17.12-29.88,8c0-9.75,21.38-7.88,29.5-2.88c5.33,3.28,12,8.25,13.38,9.38","M87.51,26c2.75,1.75,6,5.38,7.75,8.5","M93.88,21.12c3.06,1.57,6.68,4.82,8.62,7.62"],"n":[[17.1,18.1],[46.4,20.5],[45.5,46],[66.1,29.4],[79.9,27],[86,21.4]]},"ぽ":{"p":["M24.51,19c1.25,1.5,2.15,4,1.62,6.62c-3.5,17.62-6.98,37.4-4,55.88c2.5,15.5,1.12,2,5.62-6.25","M53.08,21.38c1.9,1.28,3.82,1.76,6.14,1.4c7.36-1.17,13.73-2.4,18.41-3.73c2.46-0.7,4.69-1.05,6.13-1.05","M53.83,44.55c2.21,1.44,4.46,1.98,7.16,1.57c8.59-1.31,15.78-2.44,21.23-3.94c2.87-0.79,5.72-1.18,7.41-1.18","M72.51,23.25c1.38,1.62,1.62,4.12,1.62,6.5c0,2.38,2,35.12,2,44.5c0,17.5-29.88,17.12-29.88,8c0-9.75,21.38-7.88,29.5-2.88c5.33,3.28,12,8.25,13.38,9.38","M95.13,34.5c-9.62,0-9.25-14.25,0-14.25c9.75,0,9.5,14.25,0,14.25"],"n":[[17.1,18.4],[46.4,20.8],[46.8,43.1],[66.1,29.6],[92,41.9]]},"ま":{"p":["M29.83,32.28c2.2,1.15,4.43,1.5,7.14,1.26c11.54-1.04,25.94-3.12,34.66-4.85c2.87-0.57,5.45-0.44,7.13-0.44","M33.83,51.84c2.45,1.61,4.94,1.72,7.94,1.26c9.52-1.46,17.87-3.1,27.03-5.16c3.22-0.72,6.34-1.32,8.21-1.32","M55.81,14c1.52,1.8,1.8,4.57,1.8,7.19c0,2.63,0.46,43.88,0.46,54.25c0,21.3-30.07,19.96-30.07,9.86c0-10.79,25.88-9.93,38.57-3.18c6.12,3.25,11.55,6.38,14.8,9.13"],"n":[[24.3,28.1],[26.6,50.9],[47.3,13.1]]},"み":{"p":["M32.5,26c1.88,1.75,4.06,1.7,6.88,1.25c3.88-0.62,7.62-1.75,11.88-3.12c4.26-1.37,6.25-0.12,4.5,5.12c-1.75,5.24-6.66,17.39-12,30.12c-13.63,32.51-29.26,29.26-29.26,18.63c0-14.25,20.48-15.36,33-13.5c18.5,2.75,30,6.62,44.38,14.25","M79.38,54.75c0.75,2.38,0.49,4.37,0,6.25c-2.12,8.12-7.5,25-22.12,33.75"],"n":[[26.5,24.9],[71.1,52]]},"む":{"p":["M19.59,31.65c2.1,1.55,4.24,1.66,6.81,1.21c8.17-1.41,15.33-2.98,23.19-4.96c2.76-0.69,5.44-1.27,7.05-1.27","M37.02,15.5c1.62,1.25,2.31,2.88,2.12,5.25c-0.88,11.12-1.5,20.75-4,34.88c-3.61,20.44-19.25,16.99-18.62,7.37c0.5-7.74,6.25-12.86,12.62-13.5c5-0.5,14.28,1.93,5.88,15c-12.62,19.62-11.42,24.51,5.11,25.54c10.98,0.68,19.26,0.72,28.49-0.92c14.15-2.5,7.4-2.63,7.4-11.13","M78.52,36.25c6.88,3.12,11.71,5.95,14.88,10.12c6.25,8.25-1.38,3.62-4.5,4.5"],"n":[[12.9,29],[26.6,13],[70.4,34.8]]},"め":{"p":["M27.48,31.75c1.75,1,2.41,3.09,2.5,5.25c0.5,11.62,2.75,23.5,7.25,31.38c1.39,2.44,5.38,8.5,7.25,10.38","M59.6,19.38c1,1.5,1.35,4.12,0.88,6.62c-2.75,14.62-13.62,37.75-20.1,47.24c-12.28,17.14-16.78,13.14-22.28,0.64c-5.38-15.38,26.4-42.18,53.42-35.28c29.08,8.27,23.96,46.02-7.98,50.15"],"n":[[20.1,30],[50.1,18]]},"も":{"p":["M49.17,14.75c1.88,1.88,1.86,4.52,1.12,8c-3,14.25-5,26.62-7,42.12c-2.55,19.73-0.75,29.88,17,29.86c20.25-0.02,28.63-13.11,20.01-35.73","M26.54,34.62c1.12,0.88,2.87,2.21,6,2c11.12-0.75,20-2.12,27.74-3.46c3.88-0.67,5.88-1.17,8.88-1.04","M26.42,53.38c-1.5,4,1,6.75,7.75,6.75c8.75,0,17.62-1,22.88-1.88c2.01-0.33,5.38-1,7.5-1.75"],"n":[[40.5,14.4],[21.3,29.6],[21.8,50.9]]},"ゃ":{"p":["M26,61.07c1.49,1.29,4.16,1.98,6.84,0.69c14.68-7.03,28.36-15.36,40.32-15.26c7.16,0.11,12.7,3.28,12.63,9.75c0,6.61-8.63,13.15-19.43,14.14","M49.1,34.5c4.07,0.69,8.25,3.21,9.12,5.25c1.69,3.97-0.79,1.88-2.28,2.08","M35.77,40.99c1.88,1.49,2.35,2.77,2.82,4.67c2.08,8.33,8.82,32.37,11.7,41.39c0.51,1.62,1.49,4.96,2.28,7.44"],"n":[[21.9,57.1],[42.2,32.6],[27.1,40.6]]},"や":{"p":["M18,49.38c1.88,1.62,5.25,2.5,8.62,0.88c18.51-8.88,35.76-19.38,50.83-19.26c9.02,0.14,16.01,4.13,15.93,12.29c0,8.33-10.88,16.58-24.5,17.83","M47.13,15.88c5.12,0.88,10.41,4.05,11.5,6.62c2.12,5-1,2.38-2.88,2.62","M30,24.38c2.38,1.88,3.28,2.87,3.88,5.25c2.62,10.5,11.12,41.12,14.75,52.5c0.65,2.04,1.88,6.25,2.88,9.38"],"n":[[12.9,44.1],[39.9,13.9],[19.3,25]]},"ゅ":{"p":["M27.74,40.79c1.1,1.2,1.61,3.3,1.2,5c-2.3,9.4-3.2,17.79-1.7,27.99c2.22,15.08,0.9,3.1,2.6-1.2c7.19-18.19,21.79-27.59,35.49-27.59c13.5,0,17.49,9.1,17.49,16.2c0,21.89-24.69,23.69-34.39,13.4","M57.63,33.89c2.1,1.4,2.53,2.5,2.8,5.7c0.7,8.4,1.12,14.97,1.3,23.49c0.4,19.19-5,25.59-9.9,31.39"],"n":[[19.4,39.6],[48.8,32.5]]},"ゆ":{"p":["M21.05,25.38c1.38,1.5,2.02,4.13,1.5,6.25c-2.88,11.75-4,22.25-2.12,35c2.77,18.85,1.12,3.88,3.25-1.5c9-22.75,27.24-34.5,44.38-34.5c16.88,0,21.88,11.38,21.88,20.25c0,27.38-30.88,29.62-43,16.75","M58.42,16.75c2.62,1.75,3.17,3.13,3.5,7.12c0.88,10.5,1.4,18.72,1.62,29.38c0.5,24-6.25,32-12.38,39.25"],"n":[[12.7,22],[49.8,15.9]]},"ょ":{"p":["M57.8,50.06c5.98-1.02,10.95-2.09,14.74-3.25c1.99-0.61,3.8-0.91,4.98-0.91","M54.91,33c1.79,1.69,2.38,3.28,2.29,5.16c-0.6,13.49-0.1,27.68,1.11,42.47c1.5,18.31-27.81,16.56-27.81,9.12c0-9.53,20.92-6.35,28.68-3.27c6.46,2.56,9.18,3.87,14.76,8.23"],"n":[[60.6,45.2],[46.2,32.8]]},"よ":{"p":["M58.24,35.38c7.5-1.28,13.74-2.63,18.5-4.1c2.5-0.77,4.77-1.15,6.25-1.15","M54.62,13.88c2.25,2.12,2.98,4.13,2.88,6.5c-0.75,17-0.12,34.88,1.39,53.5c1.88,23.07-34.89,20.88-34.89,11.5c0-12,26.25-8,35.98-4.12c8.1,3.23,11.52,4.88,18.52,10.38"],"n":[[61.6,28.9],[45.6,14.6]]},"ら":{"p":["M35.33,15c3.75,3,9.22,4.41,16.5,4.25c11.12-0.25-0.25,2.38-1.25,3.5","M35.83,35.75c-2.14,4.34-2.79,8.67-3.11,13.24c-0.42,5.84-0.31,12.05-2.14,19.13c-3.16,12.27,1.49,4.77,3,3.5c11.88-10,21.7-12.67,32.61-12.49c9.21,0.15,16.85,5.19,16.76,13.88c-0.12,13.6-14.24,21.49-32.49,22.49"],"n":[[29,13.8],[27.2,35.2]]},"り":{"p":["M38.75,25.25c1.25,1.5,2.24,4.03,1.62,6.62c-2.88,12.13-6.29,29.65-4.25,42.38c2,12.5,1.75-0.75,5.62-6.25","M69.37,18.75c2.25,2.12,2.88,4.12,2.88,6.5c0,2.38,0,26.38,0,35.75c0,16.5-5,25.75-12.62,33.12"],"n":[[30.4,25],[61.6,17]]},"る":{"p":["M34.31,20.38c1.75,1.25,4.62,2.62,8.5,1.5c3.88-1.12,9.62-2.5,15.62-4.62c6-2.12,7.5-0.12,4.38,4.25c-3.12,4.37-18.89,24.62-27.75,34c-8.5,9-13.09,11.89,0.75,3.25c15.62-9.75,43-10.88,43,13.38c0,22.5-40.88,24.5-40.88,12.62c0-11.25,18.12-8.75,24.38-0.38"],"n":[[28.9,18.6]]},"れ":{"p":["M34.48,13c1.5,1.38,2.83,3.74,2.5,6.38c-0.5,4-2.75,44.5-2.75,52.88c0,8.38,0.12,16.62,0.12,19.5","M16.98,40.75c2.12,1.38,3.74,1.46,7.5,0c4.5-1.75,6.55-2.66,13-5.5c4.25-1.88,4.4,0.24,2.5,3.5c-5.25,9-10.5,16.75-18.88,27.62c-7.55,9.81-6.93,12.85,3.25,3.12c14-13.38,20.34-19.76,33.88-32.5c6.38-6,19.39-12.09,18.14,0.88c-1.02,10.63-1.89,22.13-2.29,30.75c-1.02,21.71,11.53,18,20.15,8.63"],"n":[[27.4,12.9],[11.9,36.2]]},"ろ":{"p":["M36.95,21.88c1.5,2,4.62,3.62,8.5,2.5c3.88-1.12,8.12-2.25,14.12-4.38c6-2.13,6.53-0.1,3.38,4.25c-7.88,10.88-18,22.75-27.5,35.25c-7.49,9.86-10.68,11.32,2.88,2.25c17.38-11.62,46.62-14,46.62,8.12c0,15.62-16,22.5-32.12,25.12"],"n":[[31.1,19.4]]},"わ":{"p":["M38.53,14.75c1.5,1.38,2.22,3.73,2,6.38c-1,11.87-2.75,44.49-2.75,52.87c0,8.38-0.62,16.62-0.62,19.5","M17.53,40.75c2.12,1.38,3.68,1.3,7.5,0c5.88-2,9.8-3.16,16.25-6c4.25-1.88,6.12,0,2.75,4c-6.72,7.96-13,16.5-22.12,27.88c-7.75,9.66-7.54,12.21,3,2.88c21.88-19.38,49.75-35.62,63.5-21c14.36,15.27,1.62,36.62-23.38,42.62"],"n":[[31.2,13.2],[12.4,36.2]]},"を":{"p":["M28.56,27.87c1.62,1.13,3.17,1.64,6.01,1.12c10.86-1.99,16.74-3.37,24.71-4.72c3.64-0.62,5.65-0.93,8.4-0.75","M49.93,14.38c0.75,1,1.48,3.22,0.38,5.62c-4.62,10.12-10,20.75-17.12,30.25c-9.25,12.33-9.25,11.19,2.12,2.5c9-6.88,23.75-12.12,22.88,19.88","M83.06,39.88c0.62,1.75,0,4-3,5.75c-3,1.75-49.62,24.16-44.75,38.25c3.28,9.48,17.93,9.12,29.98,7.75c4.48-0.51,9.15-1.12,12.4-1.75"],"n":[[21.9,25.9],[39.7,12.8],[76.7,37.4]]},"ん":{"p":["M56.35,16.5c0.75,1.75,1.13,5.83-0.38,8.25c-7,11.25-27.22,43.47-33.88,54.37c-9,14.75-7.62,16.25,1.5,1.25c17.86-29.36,32-23.76,32-6.75c0,25,19,26.5,34.25-5"],"n":[[45.9,15.9]]}};
+/* ---------- HIRAGANA: content ----------
+   Shape notes describe the strokes as drawn in the stroke data, then the feature that separates a kana from its look-alike.
+   Every note was checked against the stroke coordinates. */
+const APP={
+  id:'hira',key:'hira4h.v1',script:'hiragana',other:'katakana',
+  title:'Menulis hiragana dari romaji',
+  logo:[['ひ','h'],['ら','r'],['が','k'],['な','n']],tabGlyph:'あ',
+  romStyles:[['ou','gakkou'],['macron','gakkō'],['oo','gakkoo']],romDefault:'ou',
+  wordsLabel:'kata',glossLabel:'Arti',
+  test:{base:6,daku:3,combo:3,foreign:0,word:8},
+  testIntro:'20 soal: 6 huruf dasar, 3 dakuten, 3 huruf kecil, dan 8 kata. Romaji tampil tanpa warna dan tanpa arti, seperti di kertas ujian. Jawaban baru terlihat setelah soal terakhir.',
+  learnIntro:'Tiga tahap per baris: lihat, jiplak, lalu tulis dari ingatan. Setiap baris punya satu warna.',
+  rulesIntro:'Pelajari setelah 46 huruf dasar dikuasai.',
+  howto:[]
+};
 const ROWS=[
  {id:'a',name:'Baris A',items:[
   ['あ','a',0,'Garis datar, garis tegak, lalu lengkung besar yang melilit garis tegak. お mirip, tetapi punya titik di kanan atas.'],
@@ -291,13 +335,13 @@ const ROWS=[
   ['え','e',3,'Goresan pendek di atas, lalu satu garis berliku yang berakhir dengan sapuan ke kanan bawah.'],
   ['お','o',4,'Garis datar, garis tegak yang berbelok menjadi lengkung besar, dan titik di kanan atas. あ tidak bertitik.']]},
  {id:'k',name:'Baris K',items:[
-  ['か','ka',0,'Bentuk seperti kapak, dengan satu goresan pendek terpisah di kanan.'],
-  ['き','ki',1,'Dua garis datar ditembus garis miring, lalu lengkung terpisah di bawah. Mirip anak kunci. さ hanya punya satu garis datar.'],
+  ['か','ka',0,'Garis datar yang berbelok turun dan berkait ke kiri di ujungnya. Lalu garis miring panjang yang turun ke kiri dan memotong garis datar itu. Terakhir, goresan pendek terpisah di kanan atas.'],
+  ['き','ki',1,'Dua garis datar ditembus garis miring, lalu lengkung terpisah di bawah. さ hanya punya satu garis datar. Di huruf cetak, lengkung bawah sering tersambung. Saat menulis tangan, pisahkan.'],
   ['く','ku',2,'Satu goresan bersudut yang membuka ke kanan. へ juga bersudut, tetapi sudutnya menghadap ke atas.'],
   ['け','ke',3,'Garis tegak di kiri. Di kanan, garis datar pendek ditembus garis tegak yang turun lebih panjang.'],
   ['こ','ko',4,'Dua garis datar pendek, atas dan bawah. Tambahkan garis tegak di kiri, hasilnya に.']]},
  {id:'s',name:'Baris S',items:[
-  ['さ','sa',0,'Garis datar, garis miring menembusnya, lalu lengkung bawah yang terpisah dan membuka ke kanan. ち kebalikannya.'],
+  ['さ','sa',0,'Garis datar, garis miring menembusnya, lalu lengkung bawah yang terpisah dan membuka ke kanan. Pada ち, lengkungnya tersambung dan menggembung ke kanan.'],
   ['し','shi',1,'Satu goresan turun lalu melengkung ke kanan atas, seperti kail. Romajinya shi.'],
   ['す','su',2,'Garis datar panjang, lalu garis tegak dengan simpul di tengah yang ujungnya turun ke kiri.'],
   ['せ','se',3,'Garis datar panjang dan dua garis tegak. Yang kanan pendek. Yang kiri turun lalu berbelok ke kanan.'],
@@ -305,9 +349,9 @@ const ROWS=[
  {id:'t',name:'Baris T',items:[
   ['た','ta',0,'Seperti huruf t, dengan こ kecil di sebelah kanannya.'],
   ['ち','chi',1,'Garis datar, lalu satu goresan miring yang berlanjut menjadi lengkung menggembung ke kanan, seperti angka 5. Romajinya chi.'],
-  ['つ','tsu',2,'Satu lengkung mendatar yang menggembung ke atas. Bentuknya seperti し yang diputar. Romajinya tsu.'],
-  ['て','te',3,'Garis datar yang berbelok turun lalu melengkung ke kiri.'],
-  ['と','to',4,'Goresan pendek miring di atas, lalu lengkung yang turun dan menyapu ke kanan.']]},
+  ['つ','tsu',2,'Satu goresan dari kiri ke kanan yang membulat di sisi kanan, lalu berbalik ke kiri bawah. Sisi kirinya terbuka. Romajinya tsu.'],
+  ['て','te',3,'Garis datar ke kanan, lalu berbalik turun menjadi lengkung yang membuka ke kanan.'],
+  ['と','to',4,'Goresan pendek miring di atas. Lalu lengkung yang mulai dari kanan atas, turun ke kiri sampai menyentuh ujung goresan pertama, dan menyapu ke kanan di bawah.']]},
  {id:'n',name:'Baris N',items:[
   ['な','na',0,'Garis datar dan garis miring seperti pada た, titik di kanan atas, lalu simpul kecil di kanan bawah.'],
   ['に','ni',1,'Garis tegak di kiri dan dua garis datar di kanan. Dalam bahasa Jepang, ni berarti dua (二).'],
@@ -316,10 +360,10 @@ const ROWS=[
   ['の','no',4,'Satu goresan melingkar dengan garis miring di tengah, seperti tanda larangan.']]},
  {id:'h',name:'Baris H',items:[
   ['は','ha',0,'Garis tegak di kiri. Di kanan, satu garis datar dan garis tegak yang berakhir dengan simpul.'],
-  ['ひ','hi',1,'Satu goresan berbentuk mangkuk lebar, ujung kirinya menekuk ke atas.'],
+  ['ひ','hi',1,'Satu goresan. Garis datar pendek di kiri atas, lalu turun membentuk mangkuk lebar. Sisi kanan mangkuk naik sampai setinggi awal goresan, lalu berbalik menjadi ekor yang turun ke kanan bawah.'],
   ['ふ','fu',2,'Empat goresan terpisah: satu di atas, satu lengkung di tengah, dan satu titik di kiri dan kanan. Romajinya fu.'],
   ['へ','he',3,'Satu goresan seperti atap: naik pendek, turun panjang.'],
-  ['ほ','ho',4,'Seperti は, ditambah satu garis datar di bagian atas.']]},
+  ['ほ','ho',4,'Seperti は, ditambah satu garis datar di bagian atas. Garis tegak kanan mulai dari garis datar atas dan tidak menembusnya.']]},
  {id:'m',name:'Baris M',items:[
   ['ま','ma',0,'Dua garis datar ditembus garis tegak yang berakhir dengan simpul. も tidak bersimpul.'],
   ['み','mi',1,'Goresan berliku dengan simpul, lalu satu goresan pendek di kanan. Mirip angka 21 yang disambung.'],
@@ -327,9 +371,9 @@ const ROWS=[
   ['め','me',3,'Seperti ぬ tanpa simpul. Dalam bahasa Jepang, me berarti mata (目).'],
   ['も','mo',4,'Garis tegak yang berkait ke kanan di bawah, ditembus dua garis datar.']]},
  {id:'y',name:'Baris Y',items:[
-  ['や','ya',0,'Lengkung besar di kanan, titik kecil di atasnya, dan garis miring panjang yang menembus lengkung.'],
-  ['ゆ','yu',2,'Lengkung yang memutar ke dalam, dengan garis tegak menembus di tengah.'],
-  ['よ','yo',4,'Garis tegak bersimpul di bawah, dengan satu garis datar pendek di kanan atas. ま punya dua garis datar.']]},
+  ['や','ya',0,'Goresan dari kiri yang naik ke kanan lalu melengkung balik ke kiri bawah, titik kecil di atasnya, dan garis miring panjang yang menembus bagian kirinya.'],
+  ['ゆ','yu',2,'Garis turun di sisi kiri, lalu naik lagi dan memutar ke kanan menjadi lingkaran besar yang tidak tertutup. Lalu garis tegak panjang yang sedikit melengkung, menembus tengah lingkaran.'],
+  ['よ','yo',4,'Garis datar pendek ditulis lebih dulu. Lalu garis tegak yang bersimpul di bawah. Garis datar menempel di sisi kanan garis tegak, di bagian atas, dan tidak menembusnya. ま punya dua garis datar yang menembus garis tegak.']]},
  {id:'r',name:'Baris R',items:[
   ['ら','ra',0,'Goresan pendek di atas, lalu garis yang turun dan berbalik membentuk perut ke kanan.'],
   ['り','ri',1,'Dua garis tegak. Garis kanan lebih panjang dan menyapu ke bawah. Pada い, garis kiri yang lebih panjang.'],
@@ -338,80 +382,231 @@ const ROWS=[
   ['ろ','ro',4,'Seperti る tanpa simpul di ujung.']]},
  {id:'w',name:'Baris W dan ん',items:[
   ['わ','wa',0,'Garis tegak, lalu goresan berliku yang berakhir dengan lengkung membulat ke dalam.'],
-  ['を','wo',4,'Garis datar pendek, zig-zag, lalu lengkung di kanan bawah. Hampir selalu dipakai sebagai partikel.'],
+  ['を','wo',4,'Garis datar pendek, zig-zag yang menembusnya, lalu lengkung di bawah yang membuka ke kanan. Hanya dipakai sebagai partikel. Romajinya wo, tetapi dalam kalimat sering ditulis o.'],
   ['ん','n',null,'Satu goresan seperti huruf n yang ditulis miring, dengan ekor ke kanan.']]}
 ];
-const BASE=[];ROWS.forEach(r=>r.items.forEach(([k,ro,col,m])=>BASE.push({k,r:ro,type:'base',row:r.id,col,m})));
 const SMALL={'ぁ':'あ','ぃ':'い','ぅ':'う','ぇ':'え','ぉ':'お','っ':'つ','ゃ':'や','ゅ':'ゆ','ょ':'よ','ゎ':'わ'};
+const DAKU_LIST='が ぎ ぐ げ ご ざ じ ず ぜ ぞ だ で ど ば び ぶ べ ぼ ぱ ぴ ぷ ぺ ぽ'.split(' ');
+const DAKU_NOTE='Dua titik mengubah k, s, t, h menjadi g, z, d, b. Lingkaran kecil mengubah h menjadi p. Untuk romaji ji dan zu, tulis じ dan ず.';
+const COMBO_LIST=[];'き し ち に ひ み り ぎ じ び ぴ'.split(' ').forEach(k=>'ゃ ゅ ょ'.split(' ').forEach(s=>COMBO_LIST.push(k+s)));
+const comboNote=k=>[...k][0]+', lalu '+[...k][1]+' yang ditulis kecil dan agak rendah.';
+const FOREIGN_LIST=[];
+const foreignNote=()=>'';
+const QUAL={};
+const EXTRA_NOTE={};
+/* [kana, arti] */
+const WORD_LIST=[
+ ['きって','perangko'],['がっこう','sekolah'],['きょう','hari ini'],['しゃしん','foto'],['ちょっと','sebentar'],['じしょ','kamus'],['でんしゃ','kereta listrik'],
+ ['びょういん','rumah sakit'],['りょこう','perjalanan wisata'],['ぎゅうにゅう','susu sapi'],['おかあさん','ibu'],['おにいさん','kakak laki-laki'],['せんせい','guru'],
+ ['ありがとう','terima kasih'],['ざっし','majalah'],['きっぷ','karcis'],['ひゃく','seratus'],['さかな','ikan'],['つくえ','meja tulis'],['ふじさん','Gunung Fuji'],
+ ['みず','air'],['ひらがな','hiragana'],['にほんご','bahasa Jepang'],['まっちゃ','teh hijau bubuk'],['おちゃ','teh'],['けいたい','ponsel'],['ゆうびんきょく','kantor pos'],
+ ['えいが','film'],['とけい','jam'],['てんぷら','tempura'],['ちず','peta'],['ぬいぐるみ','boneka'],['めがね','kacamata'],['ねこ','kucing'],['わたし','saya'],
+ ['ろうそく','lilin'],['ひこうき','pesawat'],['でぐち','pintu keluar'],['ほんや','toko buku'],['じゅうしょ','alamat'],
+ ['おおきい','besar'],['とおい','jauh'],['おねえさん','kakak perempuan'],['おとうさん','ayah'],['みんな','semua orang'],['みっつ','tiga buah'],['へや','kamar'],
+ ['はな','bunga'],['のみもの','minuman'],['さむい','dingin'],['これ','ini'],['やすみ','libur'],['よる','malam']
+];
+const PAIRS=[['ぬ','め'],['ね','れ','わ'],['る','ろ'],['さ','ち'],['は','け','ほ'],['い','り'],['あ','お'],['き','さ'],['し','つ'],['く','へ'],['う','ら'],['こ','に'],['ま','も','よ'],['た','な'],['め','の','あ']];
+const RULES=[
+ {t:'Dakuten: dua titik',d:'Ditulis di kanan atas, sebagai goresan terakhir. Mengubah baris k, s, t, h menjadi g, z, d, b. Baris d juga punya ぢ dan づ. Bunyinya sama dengan じ dan ず, tetapi jarang dipakai. Untuk romaji ji dan zu, tulis じ dan ず. Tulis ぢ dan づ hanya jika soal meminta baris d lengkap.',ex:['が','ざ','だ','ば'],set:'daku'},
+ {t:'Handakuten: lingkaran kecil',d:'Hanya dipakai pada baris h, dan mengubahnya menjadi p.',ex:['ぱ','ぴ','ぷ','ぺ','ぽ'],set:'daku'},
+ {t:'Romaji yang tidak mengikuti pola',d:'Romaji lima huruf ini tidak mengikuti pola barisnya: shi, chi, tsu, fu, dan ji. Sebagian buku menulisnya si, ti, tu, hu, dan zi. Hurufnya tetap sama. Dalam kalimat, partikel wa ditulis は, partikel e ditulis へ, dan partikel o ditulis を.',ex:['し','ち','つ','ふ','じ','を','ん'],set:'base'},
+ {t:'Huruf kecil ゃ ゅ ょ',cmp:['や','ゃ'],d:'Huruf berakhiran i, ditambah ya, yu, atau yo yang ditulis setengah ukuran. Keduanya dibaca dalam satu ketukan. Pada sha, shu, sho, cha, chu, cho, ja, ju, dan jo, huruf y tidak tampak di romaji, tetapi ゃ, ゅ, atau ょ kecil tetap ditulis. Ukuran menentukan arti: きょう berbeda dengan きよう.',ex:['きゃ','しゅ','ちょ','じゃ','りょ'],set:'combo'},
+ {t:'っ kecil',cmp:['つ','っ'],d:'Muncul pada romaji dengan konsonan ganda seperti kk, pp, ss, tt, atau tch. Tulis っ kecil sebelum huruf berikutnya. Sebagian buku menulis cch untuk tch, jadi matcha dan maccha adalah kata yang sama. Pengecualian: nn tidak memakai っ. Huruf n yang pertama ditulis ん, seperti pada みんな (minna).',ex:['きって','がっこう','まっちゃ','みんな'],set:'word'},
+ {t:'Vokal panjang',d:'Bunyi a, i, dan u yang panjang ditulis dengan menambah あ, い, atau う. Bunyi o yang panjang hampir selalu ditulis dengan menambah う, bukan お. Bunyi e yang panjang hampir selalu ditulis dengan menambah い, bukan え. Romaji gakkou, gakkō, dan gakkoo adalah kata yang sama. Ketiganya ditulis がっこう. Romaji sensei dan sensee juga sama, dan ditulis せんせい. Hanya sedikit kata yang memakai おお atau ええ. Hafalkan tiga ini: おおきい, とおい, おねえさん. Kalau tes Anda menulis o panjang sebagai ou, tulis persis seperti romajinya. Di tes seperti itu, oo selalu berarti おお dan ee selalu berarti ええ.',ex:['きょう','がっこう','せんせい','おにいさん','おおきい','おねえさん'],set:'word'},
+ {t:'Huruf ん',d:'ん ditulis untuk n yang tidak diikuti vokal atau y. Romaji ng berarti ん lalu huruf baris g, seperti にほんご (nihongo). Sebelum b, p, dan m, sebagian buku menulis m. Jadi tempura dan tenpura adalah kata yang sama, yaitu てんぷら. Apostrof pada hon\'ya menandakan ん berdiri sendiri, bukan bagian dari にゃ. Sebagian tes menulisnya hon-ya.',ex:['にほんご','てんぷら','ほんや','みんな'],set:'word'}
+];
+const PLAN=[
+ {s:0,e:100,t:'Huruf dasar per baris',d:'10 baris, sekitar 8 menit per baris. Tiap 3 baris, latihan campuran 5 menit, lalu istirahat 5 menit tanpa layar.',go:'learn',set:'base'},
+ {s:100,e:120,t:'Tabel Kosong pertama',d:'Tulis 46 huruf dari ingatan. Yang salah jadi bahan latihan berikutnya.',go:'table'},
+ {s:120,e:150,t:'Perbaiki kesalahan',d:'Latih set Yang salah, lalu Pasangan mirip.',go:'drill',set:'weak'},
+ {s:150,e:165,t:'Istirahat',d:'Tanpa layar dan tanpa hiragana. Jeda membantu ingatan mengendap.',go:null},
+ {s:165,e:195,t:'Aturan tambahan',d:'Dakuten, huruf kecil, っ, vokal panjang, dan ん. Baca kartunya, lalu latih tiap set.',go:'learn',set:'daku'},
+ {s:195,e:210,t:'Tabel Kosong kedua',d:'Bandingkan waktu dan jumlah salah dengan percobaan pertama.',go:'table'},
+ {s:210,e:230,t:'Simulasi tes',d:'20 soal campuran. 8 di antaranya kata.',go:'test'},
+ {s:230,e:240,t:'Tabel Kosong terakhir',d:'Target: 46 benar, dua kali berturut-turut. Besok pagi, tulis lagi ke-46 huruf di kertas sebelum membuka aplikasi.',go:'table'}
+];
+const MODES=[
+ {m:'base',g:'Huruf',l:'Huruf dasar',ex:'あ か さ',u:'huruf'},
+ {m:'daku',g:'Huruf',l:'Dakuten dan handakuten',ex:'が ぱ',u:'huruf'},
+ {m:'combo',g:'Huruf',l:'Huruf kecil ゃ ゅ ょ',ex:'きゃ',u:'huruf'},
+ {m:'word',g:'Kata',l:'Kata',ex:'きって',u:'kata'},
+ {m:'pairs',g:'Fokus',l:'Pasangan mirip',ex:'ぬ め',u:'huruf'},
+ {m:'weak',g:'Fokus',l:'Yang salah',ex:'',u:'kartu'},
+ {m:'all',g:'Fokus',l:'Campuran',ex:'あ が きゃ',u:'kartu'}
+];
+const REC_DEFAULT='all';
+/* recognizer: へ and り are drawn the same in both scripts, so their katakana readings count as hiragana */
+const MINE=/^[ぁ-ゖ]+$/,OTHER=/^[ァ-ヺー]+$/;
+const NORM={'ヘ':'へ','ベ':'べ','ペ':'ぺ','リ':'り'};
+
+/* ---------- HELPERS ---------- */
+const NS='http://www.w3.org/2000/svg';
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* Japanese quoted inside Indonesian text is set in the textbook face and marked lang="ja" */
+const JA=/[ぁ-ゖァ-ヺー一-鿿]+/g;
+const jp=s=>esc(s).replace(JA,m=>`<b class="ki" lang="ja">${m}</b>`);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=(a,n)=>shuffle(a).slice(0,n);
+const fmt=s=>{s=Math.max(0,Math.round(s));const h=s/3600|0,m=(s%3600)/60|0,x=s%60;return(h?h+':'+String(m).padStart(2,'0'):m)+':'+String(x).padStart(2,'0')};
+const dur=s=>{s=Math.max(0,Math.round(s));const m=s/60|0,x=s%60;return m?`${m} menit ${x} detik`:`${x} detik`};
+const hhmm=min=>(min/60|0)+':'+String(min%60).padStart(2,'0');
+const at=ts=>'pukul '+new Date(ts).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+
+/* ---------- ITEMS ---------- */
+const BASE=[];ROWS.forEach(r=>r.items.forEach(([k,ro,col,m])=>BASE.push({k,r:ro,type:'base',row:r.id,col,m})));
 const ROW_OF={};BASE.forEach(b=>ROW_OF[b.k]=b.row);
 const rowOf=ch=>{let c=[...ch][0];c=SMALL[c]||c;c=c.normalize('NFD')[0];return ROW_OF[c]||null};
 const col=row=>row?`var(--r-${row})`:'var(--primary)';
-const D=(list,type,note)=>list.map(([k,r])=>({k,r,type,m:note,row:type==='word'?null:rowOf(k)}));
-const DAKU=D([['が','ga'],['ぎ','gi'],['ぐ','gu'],['げ','ge'],['ご','go'],['ざ','za'],['じ','ji'],['ず','zu'],['ぜ','ze'],['ぞ','zo'],['だ','da'],['で','de'],['ど','do'],['ば','ba'],['び','bi'],['ぶ','bu'],['べ','be'],['ぼ','bo'],['ぱ','pa'],['ぴ','pi'],['ぷ','pu'],['ぺ','pe'],['ぽ','po']],'daku','Dua titik mengubah k, s, t, h menjadi g, z, d, b. Lingkaran kecil mengubah h menjadi p. Perhatikan じ (ji) dan ず (zu).');
-const COMBO_BASE=[['き','k'],['し','sh'],['ち','ch'],['に','n'],['ひ','h'],['み','m'],['り','r'],['ぎ','g'],['じ','j'],['び','b'],['ぴ','p']];
-const COMBO=[];COMBO_BASE.forEach(([k,c])=>{[['ゃ','a'],['ゅ','u'],['ょ','o']].forEach(([s,v])=>{const y=(c==='sh'||c==='ch'||c==='j')?'':'y';COMBO.push({k:k+s,r:c+y+v,type:'combo',row:rowOf(k),m:k+' ditambah '+s+' yang ditulis setengah ukuran, di kiri bawah.'})})});
-const WORDS=D([['きって','kitte'],['がっこう','gakkou'],['きょう','kyou'],['しゃしん','shashin'],['ちょっと','chotto'],['じしょ','jisho'],['でんしゃ','densha'],['びょういん','byouin'],['りょこう','ryokou'],['ぎゅうにゅう','gyuunyuu'],['おかあさん','okaasan'],['おにいさん','oniisan'],['せんせい','sensei'],['ありがとう','arigatou'],['ざっし','zasshi'],['きっぷ','kippu'],['ひゃく','hyaku'],['さかな','sakana'],['つくえ','tsukue'],['ふじさん','fujisan'],['みず','mizu'],['ひらがな','hiragana'],['にほんご','nihongo'],['まっちゃ','matcha'],['おちゃ','ocha'],['けいたい','keitai'],['ゆうびんきょく','yuubinkyoku'],['えいが','eiga'],['とけい','tokei'],['てんぷら','tenpura'],['ちず','chizu'],['ぬいぐるみ','nuigurumi'],['めがね','megane'],['ねこ','neko'],['わたし','watashi'],['ろうそく','rousoku'],['ひこうき','hikouki'],['でぐち','deguchi'],['ほんや','hon\'ya'],['じゅうしょ','juusho']],'word','Konsonan ganda ditulis dengan っ kecil. Vokal panjang ditulis sesuai romajinya.');
-const PAIRS=[['ぬ','め'],['ね','れ','わ'],['る','ろ'],['さ','ち'],['は','ほ'],['い','り'],['あ','お'],['き','さ'],['し','つ'],['く','へ'],['う','ら'],['こ','に'],['ま','も']];
-const BY={};[...BASE,...DAKU,...COMBO,...WORDS].forEach(it=>BY[it.k]=it);
-const RULES=[
- {t:'Dakuten (dua titik)',d:'Ditulis di kanan atas, sebagai goresan terakhir. Mengubah baris k, s, t, h menjadi g, z, d, b.',ex:[['が','ga'],['ざ','za'],['だ','da'],['ば','ba']],set:'daku'},
- {t:'Handakuten (lingkaran kecil)',d:'Hanya dipakai pada baris h, dan mengubahnya menjadi p.',ex:[['ぱ','pa'],['ぴ','pi'],['ぷ','pu'],['ぺ','pe'],['ぽ','po']],set:'daku'},
- {t:'Romaji yang menyimpang dari pola',d:'Delapan bunyi ini paling sering salah tulis dalam tes. Hafalkan sebagai pengecualian.',ex:[['し','shi'],['ち','chi'],['つ','tsu'],['ふ','fu'],['じ','ji'],['ず','zu'],['を','wo'],['ん','n']],set:'base'},
- {t:'ゃ ゅ ょ kecil',d:'Huruf berakhiran i, ditambah ya, yu, atau yo yang ditulis setengah ukuran. Keduanya dibaca dalam satu ketukan.',ex:[['きゃ','kya'],['しゅ','shu'],['ちょ','cho'],['じゃ','ja'],['りょ','ryo']],set:'combo'},
- {t:'っ kecil',d:'Muncul pada romaji dengan konsonan ganda seperti tt, pp, kk, ss, atau tch. Tulis っ kecil sebelum huruf berikutnya.',ex:[['きって','kitte'],['がっこう','gakkou'],['まっちゃ','matcha']],set:'word'},
- {t:'Vokal panjang dan ん',d:'Vokal panjang ditulis sesuai romajinya. Apostrof pada hon\'ya menandakan ん berdiri sendiri, bukan bagian dari にゃ.',ex:[['きょう','kyou'],['おにいさん','oniisan'],['せんせい','sensei'],['ほんや','hon\'ya']],set:'word'}
-];
-const PLAN=[
- {set:'base',s:0,e:100,c:'a',t:'Huruf dasar per baris',d:'Sepuluh baris, sekitar sembilan menit per baris. Setiap tiga baris, sisipkan latihan campuran lima menit.',go:'learn'},
- {s:100,e:120,c:'y',t:'Tabel Kosong pertama',d:'Seluruh 46 huruf dari ingatan. Huruf yang salah menjadi bahan latihan berikutnya.',go:'table'},
- {set:'weak',s:120,e:150,c:'t',t:'Perbaiki kesalahan',d:'Kerjakan set Yang salah, kemudian set Pasangan mirip.',go:'drill'},
- {s:150,e:165,c:'w',t:'Istirahat',d:'Tanpa layar dan tanpa hiragana. Jeda ini membantu ingatan mengendap.',go:null},
- {set:'daku',s:165,e:195,c:'n',t:'Aturan tambahan',d:'Dakuten, kombinasi kecil, っ, dan vokal panjang. Baca kartunya, lalu latih setiap set.',go:'learn'},
- {s:195,e:210,c:'y',t:'Tabel Kosong kedua',d:'Bandingkan waktu dan jumlah kesalahan dengan percobaan pertama.',go:'table'},
- {s:210,e:230,c:'k',t:'Simulasi tes',d:'Dua puluh soal campuran, dinilai otomatis.',go:'test'},
- {s:230,e:240,c:'r',t:'Tabel Kosong terakhir',d:'Targetnya sempurna dua kali berturut-turut.',go:'table'}
-];
+/* each kana of a word takes the colour of its own row */
+const ck=k=>[...k].map(ch=>{const r=rowOf(ch);return r?`<span class="cink" style="--c:var(--r-${r})">${ch}</span>`:ch}).join('');
+const DAKU=DAKU_LIST.map(k=>({k,type:'daku',row:rowOf(k),m:DAKU_NOTE}));
+const COMBO=COMBO_LIST.map(k=>({k,type:'combo',row:rowOf(k),m:comboNote(k)}));
+const FOREIGN=FOREIGN_LIST.map(([k,rare])=>({k,type:'foreign',row:rowOf(k),rare:!!rare,m:foreignNote(k)}));
+const WORDS=WORD_LIST.map(([k,g,core])=>({k,type:'word',row:null,g,core:!!core}));
+const BY={};[...BASE,...DAKU,...COMBO,...FOREIGN,...WORDS].forEach(it=>{if(!BY[it.k])BY[it.k]=it});
+const GRID=[];ROWS.forEach(r=>{const row=[null,null,null,null,null];r.items.forEach(i=>{if(i[2]!=null)row[i[2]]=i[0]});GRID.push(row);const tail=r.items.filter(i=>i[2]==null).map(i=>i[0]);if(tail.length)GRID.push([tail[0],null,null,null,null])});
+const ORDER=GRID.flat().filter(Boolean);
+const isWide=it=>[...it.k].length>1;
+
+/* ---------- ROMAJI (Hepburn, generated from the kana so every item follows one convention) ---------- */
+const K1={},DG={};
+('ア a イ i ウ u エ e オ o カ ka キ ki ク ku ケ ke コ ko サ sa シ shi ス su セ se ソ so タ ta チ chi ツ tsu テ te ト to '+
+ 'ナ na ニ ni ヌ nu ネ ne ノ no ハ ha ヒ hi フ fu ヘ he ホ ho マ ma ミ mi ム mu メ me モ mo ヤ ya ユ yu ヨ yo ラ ra リ ri ル ru レ re ロ ro '+
+ 'ワ wa ヲ wo ン n ガ ga ギ gi グ gu ゲ ge ゴ go ザ za ジ ji ズ zu ゼ ze ゾ zo ダ da ヂ ji ヅ zu デ de ド do バ ba ビ bi ブ bu ベ be ボ bo '+
+ 'パ pa ピ pi プ pu ペ pe ポ po ヴ vu ァ a ィ i ゥ u ェ e ォ o ャ ya ュ yu ョ yo').split(' ').forEach((v,i,a)=>{if(i%2===0)K1[v]=a[i+1]});
+[['キ','k'],['シ','sh'],['チ','ch'],['ニ','n'],['ヒ','h'],['ミ','m'],['リ','r'],['ギ','g'],['ジ','j'],['ビ','b'],['ピ','p']].forEach(([k,c])=>{
+  const y=(c==='sh'||c==='ch'||c==='j')?'':'y';DG[k+'ャ']=c+y+'a';DG[k+'ュ']=c+y+'u';DG[k+'ョ']=c+y+'o'});
+('ティ ti ディ di トゥ tu ドゥ du デュ dyu テュ tyu ファ fa フィ fi フェ fe フォ fo フュ fyu ウィ wi ウェ we ウォ wo '+
+ 'シェ she ジェ je チェ che ヴァ va ヴィ vi ヴェ ve ヴォ vo ツァ tsa ツェ tse ツォ tso イェ ye クァ kwa クォ kwo').split(' ').forEach((v,i,a)=>{if(i%2===0)DG[v]=a[i+1]});
+const MAC={a:'ā',i:'ī',u:'ū',e:'ē',o:'ō'};
+const toKata=s=>[...s].map(c=>{const n=c.codePointAt(0);return n>=0x3041&&n<=0x3096?String.fromCodePoint(n+0x60):c}).join('');
+function k2r(s,mac){const c=[...s];let o='';
+  const syl=i=>{if(i>=c.length)return null;const two=c[i]+(c[i+1]||'');if(DG[two])return{r:DG[two],n:2};if(K1[c[i]]!=null)return{r:K1[c[i]],n:1};return null};
+  for(let i=0;i<c.length;){const ch=c[i];
+    if(ch==='ッ'){const nx=syl(i+1);if(nx)o+=nx.r.startsWith('ch')?'t':nx.r[0];i++;continue}
+    if(ch==='ー'){const v=o.slice(-1);if(MAC[v])o=mac?o.slice(0,-1)+MAC[v]:o+v;i++;continue}
+    if(ch==='ン'){const nx=syl(i+1);o+=(nx&&/^[aiueoy]/.test(nx.r))?"n'":'n';i++;continue}
+    const sy=syl(i);if(sy){o+=sy.r;i+=sy.n}else{o+=ch;i++}}
+  return o}
+const plainRom=k=>k2r(toKata(k),false);
+function romaji(k,style){style=style||S.rom;
+  if(APP.id==='kata')return k2r(k,style==='macron');
+  const r=plainRom(k);
+  if(style==='macron')return r.replace(/ou|oo/g,'ō').replace(/uu/g,'ū').replace(/aa/g,'ā').replace(/ee/g,'ē');
+  if(style==='oo')return r.replace(/ou/g,'oo').replace(/ei/g,'ee');
+  return r}
+const romOf=it=>it.type==='base'?it.r:romaji(it.k);
+const qual=it=>QUAL[it.k]||'';
+/* the rule a word exercises, so the note under a word is about that word */
+function wordNote(it){const k=it.k,r=plainRom(k),n=[],kata=APP.id==='kata',sm=kata?'ッ':'っ',nn=kata?'ン':'ん';
+  if(/nn/.test(r))n.push(`Romaji nn ditulis ${nn} lalu huruf baris n, tanpa ${sm}.`);
+  if(k.includes(sm))n.push(`Konsonan ganda ditulis dengan ${sm} kecil.`);
+  if(kata){if(k.includes('ー'))n.push('Vokal panjang ditulis dengan ー.')}
+  else{if(/oo/.test(r))n.push('Pengecualian: o panjang di kata ini ditulis おお.');
+    else if(/ee/.test(r))n.push('Pengecualian: e panjang di kata ini ditulis ええ.');
+    if(/ou/.test(r))n.push('Bunyi o panjang ditulis dengan う.');
+    if(/ei/.test(r))n.push('Bunyi e panjang ditulis dengan い.');
+    if(/aa|ii|uu/.test(r))n.push('Vokal panjang ditulis dengan menambah huruf vokalnya.')}
+  const sms=[...new Set([...k].filter(c=>SMALL[c]&&c!==sm))];if(sms.length)n.push(`${sms.join(' ')} ditulis kecil.`);
+  if(/ng/.test(r))n.push(`Romaji ng ditulis ${nn} lalu huruf baris g.`);
+  if(/n[bpm]/.test(r))n.push(`Sebagian buku menulis m sebelum b, p, m. Hurufnya tetap ${nn}.`);
+  return n.slice(0,2).join(' ')}
+const noteOf=it=>it.type==='word'?wordNote(it):it.m;
 
 /* ---------- STATE ---------- */
-const KEY='hira4h.v1';
-let S={cards:{},learned:{},tables:[],tests:[],start:null,streak:0};
-try{const raw=localStorage.getItem(KEY);if(raw)S=Object.assign(S,JSON.parse(raw))}catch(e){}
+const KEY=APP.key;
+const fresh=()=>({cards:{},learned:{},tables:[],tests:[],start:null,streak:0,rom:APP.romDefault,paper:false});
+let S=fresh();
+try{const raw=JSON.parse(localStorage.getItem(KEY)||'null');if(raw&&typeof raw==='object'&&!Array.isArray(raw))S=Object.assign(S,raw)}catch(e){}
+/* stored data is never trusted: wrong types would break rendering, and values reach innerHTML */
+(function sanitize(){const o=x=>x&&typeof x==='object'&&!Array.isArray(x),n=x=>Number.isFinite(+x)?+x:0;
+  if(!o(S.cards))S.cards={};if(!o(S.learned))S.learned={};
+  S.tables=(Array.isArray(S.tables)?S.tables:[]).filter(o).map(t=>({at:n(t.at),score:n(t.score),time:n(t.time)}));
+  S.tests=(Array.isArray(S.tests)?S.tests:[]).filter(o).map(t=>({at:n(t.at),score:n(t.score),total:n(t.total)||20,time:n(t.time)}));
+  S.streak=n(S.streak);S.start=S.start?n(S.start):null;S.paper=!!S.paper;
+  if(S.macron===true)S.rom='macron';delete S.macron;
+  if(!APP.romStyles.some(r=>r[0]===S.rom))S.rom=APP.romDefault;
+  for(const k in S.cards){const c=S.cards[k];if(!o(c)||!BY[k]){delete S.cards[k];continue}c.b=Math.max(0,Math.min(5,n(c.b)|0));c.c=n(c.c);c.w=n(c.w)}
+  for(const k in S.learned)if(!ROWS.some(r=>r.id===k))delete S.learned[k]})();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function card(k){return S.cards[k]||(S.cards[k]={b:0,c:0,w:0})}
 function grade(k,ok){const c=card(k);if(ok){c.b=Math.min(c.b+1,5);c.c++}else{c.b=0;c.w++}save()}
-const $=(s,r=document)=>r.querySelector(s);
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
-const fmt=s=>{s=Math.max(0,Math.round(s));const h=s/3600|0,m=(s%3600)/60|0,x=s%60;return(h?h+':'+String(m).padStart(2,'0'):m)+':'+String(x).padStart(2,'0')};
-const hhmm=min=>(min/60|0)+':'+String(min%60).padStart(2,'0');
-const at=ts=>new Date(ts).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+const weakOf=k=>{const c=S.cards[k];return!!c&&c.w>0&&c.b<2};
+/* a table or test in progress survives a reload or the app being closed */
+const RUN={save(kind,o){try{localStorage.setItem(KEY+'.run.'+kind,JSON.stringify(o))}catch(e){}},
+  load(kind){try{return JSON.parse(localStorage.getItem(KEY+'.run.'+kind)||'null')}catch(e){return null}},
+  clear(kind){try{localStorage.removeItem(KEY+'.run.'+kind)}catch(e){}}};
 
 /* ---------- KAKIJUN (stroke order) ---------- */
 const CELL=109;
 /* opts: anim (draw strokes in order), nums (numbered start points), upto/hl (cumulative frame for a strip) */
 function kanaSVG(str,o={}){
-  let x=0,k=0,body='';
-  for(const ch of str){const d=KVG[ch];if(!d){x+=CELL;continue}
+  const chars=[...str];let total=0;chars.forEach(ch=>{if(KVG[ch])total+=KVG[ch].p.length});
+  const step=Math.min(0.45,3/Math.max(1,total));let x=0,k=0,body='';
+  for(const ch of chars){const d=KVG[ch];if(!d){x+=CELL;continue}
     d.p.forEach((p,j)=>{if(o.upto!=null&&j>o.upto)return;const cls=o.hl!=null?(j===o.hl?'':'done'):'';
-      body+=`<path d="${p}" pathLength="1"${x?` transform="translate(${x} 0)"`:''}${cls?` class="${cls}"`:''}${o.anim?` style="animation-delay:${(k*0.5).toFixed(2)}s"`:''}/>`;k++});
+      body+=`<path d="${p}" pathLength="1"${x?` transform="translate(${x} 0)"`:''}${cls?` class="${cls}"`:''}${o.anim?` style="animation-delay:${(k*step).toFixed(2)}s"`:''}/>`;k++});
     if(o.nums)d.n.forEach((n,j)=>{body+=`<g class="num" transform="translate(${x+n[0]+2.6} ${n[1]-2.6})"><circle r="5"/><text>${j+1}</text></g>`});
     x+=CELL}
   return`<svg class="kvg${o.anim?' anim':''}" viewBox="0 0 ${x||CELL} ${CELL}" aria-hidden="true">${body}</svg>`;
 }
-function kakijunStrip(ch){const d=KVG[ch];if(!d)return'';return`<div class="strip" aria-label="Urutan goresan ${d.p.length} langkah">${d.p.map((_,j)=>`<div class="bx"><b>${j+1}</b>${kanaSVG(ch,{upto:j,hl:j})}</div>`).join('')}</div>`}
-/* hanamaru: the spiral flower circle a Japanese teacher draws on a correct answer */
+function kakijunStrip(ch){const d=KVG[ch];if(!d)return'';return`<div class="strip" role="img" aria-label="Urutan goresan, ${d.p.length} langkah">${d.p.map((_,j)=>`<div class="bx"><b>${j+1}</b>${kanaSVG(ch,{upto:j,hl:j})}</div>`).join('')}</div>`}
+/* hanamaru: the spiral flower a Japanese teacher draws on a correct answer */
 const HANAMARU=(()=>{const P=[],cx=50,cy=50;
   for(let t=0;t<=1.0001;t+=0.012){const a=-1.2+t*2.3*2*Math.PI,r=7+23*t;P.push([cx+r*Math.cos(a),cy+r*Math.sin(a)])}
   const a0=-1.2+2.3*2*Math.PI;for(let t=0;t<=1.0001;t+=0.004){const a=a0+t*2*Math.PI*1.04,r=35+9*Math.abs(Math.sin(t*Math.PI*8));P.push([cx+r*Math.cos(a),cy+r*Math.sin(a)])}
   return'M'+P.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join('L')})();
+/* the learner's own strokes as a small theme-aware drawing */
+function inkSVG(ink){if(!ink)return'';const sw=Math.max(3,Math.min(ink.w,ink.h)/24).toFixed(1);
+  const d=ink.ink.map(s=>{let p='M'+s[0][0]+' '+s[1][0];if(s[0].length===1)p+='l0.01 0';for(let i=1;i<s[0].length;i++)p+='L'+s[0][i]+' '+s[1][i];return p}).join('');
+  return`<svg class="thumb" viewBox="0 0 ${ink.w} ${ink.h}" aria-hidden="true"><path d="${d}" stroke-width="${sw}"/></svg>`}
+
+/* ---------- GEOMETRY: what the recognizer cannot see ----------
+   Google's recognizer reads きつて as きって and ignores stroke direction, so the size of small kana
+   and the stroke order are checked here against the stroke data. */
+const GEO={};let geoSvg=null;
+function geo(ch){if(GEO[ch])return GEO[ch];const d=KVG[ch];if(!d)return null;
+  if(!geoSvg){geoSvg=document.createElementNS(NS,'svg');geoSvg.setAttribute('style','position:absolute;width:0;height:0;visibility:hidden');geoSvg.setAttribute('aria-hidden','true');document.body.appendChild(geoSvg)}
+  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;const st=[];
+  for(const p of d.p){const el=document.createElementNS(NS,'path');el.setAttribute('d',p);geoSvg.appendChild(el);const L=el.getTotalLength(),pts=[];
+    for(let i=0;i<=16;i++){const q=el.getPointAtLength(L*i/16);pts.push([q.x,q.y]);x0=Math.min(x0,q.x);y0=Math.min(y0,q.y);x1=Math.max(x1,q.x);y1=Math.max(y1,q.y)}
+    st.push({a:pts[0],b:pts[16]});el.remove()}
+  return GEO[ch]={x0,y0,x1,y1,size:Math.max(x1-x0,y1-y0)||1,st}}
+const strokeInfo=ink=>ink.ink.map(s=>{const xs=s[0],ys=s[1];return{a:[xs[0],ys[0]],b:[xs[xs.length-1],ys[ys.length-1]],x0:Math.min(...xs),x1:Math.max(...xs),y0:Math.min(...ys),y1:Math.max(...ys)}});
+const boxOf=l=>({x0:Math.min(...l.map(s=>s.x0)),x1:Math.max(...l.map(s=>s.x1)),y0:Math.min(...l.map(s=>s.y0)),y1:Math.max(...l.map(s=>s.y1))});
+/* 'none' (no small kana), 'unknown' (cannot segment), 'ok', or the small kana that was written too large */
+function sizeCheck(target,ink){const chars=[...target];if(!chars.some(c=>SMALL[c]))return'none';
+  const need=chars.map(c=>KVG[c]?KVG[c].p.length:0);if(!ink||need.some(n=>!n))return'unknown';
+  const st=strokeInfo(ink);if(st.length!==need.reduce((a,b)=>a+b,0))return'unknown';
+  let i=0,lastX=-1e9,ordered=true;
+  const sz=chars.map((c,j)=>{const b=boxOf(st.slice(i,i+need[j]));i+=need[j];const cx=(b.x0+b.x1)/2;if(cx<lastX)ordered=false;lastX=cx;return Math.max(b.x1-b.x0,b.y1-b.y0)});
+  if(!ordered)return'unknown';
+  const ref=chars.map((c,j)=>SMALL[c]?null:sz[j]/geo(c).size).filter(v=>v!=null).sort((a,b)=>a-b);
+  if(!ref.length)return'unknown';
+  const f=ref[ref.length>>1];let res='ok';
+  chars.forEach((c,j)=>{if(SMALL[c]&&sz[j]/(f*geo(SMALL[c]).size)>0.88)res=c});
+  return res}
+/* a remark on stroke count, order or direction for a single kana; empty when it matches the model */
+function strokeNote(k,ink){if(!ink||[...k].length!==1||!KVG[k])return'';
+  const g=geo(k),st=strokeInfo(ink),n=g.st.length;
+  if(st.length!==n)return`Anda menulis ${st.length} goresan. Huruf ini ditulis dalam ${n} goresan.`;
+  const b=boxOf(st),sz=Math.max(b.x1-b.x0,b.y1-b.y0)||1,cx=(b.x0+b.x1)/2,cy=(b.y0+b.y1)/2,gx=(g.x0+g.x1)/2,gy=(g.y0+g.y1)/2;
+  const nm=(p,ox,oy,s)=>[(p[0]-ox)/s,(p[1]-oy)/s],dist=(p,q)=>Math.hypot(p[0]-q[0],p[1]-q[1]);
+  for(let i=0;i<n;i++){const ma=nm(g.st[i].a,gx,gy,g.size),mb=nm(g.st[i].b,gx,gy,g.size),ua=nm(st[i].a,cx,cy,sz),ub=nm(st[i].b,cx,cy,sz);
+    if(dist(ma,mb)>0.3){const dot=(mb[0]-ma[0])*(ub[0]-ua[0])+(mb[1]-ma[1])*(ub[1]-ua[1]);
+      if(dot<0&&dist(ua,mb)<dist(ua,ma))return n>1?`Goresan ke-${i+1} ditarik dari arah sebaliknya.`:'Goresan ditarik dari arah sebaliknya.'}
+    if(n>1&&dist(ua,ma)>0.33)return`Urutan goresan berbeda dari contoh. Periksa goresan ke-${i+1}.`}
+  return''}
 
 /* ---------- PAD ---------- */
 function Pad(el,opt={}){
   el.className='pad'+(opt.wide?' wide':'');
   el.style.setProperty('--c',col(opt.row));
-  el.innerHTML='<div class="ghost" aria-hidden="true"></div><canvas aria-label="Area menulis"></canvas>';
-  const cv=el.querySelector('canvas'),gh=el.querySelector('.ghost'),ctx=cv.getContext('2d');
-  let strokes=[],cur=null,w=0,h=0,dpr=1,t0=0;
+  el.innerHTML='<div class="ghost" aria-hidden="true"></div><canvas role="img" aria-label="Area menulis"></canvas>';
+  const cv=$('canvas',el),gh=$('.ghost',el),ctx=cv.getContext('2d');
+  let strokes=[],cur=null,pid=null,w=0,h=0,dpr=1,t0=0;
   const ink=()=>getComputedStyle(document.documentElement).getPropertyValue('--ink').trim()||'#111';
   function style(){ctx.setTransform(dpr,0,0,dpr,0,0);ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle=ctx.fillStyle=ink();ctx.lineWidth=Math.max(3,Math.min(w,h)/24)}
   function seg(s,i){ctx.beginPath();ctx.moveTo(s[i-1][0]*w,s[i-1][1]*h);ctx.lineTo(s[i][0]*w,s[i][1]*h);ctx.stroke()}
@@ -419,72 +614,94 @@ function Pad(el,opt={}){
   function redraw(){style();ctx.clearRect(0,0,w,h);for(const s of strokes){dot(s[0]);for(let i=1;i<s.length;i++)seg(s,i)}}
   function size(){const r=el.getBoundingClientRect();if(!r.width)return;dpr=window.devicePixelRatio||1;w=r.width;h=r.height;cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);redraw()}
   const pt=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height,Math.round(performance.now()-t0)]};
-  cv.addEventListener('pointerdown',e=>{if(opt.locked&&opt.locked())return;e.preventDefault();cv.setPointerCapture(e.pointerId);style();if(!strokes.length)t0=performance.now();cur=[pt(e)];strokes.push(cur);dot(cur[0])});
-  cv.addEventListener('pointermove',e=>{if(!cur)return;e.preventDefault();const evs=e.getCoalescedEvents?e.getCoalescedEvents():[e];for(const ev of evs){cur.push(pt(ev));seg(cur,cur.length-1)}});
-  const end=()=>{if(cur){cur=null}};
-  cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
+  const changed=()=>opt.onChange&&opt.onChange();
+  /* one pointer owns the pad at a time, so a resting palm or thumb cannot tangle the stroke */
+  cv.addEventListener('pointerdown',e=>{if(pid!==null||e.button>0||(opt.locked&&opt.locked()))return;e.preventDefault();pid=e.pointerId;try{cv.setPointerCapture(pid)}catch(_){}
+    const ae=document.activeElement;if(ae&&ae!==document.body&&ae.blur)ae.blur();
+    style();if(!strokes.length)t0=performance.now();cur=[pt(e)];strokes.push(cur);dot(cur[0])});
+  cv.addEventListener('pointermove',e=>{if(!cur||e.pointerId!==pid)return;e.preventDefault();const evs=e.getCoalescedEvents?e.getCoalescedEvents():[e];
+    for(const ev of(evs.length?evs:[e])){const p=pt(ev),q=cur[cur.length-1];if(Math.hypot((p[0]-q[0])*w,(p[1]-q[1])*h)<1.2)continue;cur.push(p);seg(cur,cur.length-1)}});
+  const end=e=>{if(e.pointerId!==pid)return;cur=null;pid=null;changed()};
+  cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);cv.addEventListener('lostpointercapture',end);
   const ro=new ResizeObserver(size);ro.observe(el);
+  const mq=matchMedia('(prefers-color-scheme: dark)');mq.addEventListener('change',redraw);
   return{
-    clear(){strokes=[];redraw();this.hideGhost();el.classList.remove('correct','wrong');const m=el.querySelector('.hm');if(m)m.remove()},
-    undo(){strokes.pop();redraw()},
+    clear(){strokes=[];cur=null;pid=null;redraw();this.hideGhost();el.classList.remove('correct','wrong');const m=$('.hm',el);if(m)m.remove();changed()},
+    undo(){strokes.pop();redraw();changed()},
     empty(){return strokes.length===0},
     showGhost(t,o={}){gh.innerHTML=kanaSVG(t,o);gh.classList.add('show')},
     hideGhost(){gh.classList.remove('show')},
-    mark(ok){el.classList.remove('correct','wrong');if(ok!=null)el.classList.add(ok?'correct':'wrong')},
-    hanamaru(){if(el.querySelector('.hm'))return;el.insertAdjacentHTML('beforeend',`<svg class="hm" viewBox="0 0 100 100" aria-hidden="true"><path d="${HANAMARU}" pathLength="1"/></svg>`)},
-    image(){return strokes.length?cv.toDataURL('image/png'):null},
+    mark(ok){el.classList.remove('correct','wrong');if(ok!=null)el.classList.add(ok?'correct':'wrong');const m=$('.hm',el);if(ok&&!m)el.insertAdjacentHTML('beforeend',`<svg class="hm" viewBox="0 0 100 100" aria-hidden="true"><path d="${HANAMARU}" pathLength="1"/></svg>`);if(!ok&&m)m.remove()},
     ink(){if(!strokes.length||!w)return null;return{w:Math.round(w),h:Math.round(h),ink:strokes.map(s=>[s.map(p=>Math.round(p[0]*w)),s.map(p=>Math.round(p[1]*h)),s.map(p=>p[2])])}},
-    destroy(){ro.disconnect()}
+    destroy(){ro.disconnect();mq.removeEventListener('change',redraw)}
   };
 }
 
 /* ---------- AUTO GRADING ----------
-   Handwriting is read by Google's handwriting recognizer (the one behind Google Translate's draw input).
-   If it cannot be reached (offline, blocked), the app falls back to self-grading. */
+   Shape is read by Google's handwriting recognizer (the one behind Google Translate's draw input).
+   If it cannot be reached, the learner grades the card. */
 const REC_URL='https://inputtools.google.com/request?ime=handwriting&app=mobilesearch&cs=1&oe=UTF-8';
-const AUTO={offUntil:0};
-const autoReady=()=>Date.now()>=AUTO.offUntil;
+const AUTO={fails:0,offUntil:0};
+const autoReady=()=>navigator.onLine!==false&&Date.now()>=AUTO.offUntil;
 async function recognize(ink){
   if(!ink||!autoReady())return null;
-  const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),7000);
+  const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),5000);
   try{
     const r=await fetch(REC_URL,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctl.signal,
-      body:JSON.stringify({options:'enable_pre_space',requests:[{writing_guide:{writing_area_width:ink.w,writing_area_height:ink.h},ink:ink.ink,language:'ja',max_num_results:8,max_completions:0}]})});
-    const j=await r.json();if(j[0]!=='SUCCESS')throw new Error('rec');return j[1][0][1]||[];
-  }catch(e){AUTO.offUntil=Date.now()+60000;return null}finally{clearTimeout(tm)}
+      body:JSON.stringify({options:'enable_pre_space',requests:[{writing_guide:{writing_area_width:ink.w,writing_area_height:ink.h},ink:ink.ink,language:'ja',max_num_results:10,max_completions:0}]})});
+    const j=await r.json();if(j[0]!=='SUCCESS')throw new Error('rec');AUTO.fails=0;return j[1][0][1]||[];
+  }catch(e){if(++AUTO.fails>=2)AUTO.offUntil=Date.now()+30000;return null}finally{clearTimeout(tm)}
 }
-const HIRA=/^[ぁ-ゖー]+$/;
+const norm=s=>[...s].map(c=>NORM[c]||c).join('');
 const big=s=>[...s].map(c=>SMALL[c]||c).join('');
-/* ok: the best hiragana reading matches. check: matches except the size of っゃゅょ, which the recognizer cannot always judge. */
+/* ok: the best reading in this script has the right shape. A best reading in the other script means the wrong script was written. */
 function verdict(target,cands){
-  const top=cands.filter(c=>HIRA.test(c))[0]||'';
-  if(top===target)return{v:'ok',read:top};
-  if(top&&big(top)===big(target))return{v:[...target].length===1?'ok':'check',read:top};
-  return{v:'bad',read:top||cands[0]||''};
-}
-async function judgeMany(list,onEach){let i=0;const run=async()=>{while(i<list.length){const it=list[i++];const c=await recognize(it.ink);onEach(it,c?verdict(it.k,c):null)}};await Promise.all([run(),run(),run(),run(),run(),run()])}
-/* Shared check flow for Learn and Drill: draws the correct stroke order over the learner's writing,
-   asks the recognizer, then lets the learner continue or override. */
+  const cs=cands.map(norm),top=cs.find(c=>MINE.test(c))||'';
+  const alien=cs[0]&&!MINE.test(cs[0])&&OTHER.test(cs[0])?cs[0]:'';
+  if(top&&big(top)===big(target))return alien?{v:'bad',why:'script',read:alien}:{v:'ok',read:top};
+  return{v:'bad',why:alien?'script':'',read:alien||top}}
+/* v: ok | bad | check (shape right, small-kana size undecided) | manual (recognizer unreachable) */
+async function assess(it,ink){
+  if(!ink)return{v:'bad',why:'empty',notes:[]};
+  const notes=[],sn=strokeNote(it.k,ink);if(sn)notes.push(sn);
+  let c=await recognize(ink);if(!c&&autoReady())c=await recognize(ink);
+  const sz=sizeCheck(it.k,ink);
+  if(!c){if(sz!=='none'&&sz!=='ok'&&sz!=='unknown')notes.push(`${sz} tampak terlalu besar.`);return{v:'manual',notes}}
+  const a=verdict(it.k,c);
+  if(a.v==='bad')return{v:'bad',why:a.why,read:a.read,notes};
+  if(sz==='none'||sz==='ok')return{v:'ok',read:a.read,notes};
+  if(sz==='unknown')return{v:'check',read:a.read,notes};
+  return{v:'bad',why:'size',which:sz,read:a.read,notes}}
+function whyText(a){
+  if(a.why==='empty')return'Belum ditulis.';
+  if(a.why==='size')return`${jp(a.which)} ditulis terlalu besar. Tulis kira-kira setengah ukuran huruf di sebelahnya.`;
+  if(a.why==='script')return`Terbaca sebagai ${jp(a.read)}. Itu ${APP.other}, bukan ${APP.script}.`;
+  return a.read?`Terbaca sebagai ${jp(a.read)}.`:'Tulisan tidak terbaca.'}
+async function judgeMany(list,onEach){let i=0;const run=async()=>{while(i<list.length){const x=list[i++];onEach(x,await assess(BY[x.k],x.ink))}};await Promise.all([run(),run(),run(),run()])}
+function answerHTML(it){const rom=romOf(it),g=it.g&&it.g.toLowerCase()!==rom.toLowerCase()?`<span>${APP.glossLabel}: ${esc(it.g)}</span>`:'';
+  return`<div class="ans" lang="ja">${ck(it.k)}</div><div class="romsub">${esc(rom)}${qual(it)?` (${qual(it)})`:''}${g}</div>`}
+/* Shared check flow for Belajar and Latih: draws the model stroke order over the learner's writing,
+   grades it, and lets the learner continue or overrule. */
 async function judge(P,pad,it,extra,finish,keys){
   let done=false;const end=ok=>{if(done)return;done=true;finish(ok)};
-  pad.showGhost(it.k,{anim:true});$('#tl',P).style.visibility='hidden';
-  const rv=$('#rv',P),ac=$('#ac',P);
-  const info=`<div class="ans cink" style="--c:${col(it.row)}">${it.k}<small>${esc(it.r)}</small></div>${extra||''}`;
-  let a=null;
-  if(pad.empty())a={v:'bad',read:''};
-  else if(autoReady()){rv.innerHTML=info+'<div class="verdict">Menilai tulisan Anda</div>';ac.innerHTML='<button class="btn" disabled>Menilai</button>';
-    const c=await recognize(pad.ink());if(c)a=verdict(it.k,c)}
-  if(!rv.isConnected)return;
-  if(!a||a.v==='check'){
-    rv.innerHTML=info+(a?'<div class="verdict"><span class="pill warn">Periksa</span>Bentuknya benar. Pastikan huruf kecilnya memang ditulis kecil.</div>':'');
-    ac.innerHTML='<button class="btn bad" id="no">Salah</button><button class="btn ok" id="yes">Benar</button>';
+  pad.showGhost(it.k,{anim:true});$('#tl',P).hidden=true;
+  const rv=$('#rv',P),ac=$('#ac',P),info=answerHTML(it)+(extra||'');
+  rv.innerHTML='<div class="verdict">Menilai tulisan Anda</div>'+info;ac.innerHTML='<button class="btn" disabled>Menilai</button>';
+  const a=await assess(it,pad.ink());
+  if(!rv.isConnected||done)return;
+  const notes=a.notes.map(n=>`<div class="knote">${jp(n)}</div>`).join('');
+  if(a.v==='manual'||a.v==='check'){
+    const man=a.v==='manual';
+    rv.innerHTML=(man?'<div class="verdict"><span class="pill warn">Nilai sendiri</span>Penilaian otomatis tidak tersedia. Bandingkan tulisan Anda dengan contoh.</div>'
+      :'<div class="verdict"><span class="pill warn">Cek ukuran</span>Bentuk sudah benar. Apakah huruf kecilnya Anda tulis lebih kecil?</div>')+notes+info;
+    ac.innerHTML=`<button class="btn bad" id="no">${man?'Salah':'Belum'}</button><button class="btn ok" id="yes">${man?'Benar':'Sudah'}</button>`;
     $('#no',P).onclick=()=>end(false);$('#yes',P).onclick=()=>end(true);
-    keys.check=null;keys.yes=()=>end(true);keys.no=()=>end(false);return}
+    keys.check=null;keys.yes=()=>end(true);keys.no=()=>end(false);ac.scrollIntoView({block:'nearest'});return}
   let ok=a.v==='ok';
-  const paint=()=>{pad.mark(ok);if(ok)pad.hanamaru();else{const m=P.querySelector('.hm');if(m)m.remove()}
-    rv.innerHTML=info+`<div class="verdict">${ok?'<span class="pill ok">Benar</span>':`<span class="pill bad">Salah</span>${a.read?`Terbaca sebagai <span class="kana">${esc(a.read)}</span>`:'Tulisan tidak terbaca'}`}</div>`;
-    ac.innerHTML=`<button class="btn ghost" id="ov">${ok?'Tandai salah':'Sebenarnya benar'}</button><button class="btn pri" id="nx">Lanjut</button>`;
-    $('#ov',P).onclick=()=>{ok=!ok;paint()};$('#nx',P).onclick=()=>end(ok);$('#nx',P).focus({preventScroll:true})};
+  const paint=()=>{pad.mark(ok);
+    rv.innerHTML=`<div class="verdict" role="status">${ok?'<span class="pill ok">Benar</span>':`<span class="pill bad">Salah</span><span>${whyText(a)}</span>`}</div>`+notes+info;
+    ac.innerHTML=`<button class="btn ghost" id="ov">${ok?'Anggap salah':'Anggap benar'}</button><button class="btn pri" id="nx">Lanjut</button>`;
+    $('#ov',P).onclick=()=>{ok=!ok;paint()};$('#nx',P).onclick=()=>end(ok);$('#nx',P).focus({preventScroll:true});ac.scrollIntoView({block:'nearest'})};
   paint();keys.check=()=>end(ok);keys.yes=()=>end(true);keys.no=()=>end(false);
 }
 
@@ -496,75 +713,91 @@ addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;if(TA
 addEventListener('appinstalled',()=>{installEvt=null;if(TAB==='plan')renderPlan()});
 function installCard(){
   if(framed||standalone())return'';
-  const box=(body,btn)=>`<div class="card tint row" style="--c:var(--r-h);justify-content:space-between;margin-bottom:10px"><span class="small" style="flex:1 1 200px"><b>Pasang sebagai aplikasi</b><br><span class="muted">${body}</span></span>${btn||''}</div>`;
-  if(installEvt)return box('Terbuka layar penuh tanpa bilah alamat, dan tetap jalan tanpa internet.','<button class="btn pri sm" id="inst">Pasang</button>');
-  if(/iphone|ipad|ipod/i.test(navigator.userAgent))return box('Di Safari, ketuk tombol Bagikan, lalu pilih Tambahkan ke Layar Utama. Aplikasi akan terbuka tanpa bilah alamat.');
+  const box=(body,btn)=>`<div class="card row" style="justify-content:space-between;margin-bottom:10px"><span class="small" style="flex:1 1 200px"><b>Pasang sebagai aplikasi</b><br><span class="muted">${body}</span></span>${btn||''}</div>`;
+  if(installEvt)return box('Terbuka layar penuh. Tanpa internet tetap bisa dipakai, tetapi tulisan Anda nilai sendiri.','<button class="btn pri sm" id="inst">Pasang</button>');
+  if(/iphone|ipad|ipod/i.test(navigator.userAgent))return box('Di Safari, ketuk tombol Bagikan, lalu pilih Tambahkan ke Layar Utama.');
   if(/android/i.test(navigator.userAgent))return box('Buka menu browser, lalu pilih Instal aplikasi atau Tambahkan ke layar utama.');
   return'';
 }
 
 /* ---------- TABS ---------- */
+const TABS=[['plan','時','Rencana'],['learn',APP.tabGlyph,'Belajar'],['drill','練','Latih'],['table','表','Tabel'],['test','試','Tes']];
 let TAB='plan';const pads={};
 function killPads(scope){(pads[scope]||[]).forEach(p=>p.destroy());pads[scope]=[]}
 function addPad(scope,el,opt){const p=Pad(el,opt);(pads[scope]=pads[scope]||[]).push(p);return p}
 const RENDER={plan:renderPlan,learn:renderLearn,drill:renderDrill,table:renderTable,test:renderTest};
-function show(tab){TAB=tab;document.querySelectorAll('nav.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===tab));
-  document.querySelectorAll('.panel').forEach(p=>p.hidden=p.id!=='p-'+tab);RENDER[tab]();spectrum();window.scrollTo(0,0)}
-document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('click',()=>show(b.dataset.tab)));
-function spectrum(){$('#spectrum').innerHTML=ROWS.map(r=>`<i class="${S.learned[r.id]?'on':''}" style="--c:var(--r-${r.id})"></i>`).join('')}
+function show(tab){TAB=tab;$$('nav.tabs button').forEach(b=>{if(b.dataset.tab===tab)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
+  $$('.panel').forEach(p=>p.hidden=p.id!=='p-'+tab);RENDER[tab]();spectrum();window.scrollTo(0,0)}
+function spectrum(){$('#spectrum').innerHTML=ROWS.map(r=>`<b lang="ja" class="${S.learned[r.id]?'on':''}" style="--c:var(--r-${r.id})">${r.items[0][0]}</b>`).join('')}
 
 /* ---------- CLOCK ---------- */
 function tick(){const c=$('#clock');if(!S.start){c.innerHTML='Sesi belum dimulai';return}
   const el=(Date.now()-S.start)/1000,rem=4*3600-el;c.innerHTML=rem>0?'Sisa <b>'+fmt(rem)+'</b>':'<b>Waktu habis</b>';
-  if(TAB==='plan'){const m=el/60;document.querySelectorAll('.blk').forEach((b,i)=>{b.classList.toggle('now',m>=PLAN[i].s&&m<PLAN[i].e);b.classList.toggle('past',m>=PLAN[i].e)})}}
+  if(TAB==='plan'){const m=el/60;$$('.blk').forEach((b,i)=>{b.classList.toggle('now',m>=PLAN[i].s&&m<PLAN[i].e);b.classList.toggle('past',m>=PLAN[i].e)})}}
 setInterval(tick,1000);
 
 /* ---------- PLAN ---------- */
-const GRID=[];ROWS.forEach(r=>{if(r.id==='w'){const row=[null,null,null,null,null];r.items.forEach(i=>{if(i[2]!=null)row[i[2]]=i[0]});GRID.push(row);GRID.push(['ん',null,null,null,null])}else{const row=[null,null,null,null,null];r.items.forEach(i=>row[i[2]]=i[0]);GRID.push(row)}});
-const ORDER=GRID.flat().filter(Boolean);
-let resetAsk=false;
+const pct=t=>Math.round(100*t.score/t.total);
+const lastTest=()=>S.tests.length?S.tests[S.tests.length-1]:null;
+const testOK=()=>{const t=lastTest();return!!t&&pct(t)>=90};
+function nextStep(){const r=ROWS.find(r=>!S.learned[r.id]);
+  if(r)return{label:`Pelajari ${r.name}`,kana:r.items.map(i=>i[0]).join(' '),go:()=>{L={row:r,step:'intro'};show('learn')}};
+  if(S.streak<2)return{label:'Kerjakan Tabel Kosong',go:()=>show('table')};
+  if(!testOK())return{label:'Kerjakan simulasi tes',go:()=>show('test')};
+  return{label:'Latih yang masih lemah',go:()=>{setMode(weakKeys().length?'weak':REC_DEFAULT);show('drill')}}}
+let ask=null;
 function renderPlan(){const P=$('#p-plan');
-  const rowsDone=ROWS.filter(r=>S.learned[r.id]).length;
-  const bestX=S.tests.length?Math.max(...S.tests.map(t=>Math.round(100*t.score/t.total))):null;
-  const c1=rowsDone===10,c2=S.streak>=2,c3=bestX!==null&&bestX>=90,ready=c1&&c2&&c3;
-  const mix=b=>[6,22,38,55,72,88][b];
+  const rowsDone=ROWS.filter(r=>S.learned[r.id]).length,lt=lastTest();
+  const c1=rowsDone===ROWS.length,c2=S.streak>=2,c3=testOK(),ready=c1&&c2&&c3,nx=nextStep();
+  const mix=b=>[6,14,22,30,38,45][b];
+  const coreN=WORDS.filter(w=>w.core).length,target=coreN?WORDS.filter(w=>w.core):WORDS,strong=target.filter(w=>card(w.k).b>=2).length;
+  const how=[...APP.howto,
+    ['Tulis dulu, baru periksa.','Melihat jawaban sebelum menulis hanya melatih mengenali huruf. Tes meminta Anda menulis.'],
+    ['Ingat warnanya.','Tiap baris punya satu warna: merah untuk Baris A, cokelat untuk Baris W. Saat lupa, ingat warnanya dulu, lalu urutkan a, i, u, e, o sampai hurufnya ketemu.'],
+    ['Penilaian bisa Anda ubah.','Goresan Anda dikirim ke pengenal tulisan tangan Google untuk dinilai. Ukuran huruf kecil dan urutan goresan diperiksa di perangkat ini. Kalau nilainya keliru, ketuk Anggap benar atau Anggap salah. Huruf yang salah muncul lagi tiga kartu kemudian.'],
+    ['Latihan terakhir di kertas.','Tes Anda memakai pena dan kertas. Sebelum tes, kerjakan Tabel Kosong sekali di kertas.']];
   P.innerHTML=installCard()+`
   <div class="card hero stack">
-    ${ready?'<div class="hanko" aria-label="Lulus">合格</div>':''}
-    <h3 style="max-width:70%">Menulis hiragana dari romaji</h3>
+    <div>${ready?'<div class="hanko" role="img" aria-label="Lulus"><span lang="ja">合格</span><small>LULUS</small></div>':''}
+      <h3>${APP.title}</h3><p class="muted small" style="margin:0">Anda siap tes jika tiga hal ini tercapai.</p></div>
     <ul class="conds">
-      <li class="${c1?'ok':''}"><i></i><span>Semua baris dipelajari, <b>${rowsDone}</b> dari 10</span></li>
-      <li class="${c2?'ok':''}"><i></i><span>Tabel Kosong sempurna dua kali berturut-turut, <b>${Math.min(S.streak,2)}</b> dari 2</span></li>
-      <li class="${c3?'ok':''}"><i></i><span>Simulasi tes minimal 90 persen${bestX!==null?`, terbaik <b>${bestX}%</b>`:''}</span></li>
+      <li class="${c1?'ok':''}"><i></i><span>Semua baris dipelajari. <b>${rowsDone}</b> dari ${ROWS.length}.</span></li>
+      <li class="${c2?'ok':''}"><i></i><span>Tabel Kosong sempurna dua kali berturut-turut. <b>${Math.min(S.streak,2)}</b> dari 2.</span></li>
+      <li class="${c3?'ok':''}"><i></i><span>Simulasi tes terakhir 90% atau lebih.${lt?` Terakhir <b>${pct(lt)}%</b>.`:''}</span></li>
+      <li class="${S.paper?'ok':''}"><button id="paper" role="checkbox" aria-checked="${!!S.paper}"><i></i><span>Besok: tulis 46 huruf di kertas tanpa melihat. Ketuk jika sudah.</span></button></li>
     </ul>
-    <div class="row">${S.start?'<button class="btn sm" id="restart">Mulai ulang waktu</button>':'<button class="btn pri grow" id="startS">Mulai sesi 4 jam</button>'}</div>
+    <div class="row">${S.start?`<button class="btn pri grow" id="next">${nx.label}${nx.kana?`&nbsp;<span class="kana" lang="ja">${nx.kana}</span>`:''}</button>`:'<button class="btn pri grow" id="startS">Mulai sesi 4 jam</button>'}</div>
   </div>
   <h2>Peta ingatan</h2>
   <div class="card">
-    <div class="map">${GRID.flat().map(k=>k?`<div style="--c:var(--r-${ROW_OF[k]});background:color-mix(in oklab,var(--c) ${mix(card(k).b)}%,var(--card))">${k}</div>`:'<div class="void"></div>').join('')}</div>
-    <div class="legend"><span>Lemah</span>${[6,30,55,88].map(p=>`<i style="--p:${p}%"></i>`).join('')}<span>Kuat</span><span style="margin-left:auto">Satu warna untuk satu baris konsonan</span></div>
+    <div class="map" lang="ja">${GRID.flat().map(k=>k?`<div data-b="${card(k).b}" style="--c:var(--r-${ROW_OF[k]});background:color-mix(in oklab,var(--c) ${mix(card(k).b)}%,var(--card))">${k}</div>`:'<div class="void"></div>').join('')}</div>
+    <div class="legend"><span>Lemah</span>${[6,22,38,45].map(p=>`<i style="--p:${p}%"></i>`).join('')}<span>Kuat</span><span style="margin-left:auto">${coreN?'Kata inti':'Kata'} dikuasai: <b>${strong}</b> dari ${target.length}</span></div>
   </div>
   <h2>Jadwal 4 jam</h2>
-  <div class="blocks">${PLAN.map(b=>`<div class="blk" style="--c:var(--r-${b.c})"><div class="t">${hhmm(b.s)}<br>${hhmm(b.e)}</div><div class="d"><b>${esc(b.t)}</b><span class="muted">${esc(b.d)}</span></div>${b.go?`<button class="btn sm" data-go="${b.go}">Buka</button>`:'<span></span>'}</div>`).join('')}</div>
+  <div class="blocks">${PLAN.map((b,i)=>`<div class="blk"><div class="t">${hhmm(b.s)}<small>${b.e-b.s} menit</small></div><div class="d"><b>${esc(b.t)}</b><span class="muted">${jp(b.d)}</span></div>${b.go?`<button class="btn sm" data-go="${i}">Buka</button>`:'<span></span>'}</div>`).join('')}</div>
   <h2>Cara berlatih</h2>
-  <div class="card howto small">
-    <div><b>Tulis dulu, baru periksa.</b>Melihat jawaban sebelum menulis hanya melatih kemampuan mengenali. Tes menuntut Anda menulis.</div>
-    <div><b>Ingat warnanya.</b>Setiap baris konsonan punya satu warna, dari merah untuk baris A sampai cokelat untuk baris W. Saat lupa, warna membantu Anda menemukan barisnya, lalu urutan na, ni, nu menemukan hurufnya.</div>
-    <div><b>Penilaian otomatis, keputusan tetap di tangan Anda.</b>Tulisan dibaca oleh pengenal tulisan tangan Google. Jika penilaiannya keliru, ubah saja. Huruf yang salah muncul lagi tiga kartu kemudian sampai melekat.</div>
-  </div>
-  <h2>Data</h2>
+  <div class="card howto small">${how.map(([t,d])=>`<div><b>${esc(t)}</b>${jp(d)}</div>`).join('')}</div>
+  <h2>Pengaturan</h2>
   <div class="card stack small">
-    <p class="muted" style="margin:0">Progres hanya tersimpan di browser ini.</p>
-    ${resetAsk?`<div class="confirm stack"><b>Hapus semua progres?</b><div class="row"><button class="btn bad" id="rsYes">Hapus</button><button class="btn" id="rsNo">Batal</button></div></div>`:'<div><button class="btn sm" id="rs">Reset progres</button></div>'}
+    <div><b>Penulisan vokal panjang pada romaji</b><br><span class="muted">Ikuti cara yang dipakai di tes Anda.</span></div>
+    <div class="chips" role="group" aria-label="Penulisan vokal panjang">${APP.romStyles.map(([id,l])=>`<button class="chip" aria-pressed="${S.rom===id}" data-rom="${id}">${l}</button>`).join('')}</div>
+    <p class="muted" style="margin:0">Progres tersimpan di perangkat ini saja. Menghapus data browser ikut menghapusnya.</p>
+    ${ask==='clock'?'<div class="confirm stack"><b>Mulai lagi dari 4:00:00? Progres huruf tidak terhapus.</b><div class="row"><button class="btn bad" id="ckYes">Mulai lagi</button><button class="btn" id="askNo">Batal</button></div></div>'
+     :ask==='reset'?'<div class="confirm stack"><b>Hapus semua progres?</b><div class="row"><button class="btn bad" id="rsYes">Hapus</button><button class="btn" id="askNo">Batal</button></div></div>'
+     :`<div class="row">${S.start?'<button class="btn sm" id="restart">Mulai ulang waktu</button>':''}<button class="btn sm" id="rs">Reset progres</button></div>`}
   </div>
   <p class="credit">Dikembangkan oleh <b>@noeroelama</b>.<br>Data urutan goresan dari KanjiVG oleh Ulrich Apel, lisensi CC BY-SA 3.0.</p>`;
-  P.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
-  const ins=$('#inst',P);if(ins)ins.onclick=async()=>{const e=installEvt;installEvt=null;try{await e.prompt()}catch(_){}renderPlan()};
-  const s1=$('#startS',P);if(s1)s1.onclick=()=>{S.start=Date.now();save();renderPlan();tick()};
-  const s2=$('#restart',P);if(s2)s2.onclick=()=>{S.start=Date.now();save();tick()};
-  const r=$('#rs',P);if(r)r.onclick=()=>{resetAsk=true;renderPlan()};
-  const ry=$('#rsYes',P);if(ry)ry.onclick=()=>{S={cards:{},learned:{},tables:[],tests:[],start:null,streak:0};save();resetAsk=false;renderPlan();spectrum();tick()};
-  const rn=$('#rsNo',P);if(rn)rn.onclick=()=>{resetAsk=false;renderPlan()};
+  const on=(id,f)=>{const e=$('#'+id,P);if(e)e.onclick=f};
+  $$('[data-go]',P).forEach(b=>b.onclick=()=>{const p=PLAN[+b.dataset.go];if(p.go==='drill'&&p.set)setMode(p.set==='weak'&&!weakKeys().length?'pairs':p.set);if(p.go==='learn')L=null;show(p.go)});
+  $$('[data-rom]',P).forEach(b=>b.onclick=()=>{S.rom=b.dataset.rom;save();renderPlan()});
+  on('inst',async()=>{const e=installEvt;installEvt=null;try{await e.prompt()}catch(_){}renderPlan()});
+  on('startS',()=>{S.start=Date.now();save();renderPlan();tick()});
+  on('next',()=>nx.go());
+  on('paper',()=>{S.paper=!S.paper;save();renderPlan()});
+  on('restart',()=>{ask='clock';renderPlan()});on('rs',()=>{ask='reset';renderPlan()});on('askNo',()=>{ask=null;renderPlan()});
+  on('ckYes',()=>{S.start=Date.now();save();ask=null;renderPlan();tick()});
+  on('rsYes',()=>{const rom=S.rom;S=fresh();S.rom=rom;save();ask=null;L=null;DR.q=null;DR.only=null;DR.mode='base';
+    if(TB)clearInterval(TB.iv);if(TS)clearInterval(TS.iv);TB=null;TS=null;RUN.clear('table');RUN.clear('test');renderPlan();spectrum();tick()});
   tick();
 }
 
@@ -574,199 +807,212 @@ function renderLearn(){killPads('learn');const P=$('#p-learn');
   if(!L){
     const next=ROWS.find(r=>!S.learned[r.id]);
     P.innerHTML=`
-    <p class="muted small">Setiap baris punya warnanya sendiri dan melewati tiga tahap: mengenali bentuk dan urutan goresan, menjiplak, lalu menulis dari ingatan sampai semuanya benar.</p>
-    ${next?`<button class="btn pri" style="width:100%;margin-bottom:12px" data-row="${next.id}">Pelajari ${next.name}&nbsp;<span class="kana">${next.items.map(i=>i[0]).join(' ')}</span></button>`:'<div class="card small" style="margin-bottom:12px"><b>Semua baris sudah selesai.</b> Lanjutkan dengan Tabel Kosong.</div>'}
-    <div class="rowlist">${ROWS.map(r=>`<button class="rowbtn tint" style="--c:var(--r-${r.id})" data-row="${r.id}"><span class="k cink">${r.items.map(i=>i[0]).join('')}</span><span class="s">${r.name}</span>${S.learned[r.id]?'<span class="done" aria-label="selesai">✓</span>':''}</button>`).join('')}</div>
-    <h2>Aturan tambahan</h2>
-    <p class="muted small">Pelajari setelah 46 huruf dasar dikuasai.</p>
-    <div class="stack">${RULES.map(r=>`<div class="card rule"><h3>${esc(r.t)}</h3><p class="muted small" style="margin:0">${esc(r.d)}</p><div class="ex">${r.ex.map(([k,x])=>{const rw=rowOf(k);return`<span class="tint" style="--c:${col(rw)}"><b class="cink">${k}</b>${esc(x)}</span>`}).join('')}</div><div><button class="btn sm" data-set="${r.set}">Latih set ini</button></div></div>`).join('')}</div>`;
-    P.querySelectorAll('[data-row]').forEach(b=>b.onclick=()=>{L={row:ROWS.find(r=>r.id===b.dataset.row),step:'intro'};renderLearn();window.scrollTo(0,0)});
-    P.querySelectorAll('[data-set]').forEach(b=>b.onclick=()=>{DR.mode=b.dataset.set;DR.only=null;DR.q=null;show('drill')});
+    <p class="muted small">${jp(APP.learnIntro)}</p>
+    ${next?`<button class="btn pri" style="width:100%;margin-bottom:12px" data-row="${next.id}">Pelajari ${next.name}&nbsp;<span class="kana" lang="ja">${next.items.map(i=>i[0]).join(' ')}</span></button>`:'<div class="card small" style="margin-bottom:12px"><b>Semua baris sudah selesai.</b> Lanjutkan dengan Tabel Kosong, lalu aturan di bawah.</div>'}
+    <div class="rowlist">${ROWS.map(r=>`<button class="rowbtn tint" style="--c:var(--r-${r.id})" data-row="${r.id}"><span class="k cink" lang="ja">${r.items.map(i=>i[0]).join('')}</span><span class="s">${jp(r.name)}</span>${S.learned[r.id]?'<span class="done">selesai</span>':''}</button>`).join('')}</div>
+    <h2>Aturan ${APP.id==='kata'?'katakana':'tambahan'}</h2>
+    <p class="muted small">${esc(APP.rulesIntro)}</p>
+    <div class="stack">${RULES.map(r=>`<div class="card rule"><h3>${jp(r.t)}</h3>${r.cmp?`<div class="cmp" lang="ja">${r.cmp[0]}<small lang="id">besar</small>${r.cmp[1]}<small lang="id">kecil</small></div>`:''}<p>${jp(r.d)}</p><div class="ex">${r.ex.map(k=>`<span><b lang="ja">${ck(k)}</b>${esc(BY[k]?romOf(BY[k]):romaji(k))}</span>`).join('')}</div><div><button class="btn sm" data-set="${r.set}">Latih set ini</button></div></div>`).join('')}</div>`;
+    $$('[data-row]',P).forEach(b=>b.onclick=()=>{L={row:ROWS.find(r=>r.id===b.dataset.row),step:'intro'};renderLearn();window.scrollTo(0,0)});
+    $$('[data-set]',P).forEach(b=>b.onclick=()=>{setMode(b.dataset.set);show('drill')});
     return;
   }
-  const R=L.row,items=R.items.map(i=>BY[i[0]]),C=`var(--r-${R.id})`;
+  const Rw=L.row,items=Rw.items.map(i=>BY[i[0]]),C=`var(--r-${Rw.id})`;
   const stepIx={intro:0,trace:1,recall:2,done:3}[L.step];
-  const head=`<div class="row" style="justify-content:space-between"><button class="btn sm ghost" id="back">Semua baris</button><span class="pill tint cink" style="--c:${C}">${R.name}</span></div><div class="steps" style="--c:${C}">${[0,1,2].map(i=>`<span class="${i<=stepIx?'on':''}"></span>`).join('')}</div>`;
+  const head=`<div class="row" style="justify-content:space-between"><button class="btn sm ghost" id="back">Semua baris</button><span class="pill row-pill" style="--c:${C}">${jp(Rw.name)}</span></div><div class="steps" style="--c:${C}">${[0,1,2].map(i=>`<span class="${i<=stepIx?'on':''}"></span>`).join('')}</div>`;
   if(L.step==='intro'){
-    P.innerHTML=head+`<h2 style="margin-top:0">Kenali bentuk dan urutan goresannya</h2><p class="muted small">Ketuk huruf besar untuk memutar ulang urutan goresan.</p>
-    <div class="stack">${items.map(it=>`<div class="kc tint" style="--c:${C}"><button class="big cink" data-play="${it.k}" aria-label="Putar urutan goresan ${it.r}">${kanaSVG(it.k,{anim:true})}</button><div style="min-width:0"><div class="r cink">${it.r}</div><div class="m">${esc(it.m)}</div><div class="cink">${kakijunStrip(it.k)}</div></div></div>`).join('')}</div>
-    <button class="btn pri" style="width:100%;margin-top:12px" id="go">Mulai menjiplak</button>`;
-    P.querySelectorAll('[data-play]').forEach(b=>b.onclick=()=>{b.innerHTML=kanaSVG(b.dataset.play,{anim:true})});
-    $('#go',P).onclick=()=>{L.step='trace';L.i=0;renderLearn()};
+    const twin=k=>APP.id==='kata'?`<span class="twin">hiragana <b class="ki" lang="ja">${String.fromCharCode(k.charCodeAt(0)-0x60)}</b></span>`:'';
+    P.innerHTML=head+`<h2 style="margin-top:0">Lihat bentuk dan urutan goresannya</h2><p class="muted small">Ketuk huruf besar untuk memutar ulang urutan goresan.</p>
+    <div class="stack">${items.map(it=>`<div class="kc tint" style="--c:${C}"><button class="big cink" data-play="${it.k}" aria-label="Putar urutan goresan ${it.r}">${kanaSVG(it.k,{anim:true})}</button><div style="min-width:0"><div class="r cink">${it.r}${twin(it.k)}</div><div class="m">${jp(it.m)}</div><div class="cink">${kakijunStrip(it.k)}</div></div></div>`).join('')}</div>
+    <div class="actions"><button class="btn pri" id="go">Mulai menjiplak</button></div>`;
+    $$('[data-play]',P).forEach(b=>b.onclick=()=>{b.innerHTML=kanaSVG(b.dataset.play,{anim:true})});
+    $('#go',P).onclick=()=>{L.step='trace';L.i=0;renderLearn();window.scrollTo(0,0)};
   }else if(L.step==='trace'){
     const it=items[L.i];
     P.innerHTML=head+`<div class="meta"><span>Jiplak sesuai nomor goresan</span><span><b>${L.i+1}</b> dari ${items.length}</span></div>
     <div class="prompt"><div class="rom cink" style="--c:${C}">${it.r}</div></div>
     <div id="pad"></div>
-    <div class="tools"><button class="btn sm" id="pl">Putar urutan</button><button class="btn sm" id="un">Urungkan</button><button class="btn sm" id="cl">Hapus</button></div>
-    <div class="actions"><button class="btn pri" id="nx">${L.i<items.length-1?'Huruf berikutnya':'Tulis dari ingatan'}</button></div>`;
-    const pad=addPad('learn',$('#pad',P),{row:R.id});pad.showGhost(it.k,{nums:true});
+    <div class="tools"><button class="btn sm" id="pl">Putar ulang</button><button class="btn sm" id="un">Urungkan</button><button class="btn sm" id="cl">Hapus</button></div>
+    <div class="actions"><button class="btn pri" id="nx" disabled>Jiplak dulu hurufnya</button></div>`;
+    const lbl=L.i<items.length-1?'Huruf berikutnya':'Tulis dari ingatan';
+    const pad=addPad('learn',$('#pad',P),{row:Rw.id,onChange:()=>{const b=$('#nx',P);if(!b)return;b.disabled=pad.empty();b.textContent=pad.empty()?'Jiplak dulu hurufnya':lbl}});
+    pad.showGhost(it.k,{nums:true});
     $('#pl',P).onclick=()=>pad.showGhost(it.k,{anim:true,nums:true});
     $('#un',P).onclick=()=>pad.undo();$('#cl',P).onclick=()=>{pad.clear();pad.showGhost(it.k,{nums:true})};
-    $('#nx',P).onclick=()=>{if(L.i<items.length-1){L.i++}else{L.step='recall';L.order=shuffle(items.map(x=>x.k))}renderLearn()};
+    $('#nx',P).onclick=()=>{if(pad.empty())return;if(L.i<items.length-1){L.i++}else{L.step='recall';L.order=shuffle(items.map(x=>x.k))}renderLearn()};
   }else if(L.step==='recall'){
     const it=BY[L.order[0]];
     P.innerHTML=head+`<div class="meta"><span>Tulis dari ingatan</span><span><b>${L.order.length}</b> tersisa</span></div>
-    <div class="prompt"><div class="lbl">Tulis hiragana untuk</div><div class="rom cink" style="--c:${C}">${it.r}</div></div>
-    <div id="pad"></div><div class="reveal" id="rv"></div>
+    <div class="prompt"><div class="lbl">Tulis ${APP.script} untuk</div><div class="rom cink" style="--c:${C}">${it.r}</div></div>
+    <div id="pad"></div><div class="reveal" id="rv" aria-live="polite"></div>
     <div class="tools" id="tl"><button class="btn sm" id="un">Urungkan</button><button class="btn sm" id="cl">Hapus</button></div>
     <div class="actions" id="ac"><button class="btn pri" id="ck">Periksa</button></div>`;
     let revealed=false;
-    const pad=addPad('learn',$('#pad',P),{row:R.id,locked:()=>revealed});
+    const pad=addPad('learn',$('#pad',P),{row:Rw.id,locked:()=>revealed});
     $('#un',P).onclick=()=>pad.undo();$('#cl',P).onclick=()=>pad.clear();
     const fin=ok=>{grade(it.k,ok);L.order.shift();if(!ok)L.order.splice(Math.min(2,L.order.length),0,it.k);
-      if(!L.order.length){S.learned[R.id]=true;save();L.step='done'}setTimeout(renderLearn,120)};
+      if(!L.order.length){S.learned[Rw.id]=true;save();L.step='done'}setTimeout(renderLearn,120)};
     const keys={};L.keys=keys;
-    keys.check=()=>{if(revealed)return;revealed=true;judge(P,pad,it,`<div class="mn">${esc(it.m)}</div>`,fin,keys)};
+    keys.check=()=>{if(revealed)return;revealed=true;judge(P,pad,it,`<div class="mn">${jp(it.m)}</div>`,fin,keys)};
     $('#ck',P).onclick=keys.check;
   }else{
-    const ix=ROWS.indexOf(R),nx=ROWS[ix+1],mix=(ix+1)%3===0;
-    P.innerHTML=head+`<div class="card tint stack" style="--c:${C};text-align:center"><div class="kana cink" style="font-size:2.8rem">${items.map(i=>i.k).join(' ')}</div><h3>${R.name} selesai dan masuk ke daftar latihan.</h3>
-    <p class="muted small" style="margin:0">${mix?'Tiga baris sudah selesai. Kerjakan latihan campuran lima menit sebelum lanjut.':'Lanjutkan ke baris berikutnya selagi bentuknya masih segar.'}</p>
-    <div class="row" style="justify-content:center">${nx?`<button class="btn ${mix?'':'pri'}" id="nr">Baris berikutnya</button>`:''}<button class="btn ${mix||!nx?'pri':''}" id="dr">Latihan campuran</button></div></div>`;
-    if(nx)$('#nr',P).onclick=()=>{L={row:nx,step:'intro'};renderLearn();window.scrollTo(0,0)};
-    $('#dr',P).onclick=()=>{L=null;DR.mode='base';DR.only=null;DR.q=null;show('drill')};
+    const ix=ROWS.indexOf(Rw),nx=ROWS[ix+1],mix=(ix+1)%3===0&&!!nx;
+    P.innerHTML=head+`<div class="card tint stack" style="--c:${C};text-align:center"><div class="kana cink" lang="ja" style="font-size:2.8rem">${items.map(i=>i.k).join(' ')}</div><h3>${jp(Rw.name)} selesai. Hurufnya sekarang ikut di tab Latih.</h3>
+    <p class="muted small" style="margin:0">${mix?'Tiga baris selesai. Latihan campuran 5 menit dulu, lalu istirahat 5 menit.':nx?`Berikutnya ${jp(nx.name)}.`:'Semua baris selesai. Kerjakan Tabel Kosong.'}</p>
+    <div class="row" style="justify-content:center">${nx?`<button class="btn ${mix?'':'pri'}" id="nr">Lanjut ke ${jp(nx.name)}</button>`:'<button class="btn pri" id="tb">Tabel Kosong</button>'}<button class="btn ${mix?'pri':''}" id="dr">Latihan campuran</button></div></div>`;
+    if(nx)$('#nr',P).onclick=()=>{L={row:nx,step:'intro'};renderLearn();window.scrollTo(0,0)};else $('#tb',P).onclick=()=>{L=null;show('table')};
+    $('#dr',P).onclick=()=>{L=null;setMode('base');show('drill')};
     spectrum();
   }
   $('#back',P).onclick=()=>{L=null;renderLearn()};
 }
 
 /* ---------- DRILL ---------- */
-const MODES=[
- {m:'base',g:'Huruf',l:'Huruf dasar',ex:'あ か さ'},
- {m:'daku',g:'Huruf',l:'Titik dan lingkaran',ex:'が ぱ'},
- {m:'combo',g:'Huruf',l:'Huruf kecil',ex:'きゃ'},
- {m:'word',g:'Kata',l:'Kata',ex:'きって'},
- {m:'pairs',g:'Fokus',l:'Pasangan mirip',ex:'ぬ め'},
- {m:'weak',g:'Fokus',l:'Yang salah',ex:''},
- {m:'all',g:'Fokus',l:'Campuran',ex:'あ が きゃ'}
-];
-const REC_DEFAULT='all';
-function weakKeys(){return Object.entries(S.cards).filter(([k,c])=>c.w>0&&c.b<2&&BY[k]).map(([k])=>k)}
-function setInfo(o){const pool=o.m==='weak'?poolFor('weak'):poolFor(o.m),n=pool.length;
-  const weak=pool.filter(i=>{const c=S.cards[i.k];return c&&c.w>0&&c.b<2}).length;
-  let d;
+const DR={mode:'base',q:null,stat:{c:0,w:0},only:null};
+function setMode(m){DR.mode=m;DR.only=null;DR.q=null}
+function poolFor(mode){
+  const learnedBase=BASE.filter(i=>S.learned[i.row]);
+  switch(mode){
+    case'base':return learnedBase.length?learnedBase:BASE.filter(i=>i.row==='a');
+    case'pairs':return[...new Set(PAIRS.flat())].map(k=>BY[k]);
+    case'daku':return DAKU;case'combo':return COMBO;case'foreign':return FOREIGN;case'word':return WORDS;
+    case'core':return WORDS.filter(w=>w.core);
+    case'all':return[...BASE,...DAKU,...COMBO,...FOREIGN,...WORDS];
+    case'weak':return(DR.only?DR.only.map(k=>BY[k]).filter(Boolean):Object.keys(S.cards).map(k=>BY[k]).filter(Boolean)).filter(i=>weakOf(i.k));
+  }return BASE}
+/* weakest first; rare sounds after the common ones of the same level */
+function buildQ(items){return[0,1,2,3,4,5].map(b=>{const l=shuffle(items.filter(i=>card(i.k).b===b));return[...l.filter(i=>!i.rare),...l.filter(i=>i.rare)]}).flat()}
+function weakKeys(){return Object.keys(S.cards).filter(k=>BY[k]&&weakOf(k))}
+function setInfo(o){const pool=poolFor(o.m),n=pool.length,weak=pool.filter(i=>weakOf(i.k)).length;let d;
   if(o.m==='weak')d=n?`${n} kartu perlu diulang`:'Belum ada kartu yang salah';
-  else if(o.m==='base'){const r=ROWS.filter(r=>S.learned[r.id]).length;d=r?`${n} huruf, ${r} dari 10 baris dipelajari`:'Belum ada baris dipelajari, memakai baris A'}
+  else if(o.m==='base'){const r=ROWS.filter(r=>S.learned[r.id]).length;d=r?`${n} huruf, ${r} dari ${ROWS.length} baris dipelajari`:'Belum ada baris dipelajari, memakai Baris A'}
   else if(o.m==='all')d=`Semua set, ${n} kartu`;
-  else d=`${n} kartu`;
-  if(weak&&o.m!=='weak')d+=`, ${weak} lemah`;
+  else d=`${n} ${o.u}`;
+  if(weak&&o.m!=='weak')d+=`, ${weak} perlu diulang`;
   return{n,d,ex:o.m==='weak'?[...pool.slice(0,2).map(i=>i.k).join(' ')].slice(0,4).join(''):o.ex}}
 function recommend(){
-  if(S.start){const m=(Date.now()-S.start)/60000,b=PLAN.find(b=>m>=b.s&&m<b.e);if(b&&b.set)return b.set}
+  if(S.start){const m=(Date.now()-S.start)/60000,b=PLAN.find(b=>m>=b.s&&m<b.e);if(b&&b.set&&(b.set!=='weak'||weakKeys().length))return b.set}
   if(ROWS.some(r=>!S.learned[r.id]))return'base';
   if(weakKeys().length)return'weak';
   return REC_DEFAULT}
 function setButton(){const o=MODES.find(x=>x.m===DR.mode)||MODES[0],i=setInfo(o);
   const lbl=DR.mode==='weak'&&DR.only?'Yang salah dari hasil terakhir':o.l;
-  return`<button class="setbtn" id="setbtn" aria-haspopup="dialog"><span class="ex">${esc(i.ex)}</span><span class="tx"><span class="nm">${esc(lbl)}</span><span class="ds">${esc(i.d)}</span></span><span class="go">Ganti set</span></button>`}
+  return`<button class="setbtn" id="setbtn" aria-haspopup="dialog"><span class="ex" lang="ja">${esc(i.ex)}</span><span class="tx"><span class="nm">${jp(lbl)}</span><span class="ds">${esc(i.d)}</span></span><span class="go">Ganti set</span></button>`}
 function openSheet(){closeSheet(true);const rec=recommend(),groups=[...new Set(MODES.map(o=>o.g))];
   const body=groups.map(g=>`<h4>${g}</h4><div class="opts">${MODES.filter(o=>o.g===g).map(o=>{const i=setInfo(o);
-    return`<button class="opt${o.m===DR.mode?' on':''}" data-m="${o.m}"${i.n?'':' disabled'}><span class="ex">${esc(i.ex)}</span><span class="tx"><span class="nm">${esc(o.l)}${o.m===rec&&i.n?'<span class="pill ok">Disarankan</span>':''}</span><span class="ds">${esc(i.d)}</span></span></button>`}).join('')}</div>`).join('');
+    return`<button class="opt${o.m===DR.mode?' on':''}" data-m="${o.m}"${i.n?'':' disabled'}><span class="ex" lang="ja">${esc(i.ex)}</span><span class="tx"><span class="nm">${jp(o.l)}${o.m===rec&&i.n?'<span class="pill ok">Disarankan</span>':''}</span><span class="ds">${esc(i.d)}</span></span></button>`}).join('')}</div>`).join('');
   document.body.insertAdjacentHTML('beforeend',`<div id="sheet"><div class="sheet-bg" id="sheetbg"></div><div class="sheet" role="dialog" aria-modal="true" aria-label="Pilih set latihan"><div class="sheet-h"><b>Pilih set latihan</b><button class="btn sm ghost" id="sheetx">Tutup</button></div>${body}</div></div>`);
-  document.documentElement.style.overflow='hidden';
+  document.documentElement.style.overflow='hidden';$('.wrap').inert=true;$('nav.tabs').inert=true;
   $('#sheetbg').onclick=()=>closeSheet();$('#sheetx').onclick=()=>closeSheet();
-  document.querySelectorAll('#sheet .opt').forEach(b=>b.onclick=()=>{DR.mode=b.dataset.m;DR.only=null;DR.q=null;closeSheet(true);renderDrill()});
+  $$('#sheet .opt').forEach(b=>b.onclick=()=>{setMode(b.dataset.m);closeSheet(true);renderDrill();const s=$('#setbtn');if(s)s.focus({preventScroll:true})});
   const f=$('#sheet .opt.on:not([disabled])')||$('#sheet .opt:not([disabled])');if(f)f.focus({preventScroll:true})}
-function closeSheet(silent){const s=$('#sheet');if(!s)return;s.remove();document.documentElement.style.overflow='';if(!silent){const b=$('#setbtn');if(b)b.focus({preventScroll:true})}}
-
-const DR={mode:'base',q:null,stat:{c:0,w:0},only:null};
-function poolFor(mode){
-  const learnedBase=BASE.filter(i=>S.learned[i.row]);
-  switch(mode){
-    case 'base':return learnedBase.length?learnedBase:BASE.filter(i=>i.row==='a');
-    case 'pairs':return [...new Set(PAIRS.flat())].map(k=>BY[k]);
-    case 'daku':return DAKU;case 'combo':return COMBO;case 'word':return WORDS;
-    case 'all':return [...BASE,...DAKU,...COMBO,...WORDS];
-    case 'weak':{if(DR.only)return DR.only.map(k=>BY[k]).filter(Boolean);return Object.entries(S.cards).filter(([k,c])=>c.w>0&&c.b<2&&BY[k]).map(([k])=>BY[k])}
-  }return BASE}
-function buildQ(items){const by=[0,1,2,3,4,5].map(b=>shuffle(items.filter(i=>card(i.k).b===b)));return by.flat()}
+function closeSheet(silent){const s=$('#sheet');if(!s)return;s.remove();document.documentElement.style.overflow='';$('.wrap').inert=false;$('nav.tabs').inert=false;if(!silent){const b=$('#setbtn');if(b)b.focus({preventScroll:true})}}
 function renderDrill(){killPads('drill');const P=$('#p-drill');
+  if(DR.only&&DR.q&&!DR.q.length)DR.only=null;
   if(!DR.q){DR.q=buildQ(poolFor(DR.mode));DR.stat={c:0,w:0}}
-  const learnedN=Object.keys(S.learned).length;
-  const chips=setButton();
-  if(!DR.q.length){P.innerHTML=chips+`<div class="card" style="margin-top:12px"><b>${DR.mode==='weak'?'Belum ada huruf yang ditandai salah.':'Set ini kosong.'}</b><p class="muted small" style="margin:4px 0 0">Setiap huruf yang Anda tandai salah, dari tab mana pun, akan terkumpul di sini.</p></div>`;bindChips(P);return}
-  const it=DR.q[0],c=card(it.k),C=col(it.row);
+  else{/* rows learned or cards missed since the queue was built join it */
+    const have=new Set(DR.q.map(i=>i.k)),add=poolFor(DR.mode).filter(i=>!have.has(i.k)&&(DR.mode!=='weak'||weakOf(i.k)));if(add.length)DR.q.splice(Math.min(1,DR.q.length),0,...buildQ(add))}
+  const bind=()=>{const b=$('#setbtn',P);if(b)b.onclick=()=>openSheet()};
+  if(!DR.q.length){P.innerHTML=setButton()+`<div class="card" style="margin-top:12px"><b>${DR.mode==='weak'?(DR.stat.c?'Semua kartu yang salah sudah Anda perbaiki.':'Belum ada kartu yang salah.'):'Set ini kosong.'}</b><p class="muted small" style="margin:4px 0 0">Huruf yang salah di tab mana pun terkumpul di sini.</p></div>`;bind();return}
+  const it=DR.q[0],c=card(it.k),C=col(it.row),rom=romOf(it),single=!isWide(it);
   const group=DR.mode==='pairs'?PAIRS.find(g=>g.includes(it.k)):null;
-  const note='';
-  const wide=it.type==='word'||it.type==='combo';
-  P.innerHTML=chips+note+`
-  <div class="meta" style="margin-top:14px"><span>Benar <b style="color:var(--ok)">${DR.stat.c}</b>&ensp;Salah <b style="color:var(--bad)">${DR.stat.w}</b></span><span>Tingkat <b>${c.b}</b> dari 5</span></div>
-  <div class="prompt"><div class="lbl">Tulis hiragana untuk</div><div class="rom cink ${it.r.length>8?'long':''}" style="--c:${C}">${esc(it.r)}</div></div>
-  <div id="pad"></div><div class="reveal" id="rv"></div>
+  P.innerHTML=setButton()+`
+  <div class="meta" style="margin-top:12px"><span>Sesi ini: benar <b style="color:var(--ok)">${DR.stat.c}</b>, salah <b style="color:var(--bad)">${DR.stat.w}</b></span><span>Hafalan: <b>${c.b}</b> dari 5</span></div>
+  <div class="prompt"><div class="lbl">Tulis ${APP.script} untuk</div><div class="rom ${single?'cink':''} ${rom.length>9?'long':''}" style="--c:${C}">${esc(rom)}</div>${qual(it)?`<div class="q">${qual(it)}</div>`:''}</div>
+  <div id="pad"></div><div class="reveal" id="rv" aria-live="polite"></div>
   <div class="tools" id="tl"><button class="btn sm" id="un">Urungkan</button><button class="btn sm" id="cl">Hapus</button></div>
   <div class="actions" id="ac"><button class="btn pri" id="ck">Periksa</button></div>
-  <div class="kbd">Dengan keyboard, Enter untuk memeriksa dan lanjut. Panah kiri dan kanan untuk menandai salah atau benar.</div>`;
-  bindChips(P);
+  <div class="kbd">Keyboard: Enter untuk periksa dan lanjut. Panah kiri salah, panah kanan benar.</div>`;
+  bind();
   let revealed=false;
-  const pad=addPad('drill',$('#pad',P),{wide,row:it.row,locked:()=>revealed});
+  const pad=addPad('drill',$('#pad',P),{wide:!single,row:it.row,locked:()=>revealed});
   $('#un',P).onclick=()=>pad.undo();$('#cl',P).onclick=()=>pad.clear();
-  const extra=`${it.m?`<div class="mn">${esc(it.m)}</div>`:''}${group?`<div class="trio">${group.map(k=>`<div class="tint" style="--c:var(--r-${ROW_OF[k]})"><b class="cink">${k}</b><span>${BY[k].r}</span></div>`).join('')}</div>`:''}`;
+  const nt=noteOf(it),xn=group&&EXTRA_NOTE[it.k];
+  const extra=`${nt?`<div class="mn">${jp(nt)}</div>`:''}${xn?`<div class="mn">${jp(xn)}</div>`:''}${group?`<div class="tiles">${group.map(k=>`<div class="tile tint" style="--c:var(--r-${ROW_OF[k]})"><b class="cink" lang="ja">${k}</b><span>${BY[k].r}</span></div>`).join('')}</div>`:''}`;
   const fin=ok=>{grade(it.k,ok);ok?DR.stat.c++:DR.stat.w++;
     DR.q.shift();
-    if(!(DR.mode==='weak'&&ok&&card(it.k).b>=2)){const gap=ok?[4,8,15,30,60][card(it.k).b-1]:3;DR.q.splice(Math.min(gap,DR.q.length),0,it)}
+    /* a card at the top level goes to the back, so long sets keep moving through every card */
+    if(!(DR.mode==='weak'&&!weakOf(it.k))){const gap=ok?[4,8,15,30,1e9][card(it.k).b-1]:3;DR.q.splice(Math.min(gap,DR.q.length),0,it)}
     setTimeout(renderDrill,120)};
   const keys={};DR.keys=keys;
   keys.check=()=>{if(revealed)return;revealed=true;judge(P,pad,it,extra,fin,keys)};
   $('#ck',P).onclick=keys.check;
 }
-function bindChips(P){const b=$('#setbtn',P);if(b)b.onclick=()=>openSheet()}
+
+/* ---------- BATCH REVIEW (shared by Tabel and Tes) ----------
+   x: wrong, un: not graded yet (recognizer unreachable, or small-kana size undecided). Rows marked un must be decided before saving. */
+function runAuto(T,list,idOf,refresh){
+  if(!list.length){T.auto='done';return}
+  T.auto='running';T.prog=0;
+  judgeMany(list,(x,a)=>{T.prog++;const id=idOf(x);if(!T.touched[id]){if(a.v==='ok')T.x[id]=false;else if(a.v==='bad')T.x[id]=true;else T.un[id]=true}
+    const s=$('#autoStat');if(s)s.textContent=T.prog+' dari '+list.length}).then(()=>{T.auto='done';refresh()})}
+const countOf=(o,ids)=>ids.filter(id=>o[id]).length;
 
 /* ---------- TABLE (Tabel Kosong) ---------- */
 let TB=null;
+function tbPersist(){RUN.save('table',{i:TB.i,ink:TB.ink,elapsed:(Date.now()-TB.t0)/1000})}
 function renderTable(){killPads('table');const P=$('#p-table');
   if(!TB){
     const last=S.tables.slice(-3).reverse();
     P.innerHTML=`<div class="card stack">
       <h3>Tabel Kosong</h3>
-      <p class="small" style="margin:0">Tulis ke-46 huruf secara berurutan, baris demi baris, tanpa melihat apa pun. Warna kotak menunjukkan baris yang sedang Anda isi. Lewati huruf yang tidak Anda ingat. Penilaian dilakukan setelah tabel selesai.</p>
-      <p class="muted small" style="margin:0">Ulangi sampai sempurna dua kali berturut-turut. Saat ini ${S.streak} dari 2.</p>
+      <p class="small" style="margin:0">Tulis 46 huruf berurutan, tanpa melihat contoh. Kalau lupa, ketuk Lewati. Dinilai setelah semua terisi.</p>
+      <div class="preview" aria-hidden="true">${GRID.flat().map(k=>k?`<i style="--c:var(--r-${ROW_OF[k]})"></i>`:'<i class="void"></i>').join('')}</div>
+      <p class="muted small" style="margin:0">Target: sempurna 2 kali berturut-turut. Sekarang ${Math.min(S.streak,2)} dari 2.</p>
       <button class="btn pri" id="go">Mulai</button></div>
-      ${last.length?`<h2>Percobaan terakhir</h2><div class="stack">${last.map(t=>`<div class="card meta"><span><b>${t.score}</b> dari 46 benar, ${fmt(t.time)}</span><span>${at(t.at)}</span></div>`).join('')}</div>`:''}
-      <p class="muted small" style="margin-top:14px">Versi kertas sama efektifnya. Gambar tabel lima kolom dan sebelas baris, isi dari ingatan, lalu cocokkan dengan Peta ingatan di tab Rencana.</p>`;
-    $('#go',P).onclick=()=>{TB={i:0,img:{},ink:{},start:Date.now(),phase:'write',x:{},touched:{}};renderTable()};return}
+      ${last.length?`<h2>Percobaan terakhir</h2><div class="stack">${last.map(t=>`<div class="card meta"><span><b>${t.score}</b> dari 46 benar, ${dur(t.time)}</span><span>${at(t.at)}</span></div>`).join('')}</div>`:''}
+      <p class="muted small" style="margin-top:14px">Bisa juga di kertas: gambar tabel 5 kolom dan 11 baris, isi dari ingatan, lalu cocokkan dengan Peta ingatan di tab Rencana.</p>`;
+    $('#go',P).onclick=()=>{TB={i:0,ink:{},t0:Date.now(),phase:'write',x:{},un:{},touched:{}};tbPersist();renderTable()};return}
   if(TB.phase==='write'){
-    const k=ORDER[TB.i],it=BY[k];const rowIx=GRID.findIndex(r=>r.includes(k));const row=GRID[rowIx];const C=col(it.row);
-    P.innerHTML=`<div class="meta"><span>Baris <b>${rowIx+1}</b> dari ${GRID.length}</span><span id="tt"></span></div>
-    <div class="tstrip" style="margin-top:8px">${row.map(c=>c?`<div class="cell tint ${c===k?'cur':''}" style="--c:${C}">${TB.img[c]?`<img alt="" src="${TB.img[c]}">`:(c in TB.img?'kosong':'')}</div>`:'<div class="cell void"></div>').join('')}</div>
+    const k=ORDER[TB.i],it=BY[k],rowIx=GRID.findIndex(r=>r.includes(k)),row=GRID[rowIx],C=col(it.row),rowName=ROWS.find(r=>r.id===it.row).name;
+    P.innerHTML=`<div class="meta"><span>Huruf <b>${TB.i+1}</b> dari 46, ${jp(rowName)}</span><span id="tt"></span></div>
+    <div class="tstrip" style="margin-top:8px">${row.map(c=>c?`<div class="cell tint ${c===k?'cur':''}" style="--c:${C}">${TB.ink[c]?inkSVG(TB.ink[c]):(c in TB.ink&&c!==k?'kosong':'')}</div>`:'<div class="cell void"></div>').join('')}</div>
     <div class="prompt"><div class="rom cink" style="--c:${C}">${it.r}</div></div>
     <div id="pad"></div>
     <div class="tools"><button class="btn sm" id="un">Urungkan</button><button class="btn sm" id="cl">Hapus</button></div>
-    <div class="actions"><button class="btn" id="sk">Lewati</button><button class="btn pri" id="nx">Lanjut</button></div>
-    <div class="row" style="justify-content:center;margin-top:8px"><button class="btn sm ghost" id="ab">Batalkan percobaan</button></div>`;
+    <div class="actions">${TB.i?'<button class="btn" id="bk" style="flex:0 0 auto">Kembali</button>':''}<button class="btn" id="sk">Lewati</button><button class="btn pri" id="nx">Lanjut</button></div>
+    ${TB.ask?'<div class="confirm stack small" style="margin-top:8px"><b>Batalkan tabel ini? Tulisan yang sudah diisi akan hilang.</b><div class="row"><button class="btn bad" id="abYes">Batalkan</button><button class="btn" id="abNo">Teruskan</button></div></div>'
+      :'<div class="row" style="justify-content:center;margin-top:8px"><button class="btn sm ghost" id="ab">Batalkan percobaan</button></div>'}`;
     const pad=addPad('table',$('#pad',P),{row:it.row});
-    const t=$('#tt',P);const upd=()=>{if(t.isConnected)t.innerHTML='Waktu <b>'+fmt((Date.now()-TB.start)/1000)+'</b>'};upd();clearInterval(TB.iv);TB.iv=setInterval(upd,1000);
+    const t=$('#tt',P),upd=()=>{if(t.isConnected)t.innerHTML='Waktu <b>'+fmt((Date.now()-TB.t0)/1000)+'</b>'};upd();clearInterval(TB.iv);TB.iv=setInterval(upd,1000);
     $('#un',P).onclick=()=>pad.undo();$('#cl',P).onclick=()=>pad.clear();
-    const adv=(img,ink)=>{TB.img[k]=img;TB.ink[k]=ink;TB.i++;if(TB.i>=ORDER.length){TB.time=(Date.now()-TB.start)/1000;clearInterval(TB.iv);TB.phase='review';ORDER.forEach(q=>{if(!TB.img[q])TB.x[q]=true})}renderTable()};
-    $('#sk',P).onclick=()=>adv(null,null);$('#nx',P).onclick=()=>adv(pad.image(),pad.ink());
-    $('#ab',P).onclick=()=>{clearInterval(TB.iv);TB=null;renderTable()};
-    TB.keys={check:()=>adv(pad.image(),pad.ink())};
+    const adv=ink=>{TB.ink[k]=ink;TB.i++;TB.ask=false;
+      if(TB.i>=ORDER.length){TB.time=(Date.now()-TB.t0)/1000;clearInterval(TB.iv);TB.phase='review'}tbPersist();renderTable()};
+    const go=()=>{if(!pad.empty())adv(pad.ink())};
+    $('#sk',P).onclick=()=>adv(null);$('#nx',P).onclick=go;
+    const bk=$('#bk',P);if(bk)bk.onclick=()=>{TB.i--;delete TB.ink[ORDER[TB.i]];tbPersist();renderTable()};
+    const drop=()=>{clearInterval(TB.iv);TB=null;RUN.clear('table');renderTable()};
+    const ab=$('#ab',P);if(ab)ab.onclick=()=>{if(TB.i){TB.ask=true;renderTable()}else drop()};
+    const ay=$('#abYes',P);if(ay)ay.onclick=drop;const an=$('#abNo',P);if(an)an.onclick=()=>{TB.ask=false;renderTable()};
+    TB.keys={check:go};
   }else if(TB.phase==='review'){
-    if(TB.auto===undefined){
-      const list=ORDER.filter(k=>TB.ink[k]).map(k=>({k,ink:TB.ink[k]}));
-      if(!list.length||!autoReady())TB.auto='manual';
-      else{TB.auto='running';TB.prog=0;TB.fail=0;const T=TB;
-        judgeMany(list,(it,a)=>{T.prog++;if(!a)T.fail++;else if(!T.touched[it.k])T.x[it.k]=a.v==='bad';const s=$('#autoStat');if(s)s.textContent=T.prog+' dari '+list.length})
-          .then(()=>{T.auto=T.fail===list.length?'manual':'done';if(TB===T&&TAB==='table')renderTable()})}
-    }
-    const wrong=Object.keys(TB.x).filter(k=>TB.x[k]).length;
-    const msg=TB.auto==='running'?`Menilai otomatis, <span id="autoStat">${TB.prog} dari ${ORDER.filter(k=>TB.ink[k]).length}</span>.`
-      :TB.auto==='done'?'Kotak bergaris merah salah menurut penilaian otomatis. Jawaban yang benar tertera di pojok setiap kotak. Ketuk kotak mana pun untuk mengubah penilaian.'
-      :'Jawaban yang benar tertera di pojok setiap kotak. Ketuk kotak yang salah atau bentuknya meragukan. Kotak kosong sudah dihitung salah.';
-    P.innerHTML=`<div class="card stack"><h3>Nilai tabel Anda</h3><p class="small" style="margin:0">Waktu ${fmt(TB.time)}. ${msg}</p></div>
-    <div class="grid" style="margin-top:10px">${GRID.flat().map(k=>k?`<button class="cell tint ${TB.x[k]?'x':''}" style="--c:var(--r-${ROW_OF[k]})" data-k="${k}" aria-pressed="${!!TB.x[k]}" aria-label="${BY[k].r}">${TB.img[k]?`<img alt="" src="${TB.img[k]}">`:''}<span class="ck cink">${k}</span><span class="rr">${BY[k].r}</span></button>`:'<div class="cell void"></div>').join('')}</div>
-    <div class="actions"><button class="btn pri" id="sv" ${TB.auto==='running'?'disabled':''}>Simpan hasil, ${46-wrong} dari 46 benar</button></div>`;
-    P.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{const k=b.dataset.k;TB.touched[k]=true;TB.x[k]=!TB.x[k];renderTable()});
-    $('#sv',P).onclick=()=>{const miss=ORDER.filter(k=>TB.x[k]);const score=46-miss.length;
+    if(TB.time==null)TB.time=(Date.now()-TB.t0)/1000;
+    if(TB.auto===undefined){ORDER.forEach(q=>{if(!TB.ink[q])TB.x[q]=true});
+      runAuto(TB,ORDER.filter(q=>TB.ink[q]).map(q=>({k:q,ink:TB.ink[q]})),x=>x.k,()=>{if(TB&&TB.phase==='review'&&TAB==='table')renderTable()})}
+    const wrong=countOf(TB.x,ORDER),und=countOf(TB.un,ORDER),running=TB.auto==='running';
+    const msg=running?`Menilai otomatis, <span id="autoStat">${TB.prog} dari ${ORDER.filter(q=>TB.ink[q]).length}</span>.`
+      :'Kotak merah dinilai salah. Huruf yang benar ada di pojok kanan atas. Ketuk kotak untuk mengubah nilainya.'+(und?` ${und} kotak kuning belum dinilai otomatis. Nilai sendiri: ketuk sekali jika benar, dua kali jika salah.`:'');
+    P.innerHTML=`<div class="card stack"><h3>Periksa hasil tabel</h3><p class="small" style="margin:0">Waktu ${dur(TB.time)}. ${msg}</p></div>
+    <div class="grid" style="margin-top:10px">${GRID.flat().map(k=>k?`<button class="cell tint ${TB.x[k]?'x':TB.un[k]?'un':''}" style="--c:var(--r-${ROW_OF[k]})" data-k="${k}" aria-label="${BY[k].r}">${inkSVG(TB.ink[k])}<span class="ck" lang="ja">${k}</span><span class="rr">${BY[k].r}</span><span class="st">${TB.x[k]?'salah':TB.un[k]?'nilai':''}</span></button>`:'<div class="cell void"></div>').join('')}</div>
+    ${und&&!running?'<div class="row" style="justify-content:center;margin-top:8px"><button class="btn sm" id="allok">Anggap semua kotak kuning benar</button></div>':''}
+    <div class="actions"><button class="btn pri" id="sv"></button></div>
+    <div class="row" style="justify-content:center;margin-top:8px"><button class="btn sm ghost" id="ab">Buang tanpa menyimpan</button></div>`;
+    const sv=$('#sv',P),paintSave=()=>{const w=countOf(TB.x,ORDER),u=countOf(TB.un,ORDER);sv.disabled=TB.auto==='running'||u>0;sv.textContent=TB.auto==='running'?'Menilai':u?`Nilai dulu ${u} kotak kuning`:`Simpan hasil, ${46-w} dari 46 benar`};paintSave();
+    /* toggles update the tapped cell in place; the grid is not rebuilt */
+    $$('[data-k]',P).forEach(b=>b.onclick=()=>{const k=b.dataset.k;TB.touched[k]=true;if(TB.un[k]){TB.un[k]=false;TB.x[k]=false}else TB.x[k]=!TB.x[k];
+      b.classList.toggle('x',!!TB.x[k]);b.classList.remove('un');$('.st',b).textContent=TB.x[k]?'salah':'';paintSave();const a=$('#allok',P);if(a&&!countOf(TB.un,ORDER))a.parentNode.remove()});
+    const ao=$('#allok',P);if(ao)ao.onclick=()=>{ORDER.forEach(k=>{if(TB.un[k]){TB.un[k]=false;TB.touched[k]=true}});renderTable()};
+    $('#ab',P).onclick=()=>{TB=null;RUN.clear('table');renderTable()};
+    sv.onclick=()=>{const miss=ORDER.filter(k=>TB.x[k]),score=46-miss.length;
       ORDER.forEach(k=>grade(k,!TB.x[k]));
-      S.tables.push({at:Date.now(),score,time:Math.round(TB.time)});S.streak=score===46?S.streak+1:0;save();
-      TB.phase='result';TB.miss=miss;TB.score=score;renderTable()};
+      S.tables.push({at:Date.now(),score,time:Math.round(TB.time)});S.streak=score===46?S.streak+1:0;save();RUN.clear('table');
+      TB.phase='result';TB.miss=miss;TB.score=score;renderTable();window.scrollTo(0,0)};
   }else{
     const m=TB.miss;
     P.innerHTML=`<div class="card stack" style="text-align:center">
       <div class="score">${TB.score}<span class="muted" style="font-size:1.1rem"> dari 46</span></div>
-      <div class="muted small">Waktu ${fmt(TB.time)}. Sempurna berturut-turut ${S.streak} dari 2.</div>
-      ${m.length?`<div class="kana" style="font-size:1.9rem;letter-spacing:.15em">${m.map(k=>`<span class="cink" style="--c:var(--r-${ROW_OF[k]})">${k}</span>`).join('')}</div><p class="small" style="margin:0">Tulis setiap huruf ini lima kali sambil mengucapkan romajinya, lalu latih di set Yang salah.</p>`:`<p class="small" style="margin:0">${S.streak>=2?'Sempurna dua kali berturut-turut. Huruf dasar sudah Anda kuasai.':'Sempurna. Ulangi sekali lagi untuk memastikan hasilnya konsisten.'}</p>`}
+      <div class="muted small">Waktu ${dur(TB.time)}. Sempurna berturut-turut: ${Math.min(S.streak,2)} dari 2.</div>
+      ${m.length?`<div class="tiles">${m.map(k=>`<div class="tile tint" style="--c:var(--r-${ROW_OF[k]})"><b class="cink" lang="ja">${k}</b><span>${BY[k].r}</span></div>`).join('')}</div><p class="small" style="margin:0">Tulis tiap huruf ini lima kali sambil mengucapkan romajinya, lalu latih di set Yang salah.</p>`:`<p class="small" style="margin:0">${S.streak>=2?'Sempurna dua kali berturut-turut. Huruf dasar sudah Anda kuasai.':'Sempurna. Ulangi sekali lagi untuk memastikan hasilnya bukan kebetulan.'}</p>`}
       <div class="row" style="justify-content:center">${m.length?'<button class="btn pri" id="dm">Latih yang salah</button>':''}<button class="btn ${m.length?'':'pri'}" id="ag">Ulangi tabel</button></div></div>`;
     if(m.length)$('#dm',P).onclick=()=>{DR.mode='weak';DR.only=m.slice();DR.q=null;TB=null;show('drill')};
     $('#ag',P).onclick=()=>{TB=null;renderTable()};
@@ -775,49 +1021,60 @@ function renderTable(){killPads('table');const P=$('#p-table');
 
 /* ---------- TEST ---------- */
 let TS=null;
-function pick(arr,n){return shuffle(arr).slice(0,n)}
+function tsPersist(){RUN.save('test',{keys:TS.items.map(i=>i.k),i:TS.i,ink:TS.ink,elapsed:(Date.now()-TS.t0)/1000})}
+function testItems(){const m=APP.test,core=WORDS.filter(w=>w.core),rest=WORDS.filter(w=>!w.core),nc=core.length?Math.min(m.coreWords||0,m.word):0;
+  return shuffle([...pick(BASE,m.base),...pick(DAKU,m.daku),...pick(COMBO,m.combo),...pick(FOREIGN.filter(f=>!f.rare),m.foreign),...pick(core,nc),...pick(core.length?rest:WORDS,m.word-nc)])}
 function renderTest(){killPads('test');const P=$('#p-test');
   if(!TS){const hist=S.tests.slice(-3).reverse();
     P.innerHTML=`<div class="card stack"><h3>Simulasi tes</h3>
-      <p class="small" style="margin:0">Dua puluh soal dengan komposisi seperti tes sebenarnya: delapan huruf dasar, empat dakuten, empat kombinasi kecil, dan empat kata. Romaji ditampilkan tanpa warna, sama seperti di kertas ujian. Jawaban baru ditampilkan setelah semua soal selesai.</p>
+      <p class="small" style="margin:0">${esc(APP.testIntro)}</p>
       <button class="btn pri" id="go">Mulai</button></div>
-      ${hist.length?`<h2>Hasil terakhir</h2><div class="stack">${hist.map(t=>`<div class="card meta"><span><b>${t.score}</b> dari ${t.total} benar (${Math.round(100*t.score/t.total)}%), ${fmt(t.time)}</span><span>${at(t.at)}</span></div>`).join('')}</div>`:''}`;
-    $('#go',P).onclick=()=>{const items=shuffle([...pick(BASE,8),...pick(DAKU,4),...pick(COMBO,4),...pick(WORDS,4)]);TS={items,i:0,img:[],ink:[],start:Date.now(),phase:'write',x:{},w:{},touched:{}};renderTest()};return}
-  if(TS.phase==='write'){const it=TS.items[TS.i];const wide=it.type==='word'||it.type==='combo';
-    P.innerHTML=`<div class="meta"><span>Soal <b>${TS.i+1}</b> dari 20</span><span id="tt"></span></div>
-    <div class="steps" style="--c:var(--r-k);margin:6px 0 4px">${TS.items.map((_,i)=>`<span class="${i<TS.i?'on':''}"></span>`).join('')}</div>
-    <div class="prompt" style="margin-top:8px"><div class="lbl">Tulis dalam hiragana</div><div class="rom ${it.r.length>8?'long':''}">${esc(it.r)}</div></div>
+      ${hist.length?`<h2>Hasil terakhir</h2><div class="stack">${hist.map(t=>`<div class="card meta"><span><b>${pct(t)}%</b>, ${t.score} dari ${t.total} benar, ${dur(t.time)}</span><span>${at(t.at)}</span></div>`).join('')}</div>`:''}`;
+    $('#go',P).onclick=()=>{TS={items:testItems(),i:0,ink:[],t0:Date.now(),phase:'write',x:{},un:{},touched:{}};tsPersist();renderTest()};return}
+  const N=TS.items.length,ids=TS.items.map((_,i)=>i);
+  if(TS.phase==='write'){const it=TS.items[TS.i],rom=romOf(it);
+    P.innerHTML=`<div class="meta"><span>Soal <b>${TS.i+1}</b> dari ${N}</span><span id="tt"></span></div>
+    <div class="steps" style="margin:6px 0 4px">${TS.items.map((_,i)=>`<span class="${i<TS.i?'on':''}"></span>`).join('')}</div>
+    <div class="prompt" style="margin-top:8px"><div class="lbl">Tulis dalam ${APP.script}</div><div class="rom ${rom.length>9?'long':''}">${esc(rom)}</div>${qual(it)?`<div class="q">${qual(it)}</div>`:''}</div>
     <div id="pad"></div>
     <div class="tools"><button class="btn sm" id="un">Urungkan</button><button class="btn sm" id="cl">Hapus</button></div>
-    <div class="actions"><button class="btn" id="sk">Lewati</button><button class="btn pri" id="nx">${TS.i<19?'Berikutnya':'Selesai dan nilai'}</button></div>`;
-    const pad=addPad('test',$('#pad',P),{wide});
-    const t=$('#tt',P);const upd=()=>{if(t.isConnected)t.innerHTML='Waktu <b>'+fmt((Date.now()-TS.start)/1000)+'</b>'};upd();clearInterval(TS.iv);TS.iv=setInterval(upd,1000);
+    <div class="actions">${TS.i?'<button class="btn" id="bk" style="flex:0 0 auto">Kembali</button>':''}<button class="btn" id="sk">Lewati</button><button class="btn pri" id="nx">${TS.i<N-1?'Lanjut':'Selesai'}</button></div>
+    ${TS.ask?'<div class="confirm stack small" style="margin-top:8px"><b>Batalkan simulasi ini? Jawaban yang sudah ditulis akan hilang.</b><div class="row"><button class="btn bad" id="abYes">Batalkan</button><button class="btn" id="abNo">Teruskan</button></div></div>'
+      :'<div class="row" style="justify-content:center;margin-top:8px"><button class="btn sm ghost" id="ab">Batalkan simulasi</button></div>'}`;
+    const pad=addPad('test',$('#pad',P),{wide:isWide(it)});
+    const t=$('#tt',P),upd=()=>{if(t.isConnected)t.innerHTML='Waktu <b>'+fmt((Date.now()-TS.t0)/1000)+'</b>'};upd();clearInterval(TS.iv);TS.iv=setInterval(upd,1000);
     $('#un',P).onclick=()=>pad.undo();$('#cl',P).onclick=()=>pad.clear();
-    const adv=(img,ink)=>{TS.img[TS.i]=img;TS.ink[TS.i]=ink;if(!img)TS.x[TS.i]=true;TS.i++;if(TS.i>=20){TS.time=(Date.now()-TS.start)/1000;clearInterval(TS.iv);TS.phase='review'}renderTest()};
-    $('#sk',P).onclick=()=>adv(null,null);$('#nx',P).onclick=()=>adv(pad.image(),pad.ink());
-    TS.keys={check:()=>adv(pad.image(),pad.ink())};
+    const adv=ink=>{TS.ink[TS.i]=ink;TS.i++;TS.ask=false;if(TS.i>=N){TS.time=(Date.now()-TS.t0)/1000;clearInterval(TS.iv);TS.phase='review'}tsPersist();renderTest()};
+    const go=()=>{if(!pad.empty())adv(pad.ink())};
+    $('#sk',P).onclick=()=>adv(null);$('#nx',P).onclick=go;
+    const bk=$('#bk',P);if(bk)bk.onclick=()=>{TS.i--;TS.ink[TS.i]=null;tsPersist();renderTest()};
+    const drop=()=>{clearInterval(TS.iv);TS=null;RUN.clear('test');renderTest()};
+    const ab=$('#ab',P);if(ab)ab.onclick=()=>{if(TS.i){TS.ask=true;renderTest()}else drop()};
+    const ay=$('#abYes',P);if(ay)ay.onclick=drop;const an=$('#abNo',P);if(an)an.onclick=()=>{TS.ask=false;renderTest()};
+    TS.keys={check:go};
   }else if(TS.phase==='review'){
-    if(TS.auto===undefined){
-      const list=TS.items.map((it,i)=>({k:it.k,i,ink:TS.ink[i]})).filter(x=>x.ink);
-      if(!list.length||!autoReady())TS.auto='manual';
-      else{TS.auto='running';TS.prog=0;TS.fail=0;const T=TS;
-        judgeMany(list,(it,a)=>{T.prog++;if(!a)T.fail++;else if(!T.touched[it.i]){T.x[it.i]=a.v==='bad';T.w[it.i]=a.v==='check'}const s=$('#autoStat');if(s)s.textContent=T.prog+' dari '+list.length})
-          .then(()=>{T.auto=T.fail===list.length?'manual':'done';if(TS===T&&TAB==='test')renderTest()})}
-    }
-    const wrong=Object.values(TS.x).filter(Boolean).length,nW=TS.items.filter((_,i)=>TS.w[i]&&!TS.x[i]).length;
-    const msg=TS.auto==='running'?`Menilai otomatis, <span id="autoStat">${TS.prog} dari ${TS.ink.filter(Boolean).length}</span>.`
-      :TS.auto==='done'?`Baris merah salah menurut penilaian otomatis.${nW?' Baris kuning bentuknya benar, tetapi pastikan っ, ゃ, ゅ, dan ょ memang ditulis kecil.':''} Ketuk baris mana pun untuk mengubah penilaian.`
-      :'Bandingkan tulisan Anda dengan jawaban di kanan, lalu ketuk baris yang salah. っ, ゃ, ゅ, dan ょ yang tidak ditulis kecil juga dihitung salah.';
-    P.innerHTML=`<div class="card"><h3>Nilai jawaban Anda</h3><p class="small" style="margin:0">${msg}</p></div>
-    <div class="rl" style="margin-top:10px">${TS.items.map((it,i)=>{const st=TS.x[i]?'x':TS.w[i]?'w':'';return`<button class="ri ${st}" data-i="${i}" aria-pressed="${!!TS.x[i]}"><span class="rom">${esc(it.r)}</span><span class="img">${TS.img[i]?`<img alt="" src="${TS.img[i]}">`:'<span class="muted small">kosong</span>'}</span><span class="a cink" style="--c:${col(it.row)}">${it.k}</span><span class="pill ${st==='x'?'bad':st==='w'?'warn':'ok'}">${st==='x'?'Salah':st==='w'?'Periksa':'Benar'}</span></button>`}).join('')}</div>
-    <div class="actions"><button class="btn pri" id="sv" ${TS.auto==='running'?'disabled':''}>Simpan hasil, ${20-wrong} dari 20 benar</button></div>`;
-    P.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;TS.touched[i]=true;TS.w[i]=false;TS.x[i]=!TS.x[i];renderTest()});
-    $('#sv',P).onclick=()=>{const miss=TS.items.filter((_,i)=>TS.x[i]).map(i=>i.k);TS.items.forEach((it,i)=>grade(it.k,!TS.x[i]));
-      const score=20-miss.length;S.tests.push({at:Date.now(),score,total:20,time:Math.round(TS.time)});save();TS.phase='result';TS.miss=miss;TS.score=score;renderTest()};
-  }else{const pct=Math.round(TS.score*5);
-    P.innerHTML=`<div class="card stack" style="text-align:center;position:relative">${pct>=90?'<div class="hanko" aria-label="Lulus" style="position:static;margin:0 auto">合格</div>':''}<div class="score">${pct}%</div><div class="muted small">${TS.score} dari 20 benar, waktu ${fmt(TS.time)}</div>
-    ${TS.miss.length?`<div class="kana" style="font-size:1.5rem;word-spacing:.5em">${TS.miss.map(k=>`<span class="cink" style="--c:${col(BY[k].row)}">${k}</span>`).join(' ')}</div>`:''}
-    <p class="small" style="margin:0">${pct>=90?'Di atas 90 persen. Jika Tabel Kosong juga sudah sempurna dua kali berturut-turut, Anda siap tes.':'Latih huruf yang salah, lalu ulangi simulasi.'}</p>
+    if(TS.time==null)TS.time=(Date.now()-TS.t0)/1000;
+    if(TS.auto===undefined){ids.forEach(i=>{if(!TS.ink[i])TS.x[i]=true});
+      runAuto(TS,ids.filter(i=>TS.ink[i]).map(i=>({k:TS.items[i].k,i,ink:TS.ink[i]})),x=>x.i,()=>{if(TS&&TS.phase==='review'&&TAB==='test')renderTest()})}
+    const und=countOf(TS.un,ids),running=TS.auto==='running';
+    const msg=running?`Menilai otomatis, <span id="autoStat">${TS.prog} dari ${ids.filter(i=>TS.ink[i]).length}</span>.`
+      :'Baris merah dinilai salah. Ketuk baris untuk mengubah nilainya.'+(und?` ${und} baris kuning perlu Anda nilai, misalnya karena ukuran huruf kecil tidak bisa dipastikan. Ketuk sekali jika benar, dua kali jika salah.`:'');
+    const st=i=>TS.x[i]?'x':TS.un[i]?'un':'';
+    const pill=i=>TS.x[i]?'<span class="pill bad">Salah</span>':TS.un[i]?'<span class="pill warn">Nilai sendiri</span>':'<span class="pill ok">Benar</span>';
+    P.innerHTML=`<div class="card"><h3>Periksa hasil tes</h3><p class="small" style="margin:0">${msg}</p></div>
+    <div class="rl" style="margin-top:10px">${TS.items.map((it,i)=>`<button class="ri ${st(i)}" data-i="${i}"><span class="rom">${esc(romOf(it))}${qual(it)?` (${qual(it)})`:''}</span>${pill(i)}<span class="img">${TS.ink[i]?inkSVG(TS.ink[i]):'kosong'}</span><span class="a" lang="ja">${ck(it.k)}</span></button>`).join('')}</div>
+    <div class="actions"><button class="btn pri" id="sv"></button></div>
+    <div class="row" style="justify-content:center;margin-top:8px"><button class="btn sm ghost" id="ab">Buang tanpa menyimpan</button></div>`;
+    const sv=$('#sv',P),paintSave=()=>{const w=countOf(TS.x,ids),u=countOf(TS.un,ids);sv.disabled=TS.auto==='running'||u>0;sv.textContent=TS.auto==='running'?'Menilai':u?`Nilai dulu ${u} baris kuning`:`Simpan hasil, ${N-w} dari ${N} benar`};paintSave();
+    $$('[data-i]',P).forEach(b=>b.onclick=()=>{const i=+b.dataset.i;TS.touched[i]=true;if(TS.un[i]){TS.un[i]=false;TS.x[i]=false}else TS.x[i]=!TS.x[i];
+      b.className='ri '+st(i);$('.pill',b).outerHTML=pill(i);paintSave()});
+    $('#ab',P).onclick=()=>{TS=null;RUN.clear('test');renderTest()};
+    sv.onclick=()=>{const miss=TS.items.filter((_,i)=>TS.x[i]).map(i=>i.k);TS.items.forEach((it,i)=>grade(it.k,!TS.x[i]));
+      const score=N-miss.length;S.tests.push({at:Date.now(),score,total:N,time:Math.round(TS.time)});save();RUN.clear('test');TS.phase='result';TS.miss=miss;TS.score=score;renderTest();window.scrollTo(0,0)};
+  }else{const p=Math.round(100*TS.score/N),pass=p>=90;
+    P.innerHTML=`<div class="card stack" style="text-align:center">${pass?'<div class="hanko" role="img" aria-label="Lulus" style="float:none;margin:0 auto"><span lang="ja">合格</span><small>LULUS</small></div>':''}<div class="score">${p}%</div><div class="muted small">${TS.score} dari ${N} benar, ${dur(TS.time)}</div>
+    ${TS.miss.length?`<div class="tiles">${TS.miss.map(k=>`<div class="tile"><b lang="ja">${ck(k)}</b><span>${esc(romOf(BY[k]))}</span></div>`).join('')}</div>`:''}
+    <p class="small" style="margin:0">${pass?'90% atau lebih. Kalau Tabel Kosong juga sudah sempurna dua kali berturut-turut, Anda siap tes.':'Latih yang salah, lalu ulangi simulasi.'}</p>
     <div class="row" style="justify-content:center">${TS.miss.length?'<button class="btn pri" id="dm">Latih yang salah</button>':''}<button class="btn ${TS.miss.length?'':'pri'}" id="ag">Simulasi lagi</button></div></div>`;
     if(TS.miss.length)$('#dm',P).onclick=()=>{DR.mode='weak';DR.only=TS.miss.slice();DR.q=null;TS=null;show('drill')};
     $('#ag',P).onclick=()=>{TS=null;renderTest()};
@@ -825,7 +1082,8 @@ function renderTest(){killPads('test');const P=$('#p-test');
 }
 
 /* ---------- KEYBOARD ---------- */
-document.addEventListener('keydown',e=>{if($('#sheet')){if(e.key==='Escape')closeSheet();return}if(e.target.closest&&e.target.closest('button')&&e.key==='Enter')return;
+document.addEventListener('keydown',e=>{if(e.repeat)return;if($('#sheet')){if(e.key==='Escape')closeSheet();return}
+  if(e.target.closest&&e.target.closest('button')&&e.key==='Enter')return;
   const k=TAB==='drill'?DR.keys:TAB==='learn'&&L&&L.step==='recall'?L.keys:TAB==='table'&&TB&&TB.phase==='write'?TB.keys:TAB==='test'&&TS&&TS.phase==='write'?TS.keys:null;
   if(!k)return;
   if(e.key==='Enter'){e.preventDefault();k.check&&k.check()}
@@ -833,8 +1091,24 @@ document.addEventListener('keydown',e=>{if($('#sheet')){if(e.key==='Escape')clos
   else if(e.key==='ArrowLeft'&&k.no){e.preventDefault();k.no()}});
 
 /* ---------- BOOT ---------- */
+$('#logo').innerHTML=APP.logo.map(([k,r])=>`<span style="--c:var(--r-${r})">${k}</span>`).join('');
+$('#tabs').innerHTML=TABS.map(([id,g,l])=>`<button data-tab="${id}"><span class="g" lang="ja" aria-hidden="true">${g}</span>${l}</button>`).join('');
+$$('nav.tabs button').forEach(b=>b.addEventListener('click',()=>show(b.dataset.tab)));
+/* pick up a table or test that was interrupted; stored strokes are validated before they are drawn */
+(function restore(){
+  const num=a=>Array.isArray(a)&&a.length>0&&a.every(v=>typeof v==='number'&&Number.isFinite(v));
+  const okInk=i=>!!i&&typeof i==='object'&&Number.isFinite(i.w)&&Number.isFinite(i.h)&&i.w>0&&i.h>0&&Array.isArray(i.ink)&&i.ink.length>0&&i.ink.every(s=>Array.isArray(s)&&num(s[0])&&num(s[1])&&s[0].length===s[1].length);
+  const t=RUN.load('table');
+  if(t&&typeof t==='object'&&t.ink&&typeof t.ink==='object'&&Number.isFinite(+t.i)){const i=Math.max(0,Math.min(ORDER.length,+t.i|0)),ink={};
+    ORDER.slice(0,i).forEach(k=>{ink[k]=okInk(t.ink[k])?t.ink[k]:null});
+    TB={i,ink,t0:Date.now()-(+t.elapsed||0)*1000,phase:i>=ORDER.length?'review':'write',x:{},un:{},touched:{}};if(TB.phase==='review')TB.time=+t.elapsed||0}
+  const x=RUN.load('test');
+  if(x&&typeof x==='object'&&Array.isArray(x.keys)&&Array.isArray(x.ink)&&x.keys.length&&x.keys.every(k=>BY[k])){const i=Math.max(0,Math.min(x.keys.length,+x.i|0));
+    TS={items:x.keys.map(k=>BY[k]),i,ink:x.keys.map((_,j)=>j<i&&okInk(x.ink[j])?x.ink[j]:null),t0:Date.now()-(+x.elapsed||0)*1000,phase:i>=x.keys.length?'review':'write',x:{},un:{},touched:{}};if(TS.phase==='review')TS.time=+x.elapsed||0}
+})();
 const h=(location.hash||'').slice(1);
-show(RENDER[h]?h:'plan');
+show(Object.prototype.hasOwnProperty.call(RENDER,h)?h:'plan');
+
 })();
 </script>
 <script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}))}</script>
